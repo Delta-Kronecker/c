@@ -2,7 +2,7 @@ name: Clash Config Testing – Enhanced
 
 on:
   schedule:
-    - cron: '0 0 * * *'          # Every day at 00:00 UTC
+    - cron: '0 0 * * *'  # Every day at 00:00 UTC
   workflow_dispatch:
     inputs:
       test_workers:
@@ -56,10 +56,11 @@ jobs:
           ~/.local/bin/clash -v
           echo "✓ Clash Meta installed"
 
-     - name: Download subscriptions
-      run: |
-        cd scripts
-        python download_subscriptions.py
+      - name: Download subscriptions
+        id: download
+        run: |
+          cd scripts
+          python download_subscriptions.py
 
       - name: Test configs
         id: test
@@ -82,59 +83,35 @@ jobs:
       - name: Generate detailed summary
         if: always()
         run: |
-          {
-            echo "# 🔍 Clash Config Test Results"
-            echo ""
-            echo "**Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-            echo ""
-          } >> $GITHUB_STEP_SUMMARY
+          echo "# 🔍 Clash Config Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ -f "working_configs/metadata.json" ]; then
             TOTAL=$(python -c "import sys,json;print(json.load(sys.stdin)['total_working'])" < working_configs/metadata.json)
             AVG_LATENCY=$(python -c "import sys,json;print(json.load(sys.stdin)['latency']['average'])" < working_configs/metadata.json)
-            {
-              echo "## ✅ Test Successful"
-              echo ""
-              echo "### 📊 Statistics"
-              echo ""
-              echo "- **Total Working Proxies:** $TOTAL"
-              echo "- **Average Latency:** ${AVG_LATENCY}ms"
-              echo ""
-              echo "### 📋 By Protocol"
-            } >> $GITHUB_STEP_SUMMARY
-
-            python -c "
-
-            {
-              echo ""
-              echo "### 📦 Output Files"
-              echo ""
-              echo "- \`working_configs/all_working.txt\` - All working proxies"
-              echo "- \`working_configs/all_working_base64.txt\` - Base64 encoded"
-              echo "- \`working_configs/clash_config.yaml\` - Ready-to-use Clash config"
-              echo "- \`working_configs/by_protocol/\` - Grouped by protocol"
-            } >> $GITHUB_STEP_SUMMARY
+            echo "## ✅ Test Successful" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 📊 Statistics" >> $GITHUB_STEP_SUMMARY
+            echo "- **Total Working Proxies:** $TOTAL" >> $GITHUB_STEP_SUMMARY
+            echo "- **Average Latency:** ${AVG_LATENCY}ms" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 📦 Output Files" >> $GITHUB_STEP_SUMMARY
+            echo "- \`working_configs/all_working.txt\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`working_configs/all_working_base64.txt\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`working_configs/clash_config.yaml\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`working_configs/by_protocol/\`" >> $GITHUB_STEP_SUMMARY
 
           elif [ -f "temp_configs/download_stats.json" ]; then
             DOWNLOADED=$(python -c "import sys,json;print(json.load(sys.stdin)['total_parsed'])" < temp_configs/download_stats.json)
-            {
-              echo "## ⚠️ Testing Failed"
-              echo ""
-              echo "Download completed but no proxies passed connectivity test."
-              echo ""
-              echo "- **Proxies Downloaded:** $DOWNLOADED"
-              echo "- **Working Proxies:** 0"
-            } >> $GITHUB_STEP_SUMMARY
+            echo "## ⚠️ Testing Failed" >> $GITHUB_STEP_SUMMARY
+            echo "- **Proxies Downloaded:** $DOWNLOADED" >> $GITHUB_STEP_SUMMARY
+            echo "- **Working Proxies:** 0" >> $GITHUB_STEP_SUMMARY
           else
-            {
-              echo "## ❌ Download Failed"
-              echo ""
-              echo "Failed to download subscription data. Please check:"
-              echo ""
-              echo "1. Subscription URLs in \`sub.txt\`"
-              echo "2. Network connectivity"
-              echo "3. Subscription format validity"
-            } >> $GITHUB_STEP_SUMMARY
+            echo "## ❌ Download Failed" >> $GITHUB_STEP_SUMMARY
+            echo "1. Check sub.txt URLs" >> $GITHUB_STEP_SUMMARY
+            echo "2. Network connectivity" >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Commit and push results
@@ -148,28 +125,18 @@ jobs:
           else
             TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
             WORKING_COUNT="${{ steps.test.outputs.working_count }}"
-            PROTOCOLS=$(python -c "
-import sys,json
-data=json.load(sys.stdin)
-print(', '.join([f'{k}:{v}' for k,v in data['by_protocol'].items()]))
-            " < working_configs/metadata.json)
+            PROTOCOLS=$(python -c "import sys,json;data=json.load(sys.stdin);print(', '.join([f'{k}:{v}' for k,v in data['by_protocol'].items()]))" < working_configs/metadata.json)
             AVG_LATENCY=$(python -c "import sys,json;print(json.load(sys.stdin)['latency']['average'])" < working_configs/metadata.json)
-
             git commit -m "🔄 Update working configs – ${TIMESTAMP}" \
-                       -m "" \
-                       -m "📊 Statistics:" \
-                       -m "- Working Proxies: ${WORKING_COUNT}" \
-                       -m "- Average Latency: ${AVG_LATENCY}ms" \
-                       -m "- Protocols: ${PROTOCOLS}" \
-                       -m "" \
-                       -m "Generated by automated testing workflow"
+                       -m "📊 Working: ${WORKING_COUNT}, Avg Latency: ${AVG_LATENCY}ms" \
+                       -m "Protocols: ${PROTOCOLS}"
             git push
             echo "✅ Changes committed and pushed"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload test artifacts
+      - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -179,70 +146,9 @@ print(', '.join([f'{k}:{v}' for k,v in data['by_protocol'].items()]))
             temp_configs/*.json
             temp_configs/*.txt
           retention-days: 7
-          compression-level: 9
-
-      - name: Upload working configs latest
-        if: success() && steps.test.outputs.working_count != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: working-configs-latest
-          path: |
-            working_configs/all_working.txt
-            working_configs/all_working_base64.txt
-            working_configs/clash_config.yaml
-            working_configs/metadata.json
-          retention-days: 30
-
-      - name: Create summary badge data
-        if: always()
-        run: |
-          mkdir -p badges
-          WORKING="${{ steps.test.outputs.working_count }}"
-          TOTAL="${{ steps.download.outputs.proxy_count }}"
-          if [ -n "$WORKING" ] && [ -n "$TOTAL" ] && [ "$TOTAL" != "0" ]; then
-            SUCCESS_RATE=$(python -c "print(f'{($WORKING/$TOTAL*100):.1f}')")
-            COLOR="green"
-            MSG="$WORKING/$TOTAL ($SUCCESS_RATE%)"
-          else
-            COLOR="red"
-            MSG="failed"
-          fi
-          echo "{\"schemaVersion\":1,\"label\":\"proxies\",\"message\":\"$MSG\",\"color\":\"$COLOR\"}" > badges/status.json
-          cat badges/status.json
 
       - name: Clean up temporary files
         if: always()
         run: |
           rm -rf temp_configs/*.yaml temp_configs/config_*.yaml
-          find temp_configs -name "test_config_*.yaml" -mtime +1 -delete 2>/dev/null || true
           echo "🧹 Cleanup complete"
-
-      - name: Post-test validation
-        if: success()
-        run: |
-          echo "🔍 Validating output files..."
-          EXPECTED_FILES=(
-            working_configs/working_proxies.json
-            working_configs/all_working.txt
-            working_configs/clash_config.yaml
-            working_configs/metadata.json
-          )
-          MISSING=0
-          for file in "${EXPECTED_FILES[@]}"; do
-            if [ ! -f "$file" ]; then
-              echo "❌ Missing: $file"
-              MISSING=$((MISSING + 1))
-            else
-              SIZE=$(stat -c%s "$file" 2>/dev/null || stat -f%z "$file" 2>/dev/null)
-              echo "✅ $file (${SIZE} bytes)"
-            fi
-          done
-          if [ $MISSING -gt 0 ]; then
-            echo "⚠️  Warning: $MISSING expected files missing"
-          else
-            echo "✅ All output files validated"
-          fi
-
-      - name: Send notification on failure
-        if: failure()
-        run: echo "::warning::Clash config testing workflow failed. Please check the logs."
