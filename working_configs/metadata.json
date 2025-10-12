@@ -1,0 +1,9 @@
+{
+  "total_working": 307,
+  "by_protocol": {
+    "vless": 189,
+    "ss": 118
+  },
+  "last_updated": "2025-10-12T10:31:28.660636",
+  "timestamp": 1760265088
+}
