@@ -70,7 +70,6 @@
          cd scripts
          python test_configs.py
        continue-on-error: true
-       timeout-minutes: 120
 
      - name: Generate summary
        if: always()
