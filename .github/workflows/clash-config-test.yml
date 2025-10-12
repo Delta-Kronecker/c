@@ -56,10 +56,10 @@ jobs:
           ~/.local/bin/clash -v
           echo "✓ Clash Meta installed"
 
- - name: Download subscriptions
-  run: |
-    cd scripts
-    python download_subscriptions.py
+     - name: Download subscriptions
+      run: |
+        cd scripts
+        python download_subscriptions.py
 
       - name: Test configs
         id: test
