@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GhostTextManager">
+    <option name="inputs">
+      <map>
+        <entry key="### گام‌های استفاده از Subconverter برای خواندن فایل sub.txt، دریافت محتوا و تبدیل به JSON&#10;&#10;1. **نصب و اجرا**: Subconverter را دانلود و اجرا کنید (مثل `./subconverter`) تا سرور محلی روی `http://127.0.0.1:25500` فعال شود.&#10;&#10;2. **خواندن فایل**: فایل `sub.txt` را در مسیر قابل دسترسی قرار دهید. URLها را بخوانید (هر خط یک URL).&#10;&#10;3. **ترکیب URLها**: URLها را با `|` جدا کنید (مثل `url1|url2|...`). تکراری‌ها را حذف کنید.&#10;&#10;4. **URLEncode**: رشته ترکیبی را URLEncode کنید (ابزار آنلاین یا کد پایتون: `urllib.parse.quote`).&#10;&#10;5. **دریافت و تبدیل**: از URL زیر استفاده کنید:&#10;   ```&#10;   http://127.0.0.1:25500/sub?target=v2ray&amp;url=%URL_ENCODED%&#10;   ```&#10;   - Subconverter هر URL را fetch می‌کند، محتوا (معمولاً Base64) را دانلود و decode می‌کند، configs را parse می‌کند، فیلتر اعمال می‌کند، و به JSON (V2Ray format) تبدیل می‌کند.&#10;&#10;6. **خروجی**: نتیجه JSON است (outbounds در ساختار V2Ray). برای سفارشی‌سازی، `&amp;config=file://path/to/pref.ini` اضافه کنید.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1760258682314" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Please implement the plan">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="2.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1760261203476" />
+                  <option value="1760261164377" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Please implement the plan&#10;&#10;اول هر فایل را ایجاد کن و سپس با ابزار ویرایش در ان بنویس">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1760261339751" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="subconverter v0.9.0 backend">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1760259706599" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="ادامه با دسته بعدی...&#10;&#10;⚠️  هیچ outbound پیدا نشد!&#10;&#10; ذخیره در configs_converted.json...&#10;✅ نتیجه ذخیره شد&#10;&#10;============================================================&#10;✨ تبدیل با موفقیت انجام شد!&#10;============================================================&#10;&#10;Process finished with exit code 0&#10;&#10;&#10;&#10;&#10;فایل خالی است">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="2.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1760260579413" />
+                  <option value="1760260515401" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="ایا باید&#10;Subconverter&#10;را نصب کنم؟">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1760259403542" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="می خواهم &#10;Subconverter&#10;تبدیل فرمت را انجام دهد">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1760260122591" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="می خواهم یک ورک فلو گیت هاب طراحی کنی که&#10;1- clash&#10;را نصب کند&#10;2- ساب لینک های فایل&#10;sub.txt&#10;را بخواند و همه کانفیگ های انها را به وسیله &#10;clash&#10;استخراج کند&#10;3- تمام کانقیک ها را تست کند و متصل ها را به گیت هاب پروژه اپلود کند">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1760261077260" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dev.sweep.assistant.components.SweepConfig">
+    <option name="autoApprovedTools">
+      <set>
+        <option value="list_files" />
+        <option value="read_file" />
+        <option value="search_files" />
+        <option value="find_usages" />
+        <option value="get_errors" />
+        <option value="bash" />
+        <option value="powershell" />
+      </set>
+    </option>
+    <option name="fontSize" value="20.0" />
+    <option name="gateStringReplaceInChat" value="true" />
+  </component>
+</project>

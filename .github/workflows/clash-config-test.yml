@@ -1,0 +1,137 @@
+ name: Clash Config Testing
+
+ on:
+   # Run daily at 00:00 UTC
+   schedule:
+     - cron: '0 0 * * *'
+
+   # Allow manual trigger
+   workflow_dispatch:
+
+   # Run on push to main branch (optional)
+   push:
+     branches:
+       - main
+     paths:
+       - 'sub.txt'
+       - 'scripts/**'
+       - '.github/workflows/clash-config-test.yml'
+
+ jobs:
+   test-configs:
+     runs-on: ubuntu-latest
+
+     steps:
+     - name: Checkout repository
+       uses: actions/checkout@v4
+       with:
+         fetch-depth: 0
+
+     - name: Set up Python
+       uses: actions/setup-python@v5
+       with:
+         python-version: '3.11'
+         cache: 'pip'
+
+     - name: Install Python dependencies
+       run: |
+         python -m pip install --upgrade pip
+         pip install requests pyyaml
+
+     - name: Download and install Clash
+       run: |
+         # Download Clash Meta (open source alternative)
+         CLASH_VERSION="v1.18.0"
+         CLASH_URL="https://github.com/MetaCubeX/mihomo/releases/download/${CLASH_VERSION}/mihomo-linux-amd64-${CLASH_VERSION}.gz"
+ 
+         echo "Downloading Clash Meta..."
+         wget -q "${CLASH_URL}" -O clash.gz
+ 
+         echo "Extracting..."
+         gunzip clash.gz
+         chmod +x clash
+ 
+         # Move to local bin
+         mkdir -p ~/.local/bin
+         mv clash ~/.local/bin/clash
+         echo "$HOME/.local/bin" >> $GITHUB_PATH
+ 
+         echo "Clash installed successfully"
+         ~/.local/bin/clash -v
+
+     - name: Download subscriptions
+       run: |
+         cd scripts
+         python download_subscriptions.py
+       continue-on-error: false
+
+     - name: Test configs
+       run: |
+         cd scripts
+         python test_configs.py
+       continue-on-error: true
+       timeout-minutes: 120
+
+     - name: Generate summary
+       if: always()
+       run: |
+         echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+         echo "" >> $GITHUB_STEP_SUMMARY
+ 
+         if [ -f "working_configs/metadata.json" ]; then
+           echo "### Statistics" >> $GITHUB_STEP_SUMMARY
+           echo '```json' >> $GITHUB_STEP_SUMMARY
+           cat working_configs/metadata.json >> $GITHUB_STEP_SUMMARY
+           echo '```' >> $GITHUB_STEP_SUMMARY
+ 
+           # Extract working count
+           WORKING=$(cat working_configs/metadata.json | grep -oP '"total_working":\s*\K\d+' || echo "0")
+           echo "" >> $GITHUB_STEP_SUMMARY
+           echo "**Total Working Proxies: ${WORKING}**" >> $GITHUB_STEP_SUMMARY
+         else
+           echo "No working configs found or testing failed." >> $GITHUB_STEP_SUMMARY
+         fi
+
+     - name: Commit and push results
+       if: success()
+       run: |
+         git config --local user.email "github-actions[bot]@users.noreply.github.com"
+         git config --local user.name "github-actions[bot]"
+ 
+         # Add working configs
+         git add working_configs/
+ 
+         # Check if there are changes
+         if git diff --staged --quiet; then
+           echo "No changes to commit"
+         else
+           # Create commit message with timestamp
+           TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+           WORKING_COUNT=$(cat working_configs/metadata.json | grep -oP '"total_working":\s*\K\d+' || echo "0")
+ 
+           git commit -m "Update working configs - ${TIMESTAMP}" \
+                      -m "Found ${WORKING_COUNT} working proxies"
+ 
+           git push
+           echo "Changes committed and pushed"
+         fi
+       env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+     - name: Upload artifacts
+       if: always()
+       uses: actions/upload-artifact@v4
+       with:
+         name: test-results
+         path: |
+           working_configs/
+           temp_configs/*.json
+           temp_configs/*.txt
+         retention-days: 7
+
+     - name: Clean up temporary files
+       if: always()
+       run: |
+         # Remove temporary config files but keep the results
+         rm -rf temp_configs/*.yaml
+         echo "Cleanup complete"
