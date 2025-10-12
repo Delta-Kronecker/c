@@ -1,1 +1,1 @@
-https://raw.githubusercontent.com/Mosifree/-FREE2CONFIG/refs/heads/main/Vless
+https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector/main/sub/vless
