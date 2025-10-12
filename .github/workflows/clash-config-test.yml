@@ -69,7 +69,7 @@ jobs:
           TEST_TIMEOUT: ${{ github.event.inputs.test_timeout || '10' }}
         run: |
           cd scripts
-          python test_configs.py
+          python run.py
           if [ -f "../working_configs/metadata.json" ]; then
             WORKING=$(python -c "import sys,json;print(json.load(sys.stdin)['total_working'])" < ../working_configs/metadata.json)
             echo "working_count=$WORKING" >> $GITHUB_OUTPUT
