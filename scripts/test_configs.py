@@ -152,7 +152,7 @@ def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeou
         return False
 
 
-def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 1) -> List[Dict]:
+def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 100) -> List[Dict]:
     """
     Test all proxies and return working ones
     """
