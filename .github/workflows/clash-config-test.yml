@@ -56,20 +56,10 @@ jobs:
           ~/.local/bin/clash -v
           echo "✓ Clash Meta installed"
 
-      - name: Download subscriptions
-        id: download
-        run: |
-          cd scripts
-          python download_subscriptions.py
-          if [ -f "../temp_configs/parsed_proxies.json" ]; then
-            PROXY_COUNT=$(python -c "import sys,json;print(len(json.load(sys.stdin)))" < ../temp_configs/parsed_proxies.json)
-            echo "proxy_count=$PROXY_COUNT" >> $GITHUB_OUTPUT
-            echo "✓ Downloaded $PROXY_COUNT proxies"
-          else
-            echo "✗ Download failed"
-            exit 1
-          fi
-        continue-on-error: false
+ - name: Download subscriptions
+  run: |
+    cd scripts
+    python download_subscriptions.py
 
       - name: Test configs
         id: test
