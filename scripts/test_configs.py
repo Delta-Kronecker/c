@@ -67,7 +67,7 @@ def create_clash_config(proxy: Dict, config_file: str) -> bool:
         return False
 
 
-def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 10) -> bool:
+def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 5) -> bool:
     """
     Test proxy connectivity by making HTTP request through it
     """
@@ -79,9 +79,7 @@ def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 10) -> bool:
 
         # Test URLs
         test_urls = [
-            'http://www.gstatic.com/generate_204',
-            'http://www.google.com',
-            'http://cp.cloudflare.com'
+            'http://connectivitycheck.gstatic.com/generate_204',
         ]
 
         for test_url in test_urls:
@@ -103,7 +101,7 @@ def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 10) -> bool:
         return False
 
 
-def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeout: int = 15) -> bool:
+def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeout: int = 5) -> bool:
     """
     Test a single proxy using Clash
     """
@@ -152,7 +150,7 @@ def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeou
         return False
 
 
-def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 100) -> List[Dict]:
+def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 300) -> List[Dict]:
     """
     Test all proxies and return working ones
     """
