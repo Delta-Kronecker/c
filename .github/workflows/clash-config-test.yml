@@ -114,7 +114,6 @@ jobs:
             } >> $GITHUB_STEP_SUMMARY
 
             python -c "
-import sys,json
 data=json.load(sys.stdin)
 for proto,count in sorted(data['by_protocol'].items(),key=lambda x:-x[1]):
     print(f'- **{proto}:** {count}')
