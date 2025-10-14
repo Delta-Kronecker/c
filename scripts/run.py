@@ -243,17 +243,10 @@ def save_working_configs(proxies: List[Dict], output_dir: str):
 
 def generate_share_url(proxy: Dict) -> str:
     """
-    Generate share URL from proxy config
-    This is a simplified version - real implementation would need to encode properly
+    Generate share URL from proxy config using utils module
     """
-    # For now, just return a placeholder
-    # In a real implementation, you would reconstruct the proper share URL
-    ptype = proxy.get('type', '')
-    name = proxy.get('name', '')
-    server = proxy.get('server', '')
-    port = proxy.get('port', '')
-
-    return f"{ptype}://{server}:{port}#{name}"
+    from utils import proxy_to_share_url
+    return proxy_to_share_url(proxy)
 
 
 def find_clash_binary() -> str:
