@@ -200,15 +200,14 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
     completed = 0
     lock = threading.Lock()
 
+    # Group statistics
+    group_stats = {}
+
     # Get max workers from environment or use default
     max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
     test_timeout = int(os.environ.get('TEST_TIMEOUT', 15))  # Increased to 15s for strict testing
 
-    print(f"\n🔍 Strict Testing Mode Enabled")
-    print(f"Testing {total} proxies with {max_workers} parallel workers...")
-    print(f"Timeout: {test_timeout}s per proxy")
-    print(f"Verification: Multiple URLs (2/3 must succeed)")
-    print(f"This may take a while...\n")
+    print(f"\n🔍 Testing {total} proxies ({max_workers} workers, {test_timeout}s timeout)\n")
 
     def test_proxy_wrapper(proxy_data):
         """Wrapper function for parallel testing"""
@@ -234,17 +233,24 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
 
                 with lock:
                     completed += 1
-                    status = "✓ WORKING" if result else "✗ FAILED"
-                    print(f"[{completed}/{total}] Testing {proxy_type}: {proxy_name}... {status}")
 
+                    # Update group statistics
+                    if proxy_type not in group_stats:
+                        group_stats[proxy_type] = {'total': 0, 'working': 0}
+                    group_stats[proxy_type]['total'] += 1
                     if result:
+                        group_stats[proxy_type]['working'] += 1
                         working_proxies.append(proxy)
+
+                    # Show progress every 10% or every 50 proxies
+                    if completed % max(1, total // 10) == 0 or completed % 50 == 0 or completed == total:
+                        print(f"Progress: {completed}/{total} ({completed*100//total}%)")
+
             except Exception as e:
                 with lock:
                     completed += 1
-                    print(f"[{completed}/{total}] Error during test: {e}")
 
-    return working_proxies
+    return working_proxies, group_stats
 
 
 def save_working_configs(proxies: List[Dict], output_dir: str):
@@ -388,19 +394,33 @@ def main():
     print(f"Using Clash binary: {clash_path}\n")
 
     # Test proxies
-    working_proxies = test_all_proxies(proxies, clash_path, temp_dir)
+    working_proxies, group_stats = test_all_proxies(proxies, clash_path, temp_dir)
 
+    # Display summary report by groups
     print(f"\n{'=' * 60}")
-    print(f"Testing complete!")
-    print(f"Working proxies: {len(working_proxies)} / {len(proxies)}")
-    print(f"Success rate: {len(working_proxies) / len(proxies) * 100:.1f}%")
+    print(f"📊 Test Results Summary")
+    print(f"{'=' * 60}")
+    print(f"\n{'Protocol':<15} {'Total':<10} {'Working':<10} {'Success Rate':<15}")
+    print(f"{'-' * 60}")
+
+    for protocol, stats in sorted(group_stats.items()):
+        total = stats['total']
+        working = stats['working']
+        rate = (working / total * 100) if total > 0 else 0
+        print(f"{protocol:<15} {total:<10} {working:<10} {rate:>5.1f}%")
+
+    print(f"{'-' * 60}")
+    total_all = len(proxies)
+    working_all = len(working_proxies)
+    rate_all = (working_all / total_all * 100) if total_all > 0 else 0
+    print(f"{'TOTAL':<15} {total_all:<10} {working_all:<10} {rate_all:>5.1f}%")
     print(f"{'=' * 60}\n")
 
     # Save working configs
     if working_proxies:
         save_working_configs(working_proxies, output_dir)
     else:
-        print("No working proxies found")
+        print("❌ No working proxies found")
 
 
 if __name__ == '__main__':
