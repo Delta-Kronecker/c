@@ -90,7 +90,7 @@ jobs:
 
           if [ -f "working_configs/metadata.json" ]; then
             TOTAL=$(python -c "import sys,json;print(json.load(sys.stdin)['total_working'])" < working_configs/metadata.json)
-            AVG_LATENCY=$(python -c "import sys,json;print(json.load(sys.stdin)['latency']['average'])" < working_configs/metadata.json)
+            AVG_LATENCY=$(python -c "import sys,json;data=json.load(sys.stdin);print(data.get('latency',{}).get('average','N/A'))" < working_configs/metadata.json)
             echo "## ✅ Test Successful" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### 📊 Statistics" >> $GITHUB_STEP_SUMMARY
@@ -99,8 +99,6 @@ jobs:
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### 📦 Output Files" >> $GITHUB_STEP_SUMMARY
             echo "- \`working_configs/all_working.txt\`" >> $GITHUB_STEP_SUMMARY
-            echo "- \`working_configs/all_working_base64.txt\`" >> $GITHUB_STEP_SUMMARY
-            echo "- \`working_configs/clash_config.yaml\`" >> $GITHUB_STEP_SUMMARY
             echo "- \`working_configs/by_protocol/\`" >> $GITHUB_STEP_SUMMARY
 
           elif [ -f "temp_configs/download_stats.json" ]; then
@@ -126,7 +124,7 @@ jobs:
             TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
             WORKING_COUNT="${{ steps.test.outputs.working_count }}"
             PROTOCOLS=$(python -c "import sys,json;data=json.load(sys.stdin);print(', '.join([f'{k}:{v}' for k,v in data['by_protocol'].items()]))" < working_configs/metadata.json)
-            AVG_LATENCY=$(python -c "import sys,json;print(json.load(sys.stdin)['latency']['average'])" < working_configs/metadata.json)
+            AVG_LATENCY=$(python -c "import sys,json;data=json.load(sys.stdin);print(data.get('latency',{}).get('average','N/A'))" < working_configs/metadata.json)
             git commit -m "🔄 Update working configs – ${TIMESTAMP}" \
                        -m "📊 Working: ${WORKING_COUNT}, Avg Latency: ${AVG_LATENCY}ms" \
                        -m "Protocols: ${PROTOCOLS}"
