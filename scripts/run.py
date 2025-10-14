@@ -204,6 +204,7 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
     total = len(proxies)
     completed = 0
     lock = threading.Lock()
+    last_reported = 0
 
     # Group statistics
     group_stats = {}
@@ -224,6 +225,18 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
         result = test_single_proxy(proxy, clash_path, temp_dir, test_timeout=test_timeout)
 
         return idx, proxy, result, proxy_name, proxy_type
+
+    def print_group_stats():
+        """Print current group statistics"""
+        print(f"\n{'Protocol':<12} {'Tested':<8} {'Working':<8} {'Rate':<8}")
+        print("-" * 40)
+        for ptype in sorted(group_stats.keys()):
+            stats = group_stats[ptype]
+            tested = stats['total']
+            working = stats['working']
+            rate = (working / tested * 100) if tested > 0 else 0
+            print(f"{ptype:<12} {tested:<8} {working:<8} {rate:>5.1f}%")
+        print("-" * 40 + "\n")
 
     # Use ThreadPoolExecutor for parallel testing
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -247,9 +260,12 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
                         group_stats[proxy_type]['working'] += 1
                         working_proxies.append(proxy)
 
-                    # Show progress every 10% or every 50 proxies
-                    if completed % max(1, total // 10) == 0 or completed % 50 == 0 or completed == total:
+                    # Show progress and group stats every 10% or minimum every 20 tests
+                    progress_interval = max(20, total // 10)
+                    if completed - last_reported >= progress_interval or completed == total:
+                        last_reported = completed
                         print(f"Progress: {completed}/{total} ({completed*100//total}%)")
+                        print_group_stats()
 
             except Exception as e:
                 with lock:
