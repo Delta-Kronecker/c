@@ -1,16 +1,16 @@
 {
-  "total_working": 2152,
+  "total_working": 191385,
   "by_protocol": {
-    "ss": 600,
-    "vmess": 81,
-    "vless": 1345,
-    "trojan": 126
+    "vmess": 15198,
+    "trojan": 16585,
+    "ss": 29017,
+    "vless": 130585
   },
   "latency": {
     "average": 0,
     "min": 0,
     "max": 0
   },
-  "last_updated": "2025-10-14T21:32:56.774486",
-  "timestamp": 1760477576
+  "last_updated": "2025-10-14T23:24:53.399079",
+  "timestamp": 1760484293
 }
