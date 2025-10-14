@@ -1,1 +1,1 @@
-https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector/main/sub/vless
+https://github.com/Epodonios/v2ray-configs/raw/main/All_Configs_Sub.txt
