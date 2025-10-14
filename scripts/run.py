@@ -11,10 +11,15 @@ import requests
 import threading
 import re
 import hashlib
+import warnings
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import List, Dict
 from utils import proxy_to_clash_format, generate_clash_config
+
+# Suppress urllib3 warnings
+warnings.filterwarnings('ignore', message='Unverified HTTPS request')
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 
 def sanitize_filename(name: str) -> str:
