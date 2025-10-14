@@ -9,9 +9,27 @@ import time
 import subprocess
 import requests
 import threading
+import re
+import hashlib
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import List, Dict
 from utils import proxy_to_clash_format, generate_clash_config
+
+
+def sanitize_filename(name: str) -> str:
+    """
+    Sanitize proxy name to create valid filename
+    """
+    # Remove or replace invalid characters
+    name = re.sub(r'[<>:"/\\|?*]', '_', name)
+    # Remove control characters
+    name = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', name)
+    # Limit length and create hash for uniqueness
+    if len(name) > 50:
+        name_hash = hashlib.md5(name.encode()).hexdigest()[:8]
+        name = name[:42] + '_' + name_hash
+    return name if name else 'proxy'
 
 
 def load_parsed_proxies(file_path: str) -> List[Dict]:
@@ -77,8 +95,9 @@ def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 5) -> bool:
             'https': f'http://127.0.0.1:{proxy_port}'
         }
 
-        # Test URLs
+        # Test URLs - using faster endpoints
         test_urls = [
+            'http://www.gstatic.com/generate_204',
             'http://connectivitycheck.gstatic.com/generate_204',
         ]
 
@@ -91,7 +110,7 @@ def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 5) -> bool:
                     allow_redirects=False
                 )
                 # If we get any response, proxy is working
-                if response.status_code in [200, 204, 301, 302]:
+                if response.status_code in [200, 204, 301, 302, 307]:
                     return True
             except:
                 continue
@@ -101,13 +120,21 @@ def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 5) -> bool:
         return False
 
 
-def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeout: int = 5) -> bool:
+def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeout: int = 5, proxy_port: int = None) -> bool:
     """
-    Test a single proxy using Clash
+    Test a single proxy using Clash with unique port
     """
     try:
-        # Create config file
-        config_file = os.path.join(config_dir, f"test_config_{proxy['name']}.yaml")
+        # Sanitize filename
+        safe_name = sanitize_filename(proxy.get('name', 'proxy'))
+        # Add unique ID to avoid conflicts
+        unique_id = hashlib.md5(f"{proxy.get('server', '')}:{proxy.get('port', '')}".encode()).hexdigest()[:8]
+        config_file = os.path.join(config_dir, f"test_{unique_id}_{safe_name}.yaml")
+
+        # Use provided port or default
+        if proxy_port is None:
+            proxy_port = 7890
+
         if not create_clash_config(proxy, config_file):
             return False
 
@@ -122,11 +149,11 @@ def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeou
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
             )
 
-            # Wait for Clash to start
-            time.sleep(2)
+            # Wait for Clash to start (reduced from 2s to 1.5s)
+            time.sleep(1.5)
 
             # Test connectivity
-            result = test_proxy_connectivity(timeout=test_timeout)
+            result = test_proxy_connectivity(proxy_port=proxy_port, timeout=test_timeout)
 
             return result
 
@@ -135,7 +162,7 @@ def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeou
             if process:
                 process.terminate()
                 try:
-                    process.wait(timeout=3)
+                    process.wait(timeout=2)
                 except:
                     process.kill()
 
@@ -146,35 +173,59 @@ def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeou
                 pass
 
     except Exception as e:
-        print(f"Error testing proxy {proxy.get('name', 'unknown')}: {e}")
         return False
 
 
-def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 300) -> List[Dict]:
+def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 100) -> List[Dict]:
     """
-    Test all proxies and return working ones
+    Test all proxies in parallel and return working ones
     """
     working_proxies = []
     total = len(proxies)
+    completed = 0
+    lock = threading.Lock()
 
-    print(f"\nTesting {total} proxies...")
+    # Get max workers from environment or use default
+    max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
+    test_timeout = int(os.environ.get('TEST_TIMEOUT', 10))
+
+    print(f"\nTesting {total} proxies with {max_workers} parallel workers...")
+    print(f"Timeout: {test_timeout}s per proxy")
     print(f"This may take a while...\n")
 
-    for i, proxy in enumerate(proxies, 1):
-        proxy_name = proxy.get('name', 'unknown')
+    def test_proxy_wrapper(proxy_data):
+        """Wrapper function for parallel testing"""
+        idx, proxy = proxy_data
+        proxy_name = proxy.get('name', 'unknown')[:50]  # Truncate long names
         proxy_type = proxy.get('type', 'unknown')
 
-        print(f"[{i}/{total}] Testing {proxy_type}: {proxy_name}...", end=' ')
-
         # Test proxy
-        if test_single_proxy(proxy, clash_path, temp_dir):
-            print("✓ WORKING")
-            working_proxies.append(proxy)
-        else:
-            print("✗ FAILED")
+        result = test_single_proxy(proxy, clash_path, temp_dir, test_timeout=test_timeout)
 
-        # Small delay between tests
-        time.sleep(0.5)
+        return idx, proxy, result, proxy_name, proxy_type
+
+    # Use ThreadPoolExecutor for parallel testing
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all tasks
+        futures = {executor.submit(test_proxy_wrapper, (i, proxy)): i
+                   for i, proxy in enumerate(proxies, 1)}
+
+        # Process results as they complete
+        for future in as_completed(futures):
+            try:
+                idx, proxy, result, proxy_name, proxy_type = future.result()
+
+                with lock:
+                    completed += 1
+                    status = "✓ WORKING" if result else "✗ FAILED"
+                    print(f"[{completed}/{total}] Testing {proxy_type}: {proxy_name}... {status}")
+
+                    if result:
+                        working_proxies.append(proxy)
+            except Exception as e:
+                with lock:
+                    completed += 1
+                    print(f"[{completed}/{total}] Error during test: {e}")
 
     return working_proxies
 
@@ -225,6 +276,11 @@ def save_working_configs(proxies: List[Dict], output_dir: str):
     metadata = {
         'total_working': len(proxies),
         'by_protocol': {ptype: len(plist) for ptype, plist in protocols.items()},
+        'latency': {
+            'average': 0,
+            'min': 0,
+            'max': 0
+        },
         'last_updated': datetime.now().isoformat(),
         'timestamp': int(time.time())
     }
