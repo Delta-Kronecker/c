@@ -44,7 +44,7 @@ def fetch_subscription(url: str) -> str:
         headers = {
             "User-Agent": "ClashConfigTester/1.0 (+https://github.com/)"
         }
-        resp = requests.get(url.strip(), headers=headers, timeout=20)
+        resp = requests.get(url.strip(), headers=headers, timeout=120)
         if resp.status_code == 200:
             return resp.text.strip()
         print(f"⚠️ Failed to fetch ({resp.status_code}): {url}")
@@ -57,17 +57,23 @@ def fetch_subscription(url: str) -> str:
 def parse_subscription_data(data: str) -> list[str]:
     """Detects and parses subscription format"""
     proxies = []
-    if data.startswith("vmess://") or data.startswith("ss://") or data.startswith("trojan://") or data.startswith("vless://"):
-        # Single-line or multi-line plain links
-        for line in data.strip().splitlines():
-            if any(line.strip().startswith(p) for p in ["vmess://", "vless://", "ss://", "trojan://"]):
-                proxies.append(line.strip())
-    else:
-        # Possibly base64-encoded
+    protocols = ["vmess://", "vless://", "ss://", "trojan://"]
+
+    # First, try to parse as plain text (look for proxy URLs anywhere in the content)
+    for line in data.strip().splitlines():
+        line_stripped = line.strip()
+        if any(line_stripped.startswith(p) for p in protocols):
+            proxies.append(line_stripped)
+
+    # If no proxies found, try base64 decoding
+    if not proxies:
         decoded = decode_base64(data)
-        for line in decoded.strip().splitlines():
-            if any(line.strip().startswith(p) for p in ["vmess://", "vless://", "ss://", "trojan://"]):
-                proxies.append(line.strip())
+        if decoded:
+            for line in decoded.strip().splitlines():
+                line_stripped = line.strip()
+                if any(line_stripped.startswith(p) for p in protocols):
+                    proxies.append(line_stripped)
+
     return proxies
 
 
