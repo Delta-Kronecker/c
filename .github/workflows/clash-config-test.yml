@@ -8,11 +8,11 @@ on:
       test_workers:
         description: 'Number of parallel test workers'
         required: false
-        default: '20'
+        default: '100'
       test_timeout:
         description: 'Test timeout (seconds)'
         required: false
-        default: '10'
+        default: '15'
   push:
     branches: [main]
     paths:
@@ -23,7 +23,6 @@ on:
 jobs:
   test-configs:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
 
     steps:
       - name: Checkout repository
@@ -65,8 +64,8 @@ jobs:
       - name: Test configs
         id: test
         env:
-          TEST_WORKERS: ${{ github.event.inputs.test_workers || '20' }}
-          TEST_TIMEOUT: ${{ github.event.inputs.test_timeout || '10' }}
+          TEST_WORKERS: ${{ github.event.inputs.test_workers || '100' }}
+          TEST_TIMEOUT: ${{ github.event.inputs.test_timeout || '15' }}
         run: |
           cd scripts
           python run.py
