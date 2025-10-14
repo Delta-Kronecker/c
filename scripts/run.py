@@ -196,47 +196,24 @@ def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeou
         return False
 
 
-def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 100) -> List[Dict]:
+def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int, test_timeout: int) -> tuple:
     """
-    Test all proxies in parallel and return working ones
+    Test proxies for a specific group/protocol
     """
     working_proxies = []
     total = len(proxies)
     completed = 0
     lock = threading.Lock()
-    last_reported = 0
 
-    # Group statistics
-    group_stats = {}
-
-    # Get max workers from environment or use default
-    max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
-    test_timeout = int(os.environ.get('TEST_TIMEOUT', 15))  # Increased to 15s for strict testing
-
-    print(f"\n🔍 Testing {total} proxies ({max_workers} workers, {test_timeout}s timeout)\n")
+    print(f"\n{'='*60}")
+    print(f"🔍 Testing {group_name.upper()} Group - {total} proxies")
+    print(f"{'='*60}")
 
     def test_proxy_wrapper(proxy_data):
         """Wrapper function for parallel testing"""
         idx, proxy = proxy_data
-        proxy_name = proxy.get('name', 'unknown')[:50]  # Truncate long names
-        proxy_type = proxy.get('type', 'unknown')
-
-        # Test proxy
         result = test_single_proxy(proxy, clash_path, temp_dir, test_timeout=test_timeout)
-
-        return idx, proxy, result, proxy_name, proxy_type
-
-    def print_group_stats():
-        """Print current group statistics"""
-        print(f"\n{'Protocol':<12} {'Tested':<8} {'Working':<8} {'Rate':<8}")
-        print("-" * 40)
-        for ptype in sorted(group_stats.keys()):
-            stats = group_stats[ptype]
-            tested = stats['total']
-            working = stats['working']
-            rate = (working / tested * 100) if tested > 0 else 0
-            print(f"{ptype:<12} {tested:<8} {working:<8} {rate:>5.1f}%")
-        print("-" * 40 + "\n")
+        return idx, proxy, result
 
     # Use ThreadPoolExecutor for parallel testing
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -247,31 +224,77 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
         # Process results as they complete
         for future in as_completed(futures):
             try:
-                idx, proxy, result, proxy_name, proxy_type = future.result()
+                idx, proxy, result = future.result()
 
                 with lock:
                     completed += 1
-
-                    # Update group statistics
-                    if proxy_type not in group_stats:
-                        group_stats[proxy_type] = {'total': 0, 'working': 0}
-                    group_stats[proxy_type]['total'] += 1
                     if result:
-                        group_stats[proxy_type]['working'] += 1
                         working_proxies.append(proxy)
 
-                    # Show progress and group stats every 10% or minimum every 20 tests
-                    progress_interval = max(20, total // 10)
-                    if completed - last_reported >= progress_interval or completed == total:
-                        last_reported = completed
-                        print(f"Progress: {completed}/{total} ({completed*100//total}%)")
-                        print_group_stats()
+                    # Show progress
+                    percentage = (completed * 100) // total
+                    working_count = len(working_proxies)
+                    success_rate = (working_count / completed * 100) if completed > 0 else 0
+
+                    # Update every 10% or at key milestones
+                    if completed % max(1, total // 10) == 0 or completed == total:
+                        print(f"  [{completed}/{total}] {percentage}% | Working: {working_count} | Success Rate: {success_rate:.1f}%")
 
             except Exception as e:
                 with lock:
                     completed += 1
 
-    return working_proxies, group_stats
+    # Final summary for this group
+    success_rate = (len(working_proxies) / total * 100) if total > 0 else 0
+    print(f"\n  ✓ {group_name.upper()} Complete: {len(working_proxies)}/{total} working ({success_rate:.1f}%)")
+
+    return working_proxies, {'total': total, 'working': len(working_proxies)}
+
+
+def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 100) -> List[Dict]:
+    """
+    Test all proxies grouped by protocol type
+    """
+    # Get max workers from environment or use default
+    max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
+    test_timeout = int(os.environ.get('TEST_TIMEOUT', 15))
+
+    # Group proxies by protocol type
+    groups = {}
+    for proxy in proxies:
+        ptype = proxy.get('type', 'unknown')
+        if ptype not in groups:
+            groups[ptype] = []
+        groups[ptype].append(proxy)
+
+    print(f"\n{'='*60}")
+    print(f"📊 Test Overview")
+    print(f"{'='*60}")
+    print(f"Total proxies: {len(proxies)}")
+    print(f"Workers: {max_workers} | Timeout: {test_timeout}s")
+    print(f"\nGroups found:")
+    for ptype, plist in sorted(groups.items()):
+        print(f"  • {ptype.upper()}: {len(plist)} proxies")
+    print(f"{'='*60}")
+
+    # Test each group separately
+    all_working = []
+    group_stats = {}
+
+    for group_name in sorted(groups.keys()):
+        group_proxies = groups[group_name]
+        working, stats = test_group_proxies(
+            group_name,
+            group_proxies,
+            clash_path,
+            temp_dir,
+            max_workers,
+            test_timeout
+        )
+        all_working.extend(working)
+        group_stats[group_name] = stats
+
+    return all_working, group_stats
 
 
 def save_working_configs(proxies: List[Dict], output_dir: str):
