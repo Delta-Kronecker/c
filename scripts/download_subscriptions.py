@@ -15,6 +15,7 @@ import base64
 import pathlib
 import requests
 from datetime import datetime
+from utils import parse_proxy_url
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
 TEMP_DIR = BASE_DIR.parent / "temp_configs"
@@ -91,23 +92,41 @@ def main():
     print("🚀 Starting subscription download...")
     urls = load_subscriptions()
 
-    all_proxies = []
+    all_proxy_urls = []
     for url in urls:
         print(f"→ Fetching: {url}")
         raw = fetch_subscription(url)
         parsed = parse_subscription_data(raw)
-        print(f"   ↳ Found {len(parsed)} proxies.")
-        all_proxies.extend(parsed)
+        print(f"   ↳ Found {len(parsed)} proxy URLs.")
+        all_proxy_urls.extend(parsed)
 
-    print(f"\n✅ Total proxies collected: {len(all_proxies)}")
+    print(f"\n✅ Total proxy URLs collected: {len(all_proxy_urls)}")
+
+    # Parse proxy URLs into dictionaries
+    print("🔄 Parsing proxy configurations...")
+    parsed_proxies = []
+    failed_count = 0
+
+    for proxy_url in all_proxy_urls:
+        parsed = parse_proxy_url(proxy_url)
+        if parsed:
+            parsed_proxies.append(parsed)
+        else:
+            failed_count += 1
+
+    print(f"✅ Successfully parsed: {len(parsed_proxies)} proxies")
+    if failed_count > 0:
+        print(f"⚠️  Failed to parse: {failed_count} proxies")
 
     # Save parsed proxies
     parsed_path = TEMP_DIR / "parsed_proxies.json"
-    save_json(parsed_path, all_proxies)
+    save_json(parsed_path, parsed_proxies)
 
     stats = {
         "timestamp": datetime.utcnow().isoformat() + "Z",
-        "total_parsed": len(all_proxies),
+        "total_urls": len(all_proxy_urls),
+        "total_parsed": len(parsed_proxies),
+        "failed": failed_count,
         "sources": len(urls),
     }
     save_json(TEMP_DIR / "download_stats.json", stats)
