@@ -253,7 +253,7 @@ def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str, te
 
 def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 100) -> List[Dict]:
     """
-    Test all proxies grouped by protocol type
+    Test all proxies grouped by protocol type - groups run in parallel
     """
     # Get max workers from environment or use default
     max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
@@ -271,18 +271,21 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
     print(f"📊 Test Overview")
     print(f"{'='*60}")
     print(f"Total proxies: {len(proxies)}")
-    print(f"Workers: {max_workers} | Timeout: {test_timeout}s")
+    print(f"Workers per group: {max_workers} | Timeout: {test_timeout}s")
     print(f"\nGroups found:")
     for ptype, plist in sorted(groups.items()):
         print(f"  • {ptype.upper()}: {len(plist)} proxies")
     print(f"{'='*60}")
+    print(f"\n🚀 Testing all groups in PARALLEL...\n")
 
-    # Test each group separately
+    # Test each group in parallel using threads
     all_working = []
     group_stats = {}
+    lock = threading.Lock()
 
-    for group_name in sorted(groups.keys()):
-        group_proxies = groups[group_name]
+    def test_group_wrapper(group_data):
+        """Wrapper to test a group and return results"""
+        group_name, group_proxies = group_data
         working, stats = test_group_proxies(
             group_name,
             group_proxies,
@@ -291,8 +294,23 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
             max_workers,
             test_timeout
         )
-        all_working.extend(working)
-        group_stats[group_name] = stats
+        return group_name, working, stats
+
+    # Run all groups in parallel
+    with ThreadPoolExecutor(max_workers=len(groups)) as executor:
+        # Submit all group tests
+        futures = {executor.submit(test_group_wrapper, (name, proxies)): name
+                   for name, proxies in groups.items()}
+
+        # Collect results as they complete
+        for future in as_completed(futures):
+            try:
+                group_name, working, stats = future.result()
+                with lock:
+                    all_working.extend(working)
+                    group_stats[group_name] = stats
+            except Exception as e:
+                print(f"Error testing group: {e}")
 
     return all_working, group_stats
 
