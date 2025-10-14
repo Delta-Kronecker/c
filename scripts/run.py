@@ -85,9 +85,9 @@ def create_clash_config(proxy: Dict, config_file: str) -> bool:
         return False
 
 
-def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 5) -> bool:
+def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 8) -> bool:
     """
-    Test proxy connectivity by making HTTP request through it
+    Test proxy connectivity with strict multi-URL verification
     """
     try:
         proxies = {
@@ -95,24 +95,39 @@ def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 5) -> bool:
             'https': f'http://127.0.0.1:{proxy_port}'
         }
 
-        # Test URLs - using faster endpoints
+        # Multiple test URLs - ALL must succeed for strict testing
         test_urls = [
-            'http://www.gstatic.com/generate_204',
-            'http://connectivitycheck.gstatic.com/generate_204',
+            ('http://www.gstatic.com/generate_204', [204]),
+            ('http://connectivitycheck.gstatic.com/generate_204', [204]),
+            ('https://www.google.com/favicon.ico', [200]),
         ]
 
-        for test_url in test_urls:
+        success_count = 0
+        required_success = 2  # At least 2 out of 3 must succeed
+
+        for test_url, valid_codes in test_urls:
             try:
                 response = requests.get(
                     test_url,
                     proxies=proxies,
                     timeout=timeout,
-                    allow_redirects=False
+                    allow_redirects=False,
+                    verify=False
                 )
-                # If we get any response, proxy is working
-                if response.status_code in [200, 204, 301, 302, 307]:
-                    return True
+                # Check if status code is valid
+                if response.status_code in valid_codes:
+                    success_count += 1
+                    # If we got enough successes, return True
+                    if success_count >= required_success:
+                        return True
+            except requests.exceptions.ProxyError:
+                # Proxy connection failed
+                return False
+            except requests.exceptions.Timeout:
+                # Timeout - proxy is too slow
+                continue
             except:
+                # Other errors
                 continue
 
         return False
@@ -149,10 +164,10 @@ def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeou
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
             )
 
-            # Wait for Clash to start (reduced from 2s to 1.5s)
-            time.sleep(1.5)
+            # Wait for Clash to start
+            time.sleep(2)
 
-            # Test connectivity
+            # Test connectivity with strict verification
             result = test_proxy_connectivity(proxy_port=proxy_port, timeout=test_timeout)
 
             return result
@@ -187,10 +202,12 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
 
     # Get max workers from environment or use default
     max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
-    test_timeout = int(os.environ.get('TEST_TIMEOUT', 10))
+    test_timeout = int(os.environ.get('TEST_TIMEOUT', 15))  # Increased to 15s for strict testing
 
-    print(f"\nTesting {total} proxies with {max_workers} parallel workers...")
+    print(f"\n🔍 Strict Testing Mode Enabled")
+    print(f"Testing {total} proxies with {max_workers} parallel workers...")
     print(f"Timeout: {test_timeout}s per proxy")
+    print(f"Verification: Multiple URLs (2/3 must succeed)")
     print(f"This may take a while...\n")
 
     def test_proxy_wrapper(proxy_data):
