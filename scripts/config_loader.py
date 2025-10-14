@@ -149,7 +149,7 @@ class ClashConfigRunner:
         # Initialize tester
         tester = ClashTester(
             clash_path=clash_path,
-            max_workers=test_config.get('max_workers', 20),
+            max_workers=test_config.get('max_workers', 100),
             test_timeout=test_config.get('timeout', 10)
         )
         
