@@ -15,7 +15,7 @@ import base64
 import pathlib
 import requests
 from datetime import datetime
-from utils import parse_proxy_url
+from utils import parse_proxy_url, calculate_proxy_hash
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
 TEMP_DIR = BASE_DIR.parent / "temp_configs"
@@ -94,6 +94,28 @@ def save_json(path: pathlib.Path, data):
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
+def remove_duplicate_proxies(proxies: list) -> list:
+    """Remove duplicate proxies based on server:port:type combination"""
+    seen_hashes = set()
+    unique_proxies = []
+    duplicate_count = 0
+
+    for proxy in proxies:
+        proxy_hash = calculate_proxy_hash(proxy)
+
+        if proxy_hash not in seen_hashes:
+            seen_hashes.add(proxy_hash)
+            unique_proxies.append(proxy)
+        else:
+            duplicate_count += 1
+
+    if duplicate_count > 0:
+        print(f"🔄 Removed {duplicate_count} duplicate configs")
+        print(f"✅ Unique configs: {len(unique_proxies)}")
+
+    return unique_proxies
+
+
 def main():
     print("🚀 Starting subscription download...")
     urls = load_subscriptions()
@@ -124,6 +146,10 @@ def main():
     if failed_count > 0:
         print(f"⚠️  Failed to parse: {failed_count} proxies")
 
+    # Remove duplicates
+    print(f"\n🔍 Checking for duplicate configurations...")
+    parsed_proxies = remove_duplicate_proxies(parsed_proxies)
+
     # Save parsed proxies
     parsed_path = TEMP_DIR / "parsed_proxies.json"
     save_json(parsed_path, parsed_proxies)
@@ -131,9 +157,10 @@ def main():
     stats = {
         "timestamp": datetime.utcnow().isoformat() + "Z",
         "total_urls": len(all_proxy_urls),
-        "total_parsed": len(parsed_proxies),
+        "total_parsed": len(parsed_proxies),  # After deduplication
         "failed": failed_count,
         "sources": len(urls),
+        "unique_configs": len(parsed_proxies),
     }
     save_json(TEMP_DIR / "download_stats.json", stats)
 
