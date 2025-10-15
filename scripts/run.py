@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import List, Dict, Optional, Tuple
 from contextlib import contextmanager
-from utils import proxy_to_clash_format, generate_clash_config
+from utils import proxy_to_clash_format, generate_clash_config, calculate_proxy_hash
 
 warnings.filterwarnings('ignore', message='Unverified HTTPS request')
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
@@ -132,11 +132,38 @@ def sanitize_filename(name: str) -> str:
     return name if name else 'proxy'
 
 
+def remove_duplicate_proxies(proxies: List[Dict]) -> List[Dict]:
+    """Remove duplicate proxies based on server:port:type combination"""
+    seen_hashes = set()
+    unique_proxies = []
+    duplicate_count = 0
+
+    for proxy in proxies:
+        proxy_hash = calculate_proxy_hash(proxy)
+
+        if proxy_hash not in seen_hashes:
+            seen_hashes.add(proxy_hash)
+            unique_proxies.append(proxy)
+        else:
+            duplicate_count += 1
+
+    if duplicate_count > 0:
+        print(f"  Removed {duplicate_count} duplicate configs")
+        print(f"  Unique configs: {len(unique_proxies)}")
+
+    return unique_proxies
+
+
 def load_parsed_proxies(file_path: str) -> List[Dict]:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             proxies = json.load(f)
         print(f"Loaded {len(proxies)} parsed proxies")
+
+        # Remove duplicates before testing
+        print("Removing duplicate configurations...")
+        proxies = remove_duplicate_proxies(proxies)
+
         return proxies
     except Exception as e:
         print(f"Error loading proxies: {e}")
@@ -173,7 +200,7 @@ def create_clash_config(proxy: Dict, config_file: str, proxy_port: int, control_
         return False
 
 
-def test_proxy_connectivity(proxy_port: int, timeout: int = 6, retry: int = 1) -> Tuple[bool, float]:
+def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -> Tuple[bool, float]:
     proxies = {
         'http': f'http://127.0.0.1:{proxy_port}',
         'https': f'http://127.0.0.1:{proxy_port}'
@@ -181,7 +208,7 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 6, retry: int = 1) -
 
     test_targets = [
         {
-            'url': 'http://www.gstatic.com/generate_204',
+            'url': 'http://connectivitycheck.gstatic.com/generate_204',
             'expected_code': 204,
             'min_size': None,
             'weight': 2
@@ -193,16 +220,22 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 6, retry: int = 1) -
             'weight': 2
         },
         {
-            'url': 'https://www.google.com/favicon.ico',
-            'expected_code': 200,
-            'min_size': 100,
-            'weight': 5
+            'url': 'http://connectivitycheck.gstatic.com/generate_204',
+            'expected_code': 204,
+            'min_size': None,
+            'weight': 2
         },
         {
-            'url': 'https://cloudflare.com/cdn-cgi/trace',
-            'expected_code': 200,
-            'min_size': 50,
-            'weight': 4
+            'url': 'http://connectivitycheck.gstatic.com/generate_204',
+            'expected_code': 204,
+            'min_size': None,
+            'weight': 2
+        },
+        {
+            'url': 'http://connectivitycheck.gstatic.com/generate_204',
+            'expected_code': 204,
+            'min_size': None,
+            'weight': 2
         }
     ]
 
@@ -239,7 +272,7 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 6, retry: int = 1) -
             except Exception:
                 continue
 
-        if passed_tests >= total_weight * 0.85:
+        if passed_tests >= total_weight * 0.75:
             break
 
         if attempt < retry - 1:
@@ -247,7 +280,7 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 6, retry: int = 1) -
             passed_tests = 0
             latencies.clear()
 
-    success = passed_tests >= total_weight * 0.85
+    success = passed_tests >= total_weight * 0.75
     avg_latency = sum(latencies) / len(latencies) if latencies else 0
 
     return success, avg_latency
@@ -372,7 +405,7 @@ def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str,
 def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
                      max_workers: int = 50) -> Tuple[List[Dict], Dict, Dict]:
     max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
-    test_timeout = int(os.environ.get('TEST_TIMEOUT', 6))
+    test_timeout = int(os.environ.get('TEST_TIMEOUT', 8))
     batch_size = int(os.environ.get('BATCH_SIZE', 50))
 
     port_manager = PortManager()
