@@ -90,9 +90,10 @@ def create_clash_config(proxy: Dict, config_file: str) -> bool:
         return False
 
 
-def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 8) -> bool:
+def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 5) -> bool:
     """
-    Test proxy connectivity with strict multi-URL verification
+    Test proxy connectivity with VERY STRICT multi-URL verification
+    ALL tests must pass for the proxy to be considered working
     """
     try:
         proxies = {
@@ -102,15 +103,13 @@ def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 8) -> bool:
 
         # Multiple test URLs - ALL must succeed for strict testing
         test_urls = [
-            ('http://www.gstatic.com/generate_204', [204]),
-            ('http://connectivitycheck.gstatic.com/generate_204', [204]),
-            ('https://www.google.com/favicon.ico', [200]),
+            ('http://www.gstatic.com/generate_204', [204], None),  # Must be 204
+            ('http://connectivitycheck.gstatic.com/generate_204', [204], None),  # Must be 204
+            ('https://www.google.com/favicon.ico', [200], 100),  # Must be 200 and have content
         ]
 
-        success_count = 0
-        required_success = 2  # At least 2 out of 3 must succeed
-
-        for test_url, valid_codes in test_urls:
+        # ALL tests must pass - if any fail, the proxy is not working
+        for test_url, valid_codes, min_size in test_urls:
             try:
                 response = requests.get(
                     test_url,
@@ -120,22 +119,30 @@ def test_proxy_connectivity(proxy_port: int = 7890, timeout: int = 8) -> bool:
                     verify=False
                 )
                 # Check if status code is valid
-                if response.status_code in valid_codes:
-                    success_count += 1
-                    # If we got enough successes, return True
-                    if success_count >= required_success:
-                        return True
+                if response.status_code not in valid_codes:
+                    return False
+
+                # If min_size specified, verify response has content
+                if min_size is not None:
+                    if len(response.content) < min_size:
+                        return False
+
             except requests.exceptions.ProxyError:
-                # Proxy connection failed
+                # Proxy connection failed - definite failure
                 return False
             except requests.exceptions.Timeout:
-                # Timeout - proxy is too slow
-                continue
-            except:
-                # Other errors
-                continue
+                # Timeout - proxy is too slow or not working
+                return False
+            except requests.exceptions.ConnectionError:
+                # Connection failed - proxy not working
+                return False
+            except Exception as e:
+                # Any other error means proxy is not working
+                return False
 
-        return False
+        # All tests passed - proxy is working
+        return True
+
     except Exception as e:
         return False
 
@@ -257,7 +264,7 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
     """
     # Get max workers from environment or use default
     max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
-    test_timeout = int(os.environ.get('TEST_TIMEOUT', 15))
+    test_timeout = int(os.environ.get('TEST_TIMEOUT', 5))
 
     # Group proxies by protocol type
     groups = {}
