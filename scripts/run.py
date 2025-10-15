@@ -203,18 +203,14 @@ def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str, test_timeou
         return False
 
 
-def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int, test_timeout: int) -> tuple:
+def test_batch_proxies(batch_num: int, batch_proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int, test_timeout: int) -> tuple:
     """
-    Test proxies for a specific group/protocol
+    Test a single batch of proxies (up to 100) in parallel
     """
     working_proxies = []
-    total = len(proxies)
+    batch_size = len(batch_proxies)
     completed = 0
     lock = threading.Lock()
-
-    print(f"\n{'='*60}")
-    print(f"🔍 Testing {group_name.upper()} Group - {total} proxies")
-    print(f"{'='*60}")
 
     def test_proxy_wrapper(proxy_data):
         """Wrapper function for parallel testing"""
@@ -222,11 +218,11 @@ def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str, te
         result = test_single_proxy(proxy, clash_path, temp_dir, test_timeout=test_timeout)
         return idx, proxy, result
 
-    # Use ThreadPoolExecutor for parallel testing
+    # Use ThreadPoolExecutor for parallel testing within batch
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        # Submit all tasks
+        # Submit all tasks for this batch
         futures = {executor.submit(test_proxy_wrapper, (i, proxy)): i
-                   for i, proxy in enumerate(proxies, 1)}
+                   for i, proxy in enumerate(batch_proxies, 1)}
 
         # Process results as they complete
         for future in as_completed(futures):
@@ -238,33 +234,77 @@ def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str, te
                     if result:
                         working_proxies.append(proxy)
 
-                    # Show progress
-                    percentage = (completed * 100) // total
-                    working_count = len(working_proxies)
-                    success_rate = (working_count / completed * 100) if completed > 0 else 0
-
-                    # Update every 10% or at key milestones
-                    if completed % max(1, total // 10) == 0 or completed == total:
-                        print(f"  [{completed}/{total}] {percentage}% | Working: {working_count} | Success Rate: {success_rate:.1f}%")
-
             except Exception as e:
                 with lock:
                     completed += 1
 
+    return working_proxies, completed
+
+
+def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int, test_timeout: int, batch_size: int = 100) -> tuple:
+    """
+    Test proxies for a specific group/protocol in batches of 100
+    Each batch is tested in parallel, but batches are processed sequentially
+    """
+    working_proxies = []
+    total = len(proxies)
+
+    print(f"\n{'='*60}")
+    print(f"🔍 Testing {group_name.upper()} Group - {total} proxies")
+    print(f"{'='*60}")
+
+    # Split proxies into batches
+    num_batches = (total + batch_size - 1) // batch_size  # Ceiling division
+
+    total_tested = 0
+
+    for batch_num in range(num_batches):
+        start_idx = batch_num * batch_size
+        end_idx = min(start_idx + batch_size, total)
+        batch_proxies = proxies[start_idx:end_idx]
+
+        batch_count = len(batch_proxies)
+
+        print(f"\n  📦 Batch {batch_num + 1}/{num_batches} - Testing {batch_count} configs...")
+
+        # Test this batch in parallel
+        batch_working, batch_tested = test_batch_proxies(
+            batch_num + 1,
+            batch_proxies,
+            clash_path,
+            temp_dir,
+            max_workers,
+            test_timeout
+        )
+
+        # Update totals
+        working_proxies.extend(batch_working)
+        total_tested += batch_tested
+
+        # Print batch report
+        batch_success_rate = (len(batch_working) / batch_tested * 100) if batch_tested > 0 else 0
+        overall_success_rate = (len(working_proxies) / total_tested * 100) if total_tested > 0 else 0
+
+        print(f"  ✓ Batch {batch_num + 1} Complete:")
+        print(f"     - Batch: {len(batch_working)}/{batch_tested} working ({batch_success_rate:.1f}%)")
+        print(f"     - Overall: {len(working_proxies)}/{total_tested} working ({overall_success_rate:.1f}%)")
+
     # Final summary for this group
     success_rate = (len(working_proxies) / total * 100) if total > 0 else 0
-    print(f"\n  ✓ {group_name.upper()} Complete: {len(working_proxies)}/{total} working ({success_rate:.1f}%)")
+    print(f"\n  ✅ {group_name.upper()} COMPLETE: {len(working_proxies)}/{total} working ({success_rate:.1f}%)")
 
     return working_proxies, {'total': total, 'working': len(working_proxies)}
 
 
 def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_workers: int = 100) -> List[Dict]:
     """
-    Test all proxies grouped by protocol type - groups run in parallel
+    Test all proxies grouped by protocol type - protocols tested SEQUENTIALLY
+    Each protocol is divided into batches of 100 that run in parallel
     """
     # Get max workers from environment or use default
     max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
     test_timeout = int(os.environ.get('TEST_TIMEOUT', 5))
+    batch_size = int(os.environ.get('BATCH_SIZE', 100))
 
     # Group proxies by protocol type
     groups = {}
@@ -278,46 +318,37 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str, max_wo
     print(f"📊 Test Overview")
     print(f"{'='*60}")
     print(f"Total proxies: {len(proxies)}")
-    print(f"Workers per group: {max_workers} | Timeout: {test_timeout}s")
+    print(f"Workers per batch: {max_workers} | Timeout: {test_timeout}s | Batch size: {batch_size}")
     print(f"\nGroups found:")
     for ptype, plist in sorted(groups.items()):
         print(f"  • {ptype.upper()}: {len(plist)} proxies")
     print(f"{'='*60}")
-    print(f"\n🚀 Testing all groups in PARALLEL...\n")
+    print(f"\n🚀 Testing protocols SEQUENTIALLY (batches of {batch_size})...\n")
 
-    # Test each group in parallel using threads
+    # Test each group SEQUENTIALLY (one protocol at a time)
     all_working = []
     group_stats = {}
-    lock = threading.Lock()
 
-    def test_group_wrapper(group_data):
-        """Wrapper to test a group and return results"""
-        group_name, group_proxies = group_data
-        working, stats = test_group_proxies(
-            group_name,
-            group_proxies,
-            clash_path,
-            temp_dir,
-            max_workers,
-            test_timeout
-        )
-        return group_name, working, stats
+    # Process protocols in sorted order for consistent output
+    for group_name, group_proxies in sorted(groups.items()):
+        try:
+            # Test this protocol group
+            working, stats = test_group_proxies(
+                group_name,
+                group_proxies,
+                clash_path,
+                temp_dir,
+                max_workers,
+                test_timeout,
+                batch_size
+            )
 
-    # Run all groups in parallel
-    with ThreadPoolExecutor(max_workers=len(groups)) as executor:
-        # Submit all group tests
-        futures = {executor.submit(test_group_wrapper, (name, proxies)): name
-                   for name, proxies in groups.items()}
+            all_working.extend(working)
+            group_stats[group_name] = stats
 
-        # Collect results as they complete
-        for future in as_completed(futures):
-            try:
-                group_name, working, stats = future.result()
-                with lock:
-                    all_working.extend(working)
-                    group_stats[group_name] = stats
-            except Exception as e:
-                print(f"Error testing group: {e}")
+        except Exception as e:
+            print(f"Error testing {group_name} group: {e}")
+            group_stats[group_name] = {'total': len(group_proxies), 'working': 0}
 
     return all_working, group_stats
 
