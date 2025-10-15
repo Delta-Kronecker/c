@@ -272,7 +272,7 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -
             except Exception:
                 continue
 
-        if passed_tests >= total_weight * 0.90:
+        if passed_tests >= total_weight * 0.70:
             break
 
         if attempt < retry - 1:
@@ -280,7 +280,7 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -
             passed_tests = 0
             latencies.clear()
 
-    success = passed_tests >= total_weight * 0.90
+    success = passed_tests >= total_weight * 0.70
     avg_latency = sum(latencies) / len(latencies) if latencies else 0
 
     return success, avg_latency
