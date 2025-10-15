@@ -329,6 +329,7 @@ def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str,
     print(f"\n{'='*60}")
     print(f"Testing {group_name.upper()} - {total} proxies")
     print(f"{'='*60}")
+    sys.stdout.flush()
 
     num_batches = (total + batch_size - 1) // batch_size
     total_tested = 0
@@ -359,9 +360,11 @@ def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str,
 
         print(f"  Batch {batch_num + 1}: {len(batch_working)}/{batch_tested} ({batch_rate:.1f}%)")
         print(f"  Overall: {len(working_proxies)}/{total_tested} ({overall_rate:.1f}%)")
+        sys.stdout.flush()
 
     success_rate = (len(working_proxies) / total * 100) if total > 0 else 0
     print(f"\n  {group_name.upper()} Complete: {len(working_proxies)}/{total} ({success_rate:.1f}%)")
+    sys.stdout.flush()
 
     return working_proxies, {'total': total, 'working': len(working_proxies)}, all_latencies
 
@@ -390,6 +393,7 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
     for ptype, plist in sorted(groups.items()):
         print(f"  {ptype.upper()}: {len(plist)}")
     print(f"{'='*60}")
+    sys.stdout.flush()
 
     all_working = []
     group_stats = {}
@@ -414,6 +418,7 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
 
         except Exception as e:
             print(f"Error testing {group_name}: {e}")
+            sys.stdout.flush()
             group_stats[group_name] = {'total': len(group_proxies), 'working': 0}
 
     return all_working, group_stats, all_latencies
