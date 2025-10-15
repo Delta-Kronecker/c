@@ -1,16 +1,16 @@
 {
-  "total_working": 233,
+  "total_working": 1502,
   "by_protocol": {
-    "ss": 27,
-    "trojan": 7,
-    "vless": 181,
-    "vmess": 18
+    "ss": 186,
+    "trojan": 39,
+    "vless": 1104,
+    "vmess": 173
   },
   "latency": {
-    "average": 71.64227126575098,
-    "min": 41.44573211669922,
-    "max": 147.8266716003418
+    "average": 18.621000693139514,
+    "min": 14.39814567565918,
+    "max": 38.66415023803711
   },
-  "last_updated": "2025-10-15T10:10:13.555753",
-  "timestamp": 1760523013
+  "last_updated": "2025-10-15T10:51:36.333753",
+  "timestamp": 1760525496
 }
