@@ -173,7 +173,7 @@ def create_clash_config(proxy: Dict, config_file: str, proxy_port: int, control_
         return False
 
 
-def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -> Tuple[bool, float]:
+def test_proxy_connectivity(proxy_port: int, timeout: int = 6, retry: int = 1) -> Tuple[bool, float]:
     proxies = {
         'http': f'http://127.0.0.1:{proxy_port}',
         'https': f'http://127.0.0.1:{proxy_port}'
@@ -196,13 +196,13 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -
             'url': 'https://www.google.com/favicon.ico',
             'expected_code': 200,
             'min_size': 100,
-            'weight': 3
+            'weight': 5
         },
         {
             'url': 'https://cloudflare.com/cdn-cgi/trace',
             'expected_code': 200,
             'min_size': 50,
-            'weight': 2
+            'weight': 4
         }
     ]
 
@@ -239,7 +239,7 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -
             except Exception:
                 continue
 
-        if passed_tests >= total_weight * 0.75:
+        if passed_tests >= total_weight * 0.85:
             break
 
         if attempt < retry - 1:
@@ -247,7 +247,7 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -
             passed_tests = 0
             latencies.clear()
 
-    success = passed_tests >= total_weight * 0.75
+    success = passed_tests >= total_weight * 0.85
     avg_latency = sum(latencies) / len(latencies) if latencies else 0
 
     return success, avg_latency
@@ -372,7 +372,7 @@ def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str,
 def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
                      max_workers: int = 50) -> Tuple[List[Dict], Dict, Dict]:
     max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
-    test_timeout = int(os.environ.get('TEST_TIMEOUT', 8))
+    test_timeout = int(os.environ.get('TEST_TIMEOUT', 6))
     batch_size = int(os.environ.get('BATCH_SIZE', 50))
 
     port_manager = PortManager()
