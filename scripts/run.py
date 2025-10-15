@@ -214,25 +214,25 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -
             'weight': 2
         },
         {
-            'url': 'http://connectivitycheck.gstatic.com/generate_204',
+            'url': 'http://cp.cloudflare.com',
             'expected_code': 204,
             'min_size': None,
             'weight': 2
         },
         {
-            'url': 'http://connectivitycheck.gstatic.com/generate_204',
+            'url': 'http://www.gstatic.com/generate_204',
             'expected_code': 204,
             'min_size': None,
             'weight': 2
         },
         {
-            'url': 'http://connectivitycheck.gstatic.com/generate_204',
+            'url': 'https://www.gstatic.com/generate_204',
             'expected_code': 204,
             'min_size': None,
             'weight': 2
         },
         {
-            'url': 'http://connectivitycheck.gstatic.com/generate_204',
+            'url': 'https://1.1.1.1',
             'expected_code': 204,
             'min_size': None,
             'weight': 2
@@ -272,7 +272,7 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -
             except Exception:
                 continue
 
-        if passed_tests >= total_weight * 0.75:
+        if passed_tests >= total_weight * 0.90:
             break
 
         if attempt < retry - 1:
@@ -280,7 +280,7 @@ def test_proxy_connectivity(proxy_port: int, timeout: int = 8, retry: int = 2) -
             passed_tests = 0
             latencies.clear()
 
-    success = passed_tests >= total_weight * 0.75
+    success = passed_tests >= total_weight * 0.90
     avg_latency = sum(latencies) / len(latencies) if latencies else 0
 
     return success, avg_latency
