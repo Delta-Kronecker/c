@@ -1,5 +1,5 @@
 """
-Ultra-Reliable Proxy Testing System with Advanced Validation
+Balanced and Reliable Proxy Testing System
 """
 import os
 import sys
@@ -22,39 +22,24 @@ from contextlib import contextmanager
 warnings.filterwarnings('ignore', message='Unverified HTTPS request')
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
+SESSION = requests.Session()
+SESSION.verify = False
+
 
 class OutputManager:
     def __init__(self):
         self.lock = threading.Lock()
-        self.message_queue = queue.Queue()
-        self.running = True
-        self.thread = threading.Thread(target=self._printer_worker, daemon=True)
-        self.thread.start()
-    
-    def _printer_worker(self):
-        while self.running or not self.message_queue.empty():
-            try:
-                msg = self.message_queue.get(timeout=0.1)
-                print(msg, flush=True)
-                self.message_queue.task_done()
-            except queue.Empty:
-                continue
     
     def print(self, message: str):
-        self.message_queue.put(message)
-    
-    def shutdown(self):
-        self.running = False
-        self.message_queue.join()
-        if self.thread.is_alive():
-            self.thread.join(timeout=2)
+        with self.lock:
+            print(message, flush=True)
 
 
 output_manager = OutputManager()
 
 
 class PortManager:
-    def __init__(self, start_port: int = 17890, end_port: int = 27890):
+    def __init__(self, start_port: int = 17890, end_port: int = 25890):
         self.start_port = start_port
         self.end_port = end_port
         self.used_ports = set()
@@ -64,8 +49,9 @@ class PortManager:
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
                 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-                sock.bind(('127.0.0.1', port))
-                return True
+                sock.settimeout(0.5)
+                result = sock.connect_ex(('127.0.0.1', port))
+                return result != 0
         except:
             return False
     
@@ -91,7 +77,7 @@ class ClashInstance:
         self.process = None
         self.is_ready = False
     
-    def start(self, timeout: int = 15) -> bool:
+    def start(self, timeout: int = 12) -> bool:
         try:
             self.process = subprocess.Popen(
                 [self.clash_binary, '-f', self.config_path],
@@ -100,31 +86,20 @@ class ClashInstance:
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
             )
             
+            time.sleep(1.5)
+            
             start_time = time.time()
-            check_interval = 0.2
             while time.time() - start_time < timeout:
-                if self._check_health():
-                    time.sleep(1)
-                    if self._verify_proxy_ready():
-                        self.is_ready = True
-                        return True
-                time.sleep(check_interval)
+                if self._check_proxy_port():
+                    self.is_ready = True
+                    return True
+                time.sleep(0.3)
             
             return False
         except Exception:
             return False
     
-    def _check_health(self) -> bool:
-        try:
-            response = requests.get(
-                f'http://127.0.0.1:{self.control_port}/version',
-                timeout=2
-            )
-            return response.status_code == 200
-        except:
-            return False
-    
-    def _verify_proxy_ready(self) -> bool:
+    def _check_proxy_port(self) -> bool:
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
                 sock.settimeout(1)
@@ -137,11 +112,10 @@ class ClashInstance:
         if self.process:
             try:
                 self.process.terminate()
-                self.process.wait(timeout=3)
+                self.process.wait(timeout=2)
             except:
                 try:
                     self.process.kill()
-                    self.process.wait(timeout=1)
                 except:
                     pass
             finally:
@@ -158,7 +132,7 @@ def clash_context(config_path: str, clash_binary: str, proxy_port: int, control_
             yield None
     finally:
         instance.stop()
-        time.sleep(0.3)
+        time.sleep(0.2)
         try:
             if os.path.exists(config_path):
                 os.remove(config_path)
@@ -168,11 +142,11 @@ def clash_context(config_path: str, clash_binary: str, proxy_port: int, control_
 
 def get_direct_ip() -> Optional[str]:
     try:
-        response = requests.get('https://api.ipify.org?format=json', timeout=5)
+        response = SESSION.get('https://api.ipify.org?format=json', timeout=8)
         return response.json().get('ip')
     except:
         try:
-            response = requests.get('https://icanhazip.com', timeout=5)
+            response = SESSION.get('https://icanhazip.com', timeout=8)
             return response.text.strip()
         except:
             return None
@@ -235,170 +209,72 @@ def create_clash_config(proxy: Dict, config_file: str, proxy_port: int, control_
         return False
 
 
-def advanced_proxy_validation(proxy_port: int, direct_ip: Optional[str], timeout: int = 10) -> Tuple[bool, float, Dict]:
-    proxies = {
+def validate_proxy(proxy_port: int, direct_ip: Optional[str], timeout: int = 12) -> Tuple[bool, float]:
+    proxies_config = {
         'http': f'http://127.0.0.1:{proxy_port}',
         'https': f'http://127.0.0.1:{proxy_port}'
     }
     
-    validation_tests = [
-        {
-            'name': 'connectivity_basic',
-            'url': 'http://www.gstatic.com/generate_204',
-            'method': 'GET',
-            'expected_status': 204,
-            'validate_content': lambda r: True,
-            'weight': 15,
-            'critical': True
-        },
-        {
-            'name': 'connectivity_alternate',
-            'url': 'http://connectivitycheck.gstatic.com/generate_204',
-            'method': 'GET',
-            'expected_status': 204,
-            'validate_content': lambda r: True,
-            'weight': 15,
-            'critical': True
-        },
-        {
-            'name': 'https_basic',
-            'url': 'https://www.google.com/favicon.ico',
-            'method': 'GET',
-            'expected_status': 200,
-            'validate_content': lambda r: len(r.content) > 100,
-            'weight': 20,
-            'critical': True
-        },
-        {
-            'name': 'ip_verification',
-            'url': 'https://api.ipify.org?format=json',
-            'method': 'GET',
-            'expected_status': 200,
-            'validate_content': lambda r: validate_ip_change(r, direct_ip),
-            'weight': 30,
-            'critical': True
-        },
-        {
-            'name': 'cloudflare_trace',
-            'url': 'https://cloudflare.com/cdn-cgi/trace',
-            'method': 'GET',
-            'expected_status': 200,
-            'validate_content': lambda r: 'ip=' in r.text and validate_cf_trace(r, direct_ip),
-            'weight': 20,
-            'critical': True
-        },
-        {
-            'name': 'dns_resolution',
-            'url': 'https://dns.google/resolve?name=google.com&type=A',
-            'method': 'GET',
-            'expected_status': 200,
-            'validate_content': lambda r: 'Answer' in r.text,
-            'weight': 10,
-            'critical': False
-        },
-        {
-            'name': 'real_content',
-            'url': 'https://www.google.com',
-            'method': 'GET',
-            'expected_status': 200,
-            'validate_content': lambda r: len(r.content) > 5000 and b'google' in r.content.lower(),
-            'weight': 15,
-            'critical': False
-        }
+    tests = [
+        ('http://www.gstatic.com/generate_204', 204, None, 3),
+        ('http://connectivitycheck.gstatic.com/generate_204', 204, None, 3),
+        ('https://www.google.com/favicon.ico', 200, 100, 4)
     ]
     
-    def validate_ip_change(response, direct_ip):
-        try:
-            proxy_ip = response.json().get('ip')
-            if not proxy_ip:
-                return False
-            if direct_ip and proxy_ip == direct_ip:
-                return False
-            return True
-        except:
-            return False
-    
-    def validate_cf_trace(response, direct_ip):
-        try:
-            lines = response.text.split('\n')
-            for line in lines:
-                if line.startswith('ip='):
-                    proxy_ip = line.split('=')[1].strip()
-                    if direct_ip and proxy_ip == direct_ip:
-                        return False
-                    return True
-            return False
-        except:
-            return False
-    
-    results = {}
+    passed = 0
+    required = 2
     latencies = []
-    total_weight = sum(t['weight'] for t in validation_tests)
-    critical_weight = sum(t['weight'] for t in validation_tests if t['critical'])
-    achieved_weight = 0
-    achieved_critical_weight = 0
     
-    for test in validation_tests:
-        test_passed = False
-        test_latency = 0
-        
+    for url, expected_status, min_size, weight in tests:
         for attempt in range(2):
             try:
-                start_time = time.time()
-                response = requests.request(
-                    test['method'],
-                    test['url'],
-                    proxies=proxies,
+                start = time.time()
+                resp = SESSION.get(
+                    url,
+                    proxies=proxies_config,
                     timeout=timeout,
-                    allow_redirects=False,
-                    verify=False
+                    allow_redirects=False
                 )
-                test_latency = (time.time() - start_time) * 1000
+                latency = (time.time() - start) * 1000
                 
-                if response.status_code == test['expected_status']:
-                    if test['validate_content'](response):
-                        test_passed = True
-                        latencies.append(test_latency)
-                        achieved_weight += test['weight']
-                        if test['critical']:
-                            achieved_critical_weight += test['weight']
+                if resp.status_code == expected_status:
+                    if min_size is None or len(resp.content) >= min_size:
+                        passed += 1
+                        latencies.append(latency)
                         break
-                
-            except (requests.exceptions.ProxyError,
-                    requests.exceptions.SSLError,
-                    requests.exceptions.Timeout,
-                    requests.exceptions.ConnectionError):
-                pass
-            except Exception:
+                        
+            except:
                 pass
             
-            if attempt < 1:
+            if attempt == 0:
                 time.sleep(0.5)
+    
+    if passed >= required:
+        if direct_ip:
+            try:
+                resp = SESSION.get(
+                    'https://api.ipify.org?format=json',
+                    proxies=proxies_config,
+                    timeout=timeout
+                )
+                proxy_ip = resp.json().get('ip')
+                if proxy_ip == direct_ip:
+                    return False, 0
+            except:
+                pass
         
-        results[test['name']] = test_passed
+        avg_latency = sum(latencies) / len(latencies) if latencies else 0
+        return True, avg_latency
     
-    critical_pass_rate = (achieved_critical_weight / critical_weight) if critical_weight > 0 else 0
-    overall_pass_rate = (achieved_weight / total_weight) if total_weight > 0 else 0
-    
-    is_valid = (
-        critical_pass_rate >= 0.95 and
-        overall_pass_rate >= 0.75 and
-        results.get('connectivity_basic', False) and
-        results.get('https_basic', False) and
-        results.get('ip_verification', False)
-    )
-    
-    avg_latency = sum(latencies) / len(latencies) if latencies else 0
-    
-    return is_valid, avg_latency, results
+    return False, 0
 
 
 def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str,
                       port_manager: PortManager, direct_ip: Optional[str],
-                      test_timeout: int = 10) -> Tuple[bool, float, Dict]:
+                      test_timeout: int = 12) -> Tuple[bool, float]:
     proxy_port = port_manager.acquire_port()
     if not proxy_port:
-        return False, 0, {}
+        return False, 0
     
     control_port = proxy_port + 1000
     
@@ -410,25 +286,21 @@ def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str,
         config_file = os.path.join(config_dir, f"test_{unique_id}_{safe_name}.yaml")
         
         if not create_clash_config(proxy, config_file, proxy_port, control_port):
-            return False, 0, {}
+            return False, 0
         
         with clash_context(config_file, clash_path, proxy_port, control_port) as instance:
             if not instance or not instance.is_ready:
-                return False, 0, {}
+                return False, 0
             
-            time.sleep(0.8)
-            
-            success, latency, test_results = advanced_proxy_validation(
-                proxy_port, direct_ip, test_timeout
-            )
-            
-            return success, latency, test_results
+            time.sleep(0.5)
+            success, latency = validate_proxy(proxy_port, direct_ip, test_timeout)
+            return success, latency
     
     except Exception:
-        return False, 0, {}
+        return False, 0
     finally:
         port_manager.release_port(proxy_port)
-        time.sleep(0.2)
+        time.sleep(0.1)
 
 
 def test_batch_proxies(batch_num: int, batch_proxies: List[Dict],
@@ -440,20 +312,20 @@ def test_batch_proxies(batch_num: int, batch_proxies: List[Dict],
     latencies = {}
     lock = threading.Lock()
     
-    def test_proxy_wrapper(proxy_data):
+    def test_wrapper(proxy_data):
         idx, proxy = proxy_data
-        result, latency, test_results = test_single_proxy(
+        result, latency = test_single_proxy(
             proxy, clash_path, temp_dir, port_manager, direct_ip, test_timeout
         )
-        return idx, proxy, result, latency, test_results
+        return idx, proxy, result, latency
     
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {executor.submit(test_proxy_wrapper, (i, proxy)): i
+        futures = {executor.submit(test_wrapper, (i, proxy)): i
                    for i, proxy in enumerate(batch_proxies, 1)}
         
         for future in as_completed(futures):
             try:
-                idx, proxy, result, latency, test_results = future.result()
+                idx, proxy, result, latency = future.result()
                 
                 with lock:
                     completed += 1
@@ -471,7 +343,7 @@ def test_batch_proxies(batch_num: int, batch_proxies: List[Dict],
 def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str,
                        temp_dir: str, port_manager: PortManager, direct_ip: Optional[str],
                        max_workers: int, test_timeout: int,
-                       batch_size: int = 30) -> Tuple[List[Dict], Dict, Dict]:
+                       batch_size: int) -> Tuple[List[Dict], Dict, Dict]:
     working_proxies = []
     all_latencies = {}
     total = len(proxies)
@@ -508,27 +380,26 @@ def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str,
         batch_rate = (len(batch_working) / batch_tested * 100) if batch_tested > 0 else 0
         overall_rate = (len(working_proxies) / total_tested * 100) if total_tested > 0 else 0
         
-        output_manager.print(f"  Batch {batch_num + 1}: {len(batch_working)}/{batch_tested} ({batch_rate:.1f}%)")
-        output_manager.print(f"  Overall: {len(working_proxies)}/{total_tested} ({overall_rate:.1f}%)")
+        output_manager.print(f"  Batch {batch_num + 1}: {len(batch_working)}/{batch_tested} working ({batch_rate:.1f}%)")
+        output_manager.print(f"  Overall Progress: {len(working_proxies)}/{total_tested} working ({overall_rate:.1f}%)")
     
     success_rate = (len(working_proxies) / total * 100) if total > 0 else 0
-    output_manager.print(f"\n  {group_name.upper()} Complete: {len(working_proxies)}/{total} ({success_rate:.1f}%)")
+    output_manager.print(f"\n  ✓ {group_name.upper()} COMPLETE: {len(working_proxies)}/{total} working ({success_rate:.1f}%)")
     
     return working_proxies, {'total': total, 'working': len(working_proxies)}, all_latencies
 
 
-def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
-                     max_workers: int = 30) -> Tuple[List[Dict], Dict, Dict]:
-    max_workers = int(os.environ.get('TEST_WORKERS', max_workers))
-    test_timeout = int(os.environ.get('TEST_TIMEOUT', 10))
-    batch_size = int(os.environ.get('BATCH_SIZE', 30))
+def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str) -> Tuple[List[Dict], Dict, Dict]:
+    max_workers = int(os.environ.get('TEST_WORKERS', 20))
+    test_timeout = int(os.environ.get('TEST_TIMEOUT', 12))
+    batch_size = int(os.environ.get('BATCH_SIZE', 20))
     
     output_manager.print("\nDetecting direct IP address...")
     direct_ip = get_direct_ip()
     if direct_ip:
         output_manager.print(f"Direct IP: {direct_ip}")
     else:
-        output_manager.print("Warning: Could not detect direct IP")
+        output_manager.print("Warning: Could not detect direct IP (IP change validation disabled)")
     
     port_manager = PortManager()
     
@@ -543,10 +414,12 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
     output_manager.print(f"Test Configuration")
     output_manager.print(f"{'='*60}")
     output_manager.print(f"Total proxies: {len(proxies)}")
-    output_manager.print(f"Workers: {max_workers} | Timeout: {test_timeout}s | Batch: {batch_size}")
-    output_manager.print(f"\nProtocols:")
+    output_manager.print(f"Workers per batch: {max_workers}")
+    output_manager.print(f"Timeout: {test_timeout}s")
+    output_manager.print(f"Batch size: {batch_size}")
+    output_manager.print(f"\nProtocol Distribution:")
     for ptype, plist in sorted(groups.items()):
-        output_manager.print(f"  {ptype.upper()}: {len(plist)}")
+        output_manager.print(f"  • {ptype.upper()}: {len(plist)} proxies")
     output_manager.print(f"{'='*60}")
     
     all_working = []
@@ -572,7 +445,7 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
             all_latencies.update(latencies)
         
         except Exception as e:
-            output_manager.print(f"Error testing {group_name}: {e}")
+            output_manager.print(f"✗ Error testing {group_name}: {e}")
             group_stats[group_name] = {'total': len(group_proxies), 'working': 0}
     
     return all_working, group_stats, all_latencies
@@ -642,16 +515,17 @@ def find_clash_binary() -> Optional[str]:
         './clash-linux-amd64',
         './clash-linux-arm64',
         'clash.exe',
-        './clash.exe'
+        './clash.exe',
+        os.path.expanduser('~/.local/bin/clash')
     ]
     
     for path in possible_paths:
-        if os.path.exists(path):
+        if os.path.exists(path) and os.access(path, os.X_OK):
             return path
     
     try:
-        result = subprocess.run(['which', 'clash'], capture_output=True, text=True)
-        if result.returncode == 0:
+        result = subprocess.run(['which', 'clash'], capture_output=True, text=True, timeout=5)
+        if result.returncode == 0 and result.stdout.strip():
             return result.stdout.strip()
     except:
         pass
@@ -661,66 +535,69 @@ def find_clash_binary() -> Optional[str]:
 
 def main():
     output_manager.print("=" * 60)
-    output_manager.print("Ultra-Reliable Proxy Testing System")
-    output_manager.print("=" * 60 + "\n")
+    output_manager.print("Balanced Proxy Testing System")
+    output_manager.print("=" * 60)
     
     base_dir = os.path.dirname(os.path.dirname(__file__))
     temp_dir = os.path.join(base_dir, 'temp_configs')
     output_dir = os.path.join(base_dir, 'working_configs')
     
+    os.makedirs(temp_dir, exist_ok=True)
+    
     proxies_file = os.path.join(temp_dir, 'parsed_proxies.json')
     if not os.path.exists(proxies_file):
-        output_manager.print(f"Error: {proxies_file} not found")
-        output_manager.print("Run download_subscriptions.py first")
-        output_manager.shutdown()
+        output_manager.print(f"\n✗ Error: {proxies_file} not found")
+        output_manager.print("Please run download_subscriptions.py first")
         sys.exit(1)
     
     proxies = load_parsed_proxies(proxies_file)
     if not proxies:
-        output_manager.print("No proxies to test")
-        output_manager.shutdown()
+        output_manager.print("\n✗ No proxies to test")
         sys.exit(1)
     
     clash_path = find_clash_binary()
     if not clash_path:
-        output_manager.print("Error: Clash binary not found")
-        output_manager.shutdown()
+        output_manager.print("\n✗ Error: Clash binary not found")
+        output_manager.print("Please install Clash: https://github.com/Dreamacro/clash/releases")
         sys.exit(1)
     
-    output_manager.print(f"Clash: {clash_path}\n")
+    output_manager.print(f"\n✓ Using Clash: {clash_path}")
     
     working_proxies, group_stats, latencies = test_all_proxies(proxies, clash_path, temp_dir)
     
     output_manager.print(f"\n{'=' * 60}")
-    output_manager.print(f"Final Test Results")
+    output_manager.print(f"📊 Final Test Results")
     output_manager.print(f"{'=' * 60}")
-    output_manager.print(f"\n{'Protocol':<15} {'Total':<10} {'Working':<10} {'Rate':<10}")
+    output_manager.print(f"\n{'Protocol':<15} {'Total':<10} {'Working':<10} {'Success Rate'}")
     output_manager.print(f"{'-' * 60}")
     
     for protocol, stats in sorted(group_stats.items()):
         total = stats['total']
         working = stats['working']
         rate = (working / total * 100) if total > 0 else 0
-        output_manager.print(f"{protocol:<15} {total:<10} {working:<10} {rate:>5.1f}%")
+        output_manager.print(f"{protocol:<15} {total:<10} {working:<10} {rate:>6.1f}%")
     
     output_manager.print(f"{'-' * 60}")
     total_all = len(proxies)
     working_all = len(working_proxies)
     rate_all = (working_all / total_all * 100) if total_all > 0 else 0
-    output_manager.print(f"{'TOTAL':<15} {total_all:<10} {working_all:<10} {rate_all:>5.1f}%")
-    output_manager.print(f"{'=' * 60}\n")
+    output_manager.print(f"{'TOTAL':<15} {total_all:<10} {working_all:<10} {rate_all:>6.1f}%")
+    output_manager.print(f"{'=' * 60}")
     
     if working_proxies:
         save_working_configs(working_proxies, output_dir, latencies)
-        output_manager.print(f"\nSaved {len(working_proxies)} working proxies to {output_dir}")
+        output_manager.print(f"\n✓ Saved {len(working_proxies)} working proxies to: {output_dir}")
         
         latency_values = [v for v in latencies.values() if v > 0]
         if latency_values:
-            output_manager.print(f"Average latency: {sum(latency_values)/len(latency_values):.0f}ms")
+            avg_lat = sum(latency_values) / len(latency_values)
+            output_manager.print(f"✓ Average latency: {avg_lat:.0f}ms")
     else:
-        output_manager.print("No working proxies found")
-    
-    output_manager.shutdown()
+        output_manager.print("\n✗ No working proxies found")
+        output_manager.print("This could mean:")
+        output_manager.print("  • All proxies are actually blocked/dead")
+        output_manager.print("  • Network connectivity issues")
+        output_manager.print("  • Clash configuration problems")
 
 
 if __name__ == '__main__':
