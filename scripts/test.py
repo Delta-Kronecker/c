@@ -1,5 +1,5 @@
 """
-Advanced Proxy Testing System using Clash - Fixed False Positives
+Advanced Proxy Testing System using Clash - CRITICAL FIX
 """
 import os
 import sys
@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import List, Dict, Optional, Tuple
 from contextlib import contextmanager
-from utils import proxy_to_clash_format, generate_clash_config, calculate_proxy_hash
+from utils import proxy_to_clash_format, calculate_proxy_hash
 
 warnings.filterwarnings('ignore', message='Unverified HTTPS request')
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
@@ -29,28 +29,13 @@ class PortManager:
         self.end_port = end_port
         self.used_ports = set()
         self.lock = threading.Lock()
-        self.port_release_delay = {}  # Track when ports were released
 
     def is_port_available(self, port: int) -> bool:
-        """Check if port is truly available"""
         try:
-            # First check if we recently released this port
-            if port in self.port_release_delay:
-                release_time = self.port_release_delay[port]
-                if time.time() - release_time < 2:  # Wait 2 seconds after release
-                    return False
-            
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
                 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 sock.bind(('127.0.0.1', port))
-                sock.close()
-                
-            # Double check - try to connect
-            time.sleep(0.1)
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-                sock.settimeout(0.5)
-                result = sock.connect_ex(('127.0.0.1', port))
-                return result != 0  # Port is free if connection fails
+                return True
         except:
             return False
 
@@ -65,14 +50,6 @@ class PortManager:
     def release_port(self, port: int):
         with self.lock:
             self.used_ports.discard(port)
-            self.port_release_delay[port] = time.time()
-            
-            # Clean old entries
-            current_time = time.time()
-            self.port_release_delay = {
-                p: t for p, t in self.port_release_delay.items() 
-                if current_time - t < 5
-            }
 
 
 class ClashInstance:
@@ -83,75 +60,58 @@ class ClashInstance:
         self.control_port = control_port
         self.process = None
         self.is_ready = False
-        self.start_time = None
 
     def start(self, timeout: int = 15) -> bool:
-        """Start Clash with proper initialization checks"""
         try:
-            self.start_time = time.time()
-            
-            # Start process
             self.process = subprocess.Popen(
                 [self.clash_binary, '-f', self.config_path],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
             )
 
-            # Wait for process to initialize
-            time.sleep(0.5)
+            # Wait longer for initialization
+            time.sleep(2)
             
-            # Check if process is still running
+            # Check if process crashed
             if self.process.poll() is not None:
+                stderr = self.process.stderr.read().decode('utf-8', errors='ignore')
                 return False
 
-            # Wait for health check
+            # Multiple health checks
             start_time = time.time()
-            consecutive_success = 0
+            success_count = 0
             
             while time.time() - start_time < timeout:
                 if self._check_health():
-                    consecutive_success += 1
-                    if consecutive_success >= 3:  # Require 3 consecutive successful checks
+                    success_count += 1
+                    if success_count >= 3:
                         self.is_ready = True
-                        time.sleep(0.5)  # Extra stabilization time
+                        time.sleep(1)  # Extra stabilization
                         return True
                 else:
-                    consecutive_success = 0
-                    
-                time.sleep(0.3)
+                    success_count = 0
+                
+                time.sleep(0.5)
 
             return False
         except Exception as e:
             return False
 
     def _check_health(self) -> bool:
-        """Enhanced health check"""
         try:
-            # Check if process is still running
             if self.process and self.process.poll() is not None:
                 return False
             
-            # Check control port
             response = requests.get(
                 f'http://127.0.0.1:{self.control_port}/version',
                 timeout=2
             )
-            
-            if response.status_code != 200:
-                return False
-            
-            # Verify proxy port is listening
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-                sock.settimeout(1)
-                result = sock.connect_ex(('127.0.0.1', self.proxy_port))
-                return result == 0
-                
+            return response.status_code == 200
         except:
             return False
 
     def stop(self):
-        """Properly stop Clash instance"""
         if self.process:
             try:
                 self.process.terminate()
@@ -164,8 +124,6 @@ class ClashInstance:
                     pass
             finally:
                 self.process = None
-        
-        # Wait for port to be fully released
         time.sleep(0.5)
 
 
@@ -184,62 +142,165 @@ def clash_context(config_path: str, clash_binary: str, proxy_port: int, control_
                 os.remove(config_path)
         except:
             pass
-        
-        # Ensure ports are fully released
-        time.sleep(0.3)
 
 
-def sanitize_filename(name: str) -> str:
-    name = re.sub(r'[<>:"/\\|?*]', '_', name)
-    name = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', name)
-    if len(name) > 50:
-        name_hash = hashlib.md5(name.encode()).hexdigest()[:8]
-        name = name[:42] + '_' + name_hash
-    return name if name else 'proxy'
-
-
-def remove_duplicate_proxies(proxies: List[Dict]) -> List[Dict]:
-    """Remove duplicate proxies based on server:port:type combination"""
-    seen_hashes = set()
-    unique_proxies = []
-    duplicate_count = 0
-
-    for proxy in proxies:
-        proxy_hash = calculate_proxy_hash(proxy)
-
-        if proxy_hash not in seen_hashes:
-            seen_hashes.add(proxy_hash)
-            unique_proxies.append(proxy)
-        else:
-            duplicate_count += 1
-
-    if duplicate_count > 0:
-        print(f"  Removed {duplicate_count} duplicate configs")
-        print(f"  Unique configs: {len(unique_proxies)}")
-
-    return unique_proxies
-
-
-def load_parsed_proxies(file_path: str) -> List[Dict]:
+def test_proxy_connectivity(proxy_port: int, timeout: int = 15) -> Tuple[bool, float, str]:
+    """
+    CRITICAL: Test with REAL external connectivity validation
+    """
+    session = requests.Session()
+    session.proxies = {
+        'http': f'http://127.0.0.1:{proxy_port}',
+        'https': f'http://127.0.0.1:{proxy_port}'
+    }
+    
+    latencies = []
+    errors = []
+    
+    # Stage 1: Simple connectivity (must pass)
+    stage1_pass = False
+    for url in ['http://www.gstatic.com/generate_204', 'http://connectivitycheck.gstatic.com/generate_204']:
+        try:
+            start = time.time()
+            resp = session.get(url, timeout=timeout, verify=False)
+            latency = (time.time() - start) * 1000
+            
+            if resp.status_code == 204 and len(resp.content) == 0:
+                latencies.append(latency)
+                stage1_pass = True
+                break
+        except Exception as e:
+            errors.append(f"Stage1: {type(e).__name__}")
+            continue
+    
+    if not stage1_pass:
+        return False, 0, "Stage1 failed: Basic connectivity"
+    
+    # Stage 2: HTTPS with TLS (must pass)
+    stage2_pass = False
+    for url in ['https://www.gstatic.com/generate_204', 'https://www.cloudflare.com/cdn-cgi/trace']:
+        try:
+            start = time.time()
+            resp = session.get(url, timeout=timeout, verify=False)
+            latency = (time.time() - start) * 1000
+            
+            if resp.status_code in [200, 204] and len(resp.content) >= 0:
+                latencies.append(latency)
+                stage2_pass = True
+                break
+        except Exception as e:
+            errors.append(f"Stage2: {type(e).__name__}")
+            continue
+    
+    if not stage2_pass:
+        return False, 0, "Stage2 failed: HTTPS/TLS"
+    
+    # Stage 3: Real content fetch with validation (CRITICAL)
+    stage3_pass = False
+    test_sites = [
+        {
+            'url': 'https://www.google.com/humans.txt',
+            'min_size': 50,
+            'keywords': [b'Google', b'humans']
+        },
+        {
+            'url': 'https://www.cloudflare.com',
+            'min_size': 1000,
+            'keywords': [b'cloudflare', b'html', b'<!DOCTYPE']
+        }
+    ]
+    
+    for site in test_sites:
+        try:
+            start = time.time()
+            resp = session.get(site['url'], timeout=timeout, verify=False, allow_redirects=True)
+            latency = (time.time() - start) * 1000
+            
+            # Must be 200 OK
+            if resp.status_code != 200:
+                errors.append(f"Stage3: Status {resp.status_code}")
+                continue
+            
+            content = resp.content.lower()
+            content_len = len(content)
+            
+            # Must have minimum size
+            if content_len < site['min_size']:
+                errors.append(f"Stage3: Content too small ({content_len})")
+                continue
+            
+            # Must contain expected keywords
+            keyword_found = False
+            for keyword in site['keywords']:
+                if keyword.lower() in content:
+                    keyword_found = True
+                    break
+            
+            if not keyword_found:
+                errors.append(f"Stage3: Content validation failed")
+                continue
+            
+            latencies.append(latency)
+            stage3_pass = True
+            break
+            
+        except requests.exceptions.Timeout:
+            errors.append("Stage3: Timeout")
+            continue
+        except requests.exceptions.ProxyError:
+            errors.append("Stage3: Proxy error")
+            continue
+        except requests.exceptions.SSLError:
+            errors.append("Stage3: SSL error")
+            continue
+        except Exception as e:
+            errors.append(f"Stage3: {type(e).__name__}")
+            continue
+    
+    if not stage3_pass:
+        error_msg = "; ".join(errors[-3:]) if errors else "Unknown"
+        return False, 0, f"Stage3 failed: {error_msg}"
+    
+    # Stage 4: IP leak check (verify we're actually using proxy)
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            proxies = json.load(f)
-        print(f"Loaded {len(proxies)} parsed proxies")
-
-        # Remove duplicates before testing
-        print("Removing duplicate configurations...")
-        proxies = remove_duplicate_proxies(proxies)
-
-        return proxies
+        # Get IP through proxy
+        resp = session.get('https://api.ipify.org?format=json', timeout=10, verify=False)
+        if resp.status_code == 200:
+            proxy_ip = resp.json().get('ip', '')
+            
+            # Get direct IP (without proxy)
+            direct_resp = requests.get('https://api.ipify.org?format=json', timeout=10, verify=False)
+            if direct_resp.status_code == 200:
+                direct_ip = direct_resp.json().get('ip', '')
+                
+                # IPs must be different
+                if proxy_ip == direct_ip:
+                    return False, 0, "Stage4 failed: IP leak detected (not using proxy)"
     except Exception as e:
-        print(f"Error loading proxies: {e}")
-        return []
+        # This stage is optional, don't fail if check fails
+        pass
+    
+    avg_latency = sum(latencies) / len(latencies) if latencies else 999999
+    return True, avg_latency, ""
 
 
-def create_clash_config(proxy: Dict, config_file: str, proxy_port: int, control_port: int) -> bool:
+def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str,
+                      port_manager: PortManager, test_timeout: int = 15) -> Tuple[bool, float, str]:
+    proxy_port = port_manager.acquire_port()
+    if not proxy_port:
+        return False, 0, "No ports available"
+
+    control_port = proxy_port + 1000
+
     try:
-        clash_proxy = proxy_to_clash_format(proxy)
+        # Create config
+        safe_name = re.sub(r'[<>:"/\\|?*]', '_', proxy.get('name', 'proxy'))[:50]
+        unique_id = hashlib.md5(
+            f"{proxy.get('server', '')}:{proxy.get('port', '')}{time.time()}".encode()
+        ).hexdigest()[:8]
+        config_file = os.path.join(config_dir, f"test_{unique_id}_{safe_name}.yaml")
 
+        clash_proxy = proxy_to_clash_format(proxy)
         config = {
             'port': proxy_port,
             'socks-port': proxy_port + 1,
@@ -248,274 +309,51 @@ def create_clash_config(proxy: Dict, config_file: str, proxy_port: int, control_
             'log-level': 'silent',
             'external-controller': f'127.0.0.1:{control_port}',
             'proxies': [clash_proxy],
-            'proxy-groups': [
-                {
-                    'name': 'PROXY',
-                    'type': 'select',
-                    'proxies': [clash_proxy['name']]
-                }
-            ],
+            'proxy-groups': [{
+                'name': 'PROXY',
+                'type': 'select',
+                'proxies': [clash_proxy['name']]
+            }],
             'rules': ['MATCH,PROXY']
         }
 
         with open(config_file, 'w', encoding='utf-8') as f:
             yaml.dump(config, f, allow_unicode=True, default_flow_style=False)
 
-        return True
-    except Exception:
-        return False
-
-
-def test_proxy_connectivity(proxy_port: int, timeout: int = 10, max_retries: int = 2) -> Tuple[bool, float, str]:
-    """
-    Enhanced connectivity test with content validation
-    Returns: (success, latency, failure_reason)
-    """
-    proxies = {
-        'http': f'http://127.0.0.1:{proxy_port}',
-        'https': f'http://127.0.0.1:{proxy_port}'
-    }
-
-    # Multi-stage testing strategy
-    test_stages = [
-        {
-            'name': 'Basic HTTP',
-            'tests': [
-                {
-                    'url': 'http://connectivitycheck.gstatic.com/generate_204',
-                    'expected_code': 204,
-                    'min_size': None,
-                    'max_size': 10,  # Should be empty
-                    'timeout': timeout,
-                    'weight': 3
-                },
-                {
-                    'url': 'http://cp.cloudflare.com',
-                    'expected_code': 204,
-                    'min_size': None,
-                    'max_size': 10,
-                    'timeout': timeout,
-                    'weight': 3
-                }
-            ],
-            'required_pass': 1  # At least 1 test must pass
-        },
-        {
-            'name': 'HTTPS Validation',
-            'tests': [
-                {
-                    'url': 'https://www.gstatic.com/generate_204',
-                    'expected_code': 204,
-                    'min_size': None,
-                    'max_size': 10,
-                    'timeout': timeout,
-                    'weight': 4
-                },
-                {
-                    'url': 'https://1.1.1.1',
-                    'expected_code': [200, 301, 302],  # Allow redirects
-                    'min_size': None,
-                    'max_size': None,
-                    'timeout': timeout,
-                    'weight': 3
-                }
-            ],
-            'required_pass': 1
-        },
-        {
-            'name': 'Content Fetch',
-            'tests': [
-                {
-                    'url': 'https://www.google.com',
-                    'expected_code': [200],
-                    'min_size': 1000,  # Must return real content
-                    'max_size': None,
-                    'timeout': timeout,
-                    'content_check': lambda c: b'google' in c.lower() or b'html' in c.lower(),
-                    'weight': 5
-                },
-                {
-                    'url': 'https://www.cloudflare.com',
-                    'expected_code': [200],
-                    'min_size': 500,
-                    'max_size': None,
-                    'timeout': timeout,
-                    'content_check': lambda c: b'cloudflare' in c.lower() or b'html' in c.lower(),
-                    'weight': 4
-                }
-            ],
-            'required_pass': 1
-        }
-    ]
-
-    all_latencies = []
-    stage_results = []
-    last_error = "Unknown error"
-
-    for attempt in range(max_retries):
-        if attempt > 0:
-            time.sleep(2)  # Wait before retry
-        
-        attempt_latencies = []
-        attempt_passed_stages = 0
-        
-        for stage in test_stages:
-            stage_passed_tests = 0
-            stage_latencies = []
-            
-            for test in stage['tests']:
-                try:
-                    start = time.time()
-                    
-                    response = requests.get(
-                        test['url'],
-                        proxies=proxies,
-                        timeout=test['timeout'],
-                        allow_redirects=True,  # Follow redirects
-                        verify=False,
-                        headers={
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                        }
-                    )
-                    
-                    latency = (time.time() - start) * 1000
-
-                    # Check status code
-                    expected_codes = test['expected_code']
-                    if isinstance(expected_codes, int):
-                        expected_codes = [expected_codes]
-                    
-                    if response.status_code not in expected_codes:
-                        last_error = f"Bad status: {response.status_code}"
-                        continue
-
-                    # Check content size
-                    content_len = len(response.content)
-                    
-                    if test.get('min_size') and content_len < test['min_size']:
-                        last_error = f"Content too small: {content_len} bytes"
-                        continue
-                    
-                    if test.get('max_size') and content_len > test['max_size']:
-                        last_error = f"Content too large: {content_len} bytes"
-                        continue
-
-                    # Check content validation
-                    if test.get('content_check'):
-                        if not test['content_check'](response.content):
-                            last_error = "Content validation failed"
-                            continue
-
-                    # Test passed
-                    stage_passed_tests += test['weight']
-                    stage_latencies.append(latency)
-                    last_error = None
-
-                except requests.exceptions.ProxyError as e:
-                    last_error = "Proxy connection failed"
-                    continue
-                except requests.exceptions.Timeout:
-                    last_error = "Request timeout"
-                    continue
-                except requests.exceptions.SSLError:
-                    last_error = "SSL error"
-                    continue
-                except requests.exceptions.ConnectionError as e:
-                    last_error = "Connection error"
-                    continue
-                except Exception as e:
-                    last_error = f"Unexpected error: {type(e).__name__}"
-                    continue
-            
-            # Check if stage passed
-            if stage_passed_tests > 0 and len(stage_latencies) >= stage['required_pass']:
-                attempt_passed_stages += 1
-                attempt_latencies.extend(stage_latencies)
-            
-            stage_results.append({
-                'name': stage['name'],
-                'passed': stage_passed_tests > 0,
-                'tests_passed': len(stage_latencies)
-            })
-        
-        # Check if attempt was successful
-        # Must pass at least 2 out of 3 stages
-        if attempt_passed_stages >= 2 and len(attempt_latencies) >= 3:
-            all_latencies.extend(attempt_latencies)
-            avg_latency = sum(all_latencies) / len(all_latencies)
-            return True, avg_latency, ""
-        
-        # If failed, clear results for next attempt
-        if attempt < max_retries - 1:
-            all_latencies.clear()
-            stage_results.clear()
-
-    # All attempts failed
-    avg_latency = sum(all_latencies) / len(all_latencies) if all_latencies else 0
-    return False, avg_latency, last_error or "Failed multiple stages"
-
-
-def test_single_proxy(proxy: Dict, clash_path: str, config_dir: str,
-                      port_manager: PortManager, test_timeout: int = 10) -> Tuple[bool, float, str]:
-    """
-    Test single proxy with detailed error reporting
-    Returns: (success, latency, error_message)
-    """
-    proxy_port = port_manager.acquire_port()
-    if not proxy_port:
-        return False, 0, "No available ports"
-
-    control_port = proxy_port + 1000
-    error_msg = ""
-
-    try:
-        safe_name = sanitize_filename(proxy.get('name', 'proxy'))
-        unique_id = hashlib.md5(
-            f"{proxy.get('server', '')}:{proxy.get('port', '')}{time.time()}".encode()
-        ).hexdigest()[:8]
-        config_file = os.path.join(config_dir, f"test_{unique_id}_{safe_name}.yaml")
-
-        if not create_clash_config(proxy, config_file, proxy_port, control_port):
-            return False, 0, "Config creation failed"
-
+        # Test with Clash
         with clash_context(config_file, clash_path, proxy_port, control_port) as instance:
             if not instance or not instance.is_ready:
-                return False, 0, "Clash instance failed to start"
+                return False, 0, "Clash failed to start"
 
-            # Give Clash extra time to stabilize
-            time.sleep(1)
+            # Wait for full initialization
+            time.sleep(2)
             
             success, latency, error = test_proxy_connectivity(proxy_port, test_timeout)
-            
-            if not success:
-                error_msg = error
-            
-            return success, latency, error_msg
+            return success, latency, error
 
     except Exception as e:
-        return False, 0, f"Exception: {type(e).__name__}"
+        return False, 0, f"Exception: {str(e)}"
     finally:
         port_manager.release_port(proxy_port)
-        time.sleep(0.2)  # Small delay before next test
+        time.sleep(0.3)
 
 
 def test_batch_proxies(batch_num: int, batch_proxies: List[Dict],
                        clash_path: str, temp_dir: str, port_manager: PortManager,
                        max_workers: int, test_timeout: int) -> Tuple[List[Dict], int, Dict, Dict]:
-    """Test batch with error tracking"""
     working_proxies = []
     completed = 0
     latencies = {}
     error_stats = {}
     lock = threading.Lock()
 
-    def test_proxy_wrapper(proxy_data):
+    def test_wrapper(proxy_data):
         idx, proxy = proxy_data
         result, latency, error = test_single_proxy(proxy, clash_path, temp_dir, port_manager, test_timeout)
         return idx, proxy, result, latency, error
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {executor.submit(test_proxy_wrapper, (i, proxy)): i
+        futures = {executor.submit(test_wrapper, (i, proxy)): i
                    for i, proxy in enumerate(batch_proxies, 1)}
 
         for future in as_completed(futures):
@@ -528,7 +366,6 @@ def test_batch_proxies(batch_num: int, batch_proxies: List[Dict],
                         working_proxies.append(proxy)
                         latencies[proxy.get('name', f'proxy_{idx}')] = latency
                     else:
-                        # Track error types
                         error_stats[error] = error_stats.get(error, 0) + 1
 
             except Exception as e:
@@ -539,19 +376,48 @@ def test_batch_proxies(batch_num: int, batch_proxies: List[Dict],
     return working_proxies, completed, latencies, error_stats
 
 
+def remove_duplicate_proxies(proxies: List[Dict]) -> List[Dict]:
+    seen_hashes = set()
+    unique_proxies = []
+    duplicate_count = 0
+
+    for proxy in proxies:
+        proxy_hash = calculate_proxy_hash(proxy)
+        if proxy_hash not in seen_hashes:
+            seen_hashes.add(proxy_hash)
+            unique_proxies.append(proxy)
+        else:
+            duplicate_count += 1
+
+    if duplicate_count > 0:
+        print(f"  Removed {duplicate_count} duplicate configs")
+
+    return unique_proxies
+
+
+def load_parsed_proxies(file_path: str) -> List[Dict]:
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            proxies = json.load(f)
+        print(f"Loaded {len(proxies)} parsed proxies")
+        proxies = remove_duplicate_proxies(proxies)
+        return proxies
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
+
+
 def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str,
                        temp_dir: str, port_manager: PortManager, max_workers: int,
-                       test_timeout: int, batch_size: int = 30) -> Tuple[List[Dict], Dict, Dict]:
-    """Test group with reduced batch size for stability"""
+                       test_timeout: int, batch_size: int = 20) -> Tuple[List[Dict], Dict, Dict]:
     working_proxies = []
     all_latencies = {}
     all_errors = {}
     total = len(proxies)
 
-    print(f"\n{'='*60}")
+    print(f"\n{'='*70}")
     print(f"Testing {group_name.upper()} - {total} proxies")
-    print(f"{'='*60}")
-    sys.stdout.flush()
+    print(f"{'='*70}")
 
     num_batches = (total + batch_size - 1) // batch_size
     total_tested = 0
@@ -562,85 +428,66 @@ def test_group_proxies(group_name: str, proxies: List[Dict], clash_path: str,
         batch_proxies = proxies[start_idx:end_idx]
 
         print(f"\n  Batch {batch_num + 1}/{num_batches} - Testing {len(batch_proxies)} configs...")
+        sys.stdout.flush()
 
         batch_working, batch_tested, batch_latencies, batch_errors = test_batch_proxies(
-            batch_num + 1,
-            batch_proxies,
-            clash_path,
-            temp_dir,
-            port_manager,
-            max_workers,
-            test_timeout
+            batch_num + 1, batch_proxies, clash_path, temp_dir,
+            port_manager, max_workers, test_timeout
         )
 
         working_proxies.extend(batch_working)
         all_latencies.update(batch_latencies)
         
-        # Merge error stats
         for error, count in batch_errors.items():
             all_errors[error] = all_errors.get(error, 0) + count
         
         total_tested += batch_tested
-
         batch_rate = (len(batch_working) / batch_tested * 100) if batch_tested > 0 else 0
         overall_rate = (len(working_proxies) / total_tested * 100) if total_tested > 0 else 0
 
-        print(f"  Batch {batch_num + 1}: {len(batch_working)}/{batch_tested} ({batch_rate:.1f}%)")
-        print(f"  Overall: {len(working_proxies)}/{total_tested} ({overall_rate:.1f}%)")
+        print(f"  Batch {batch_num + 1}: {len(batch_working)}/{batch_tested} working ({batch_rate:.1f}%)")
+        print(f"  Overall: {len(working_proxies)}/{total_tested} working ({overall_rate:.1f}%)")
         
-        # Show top errors for this batch
         if batch_errors:
-            top_errors = sorted(batch_errors.items(), key=lambda x: x[1], reverse=True)[:3]
-            print(f"  Top errors: {', '.join([f'{e}({c})' for e, c in top_errors])}")
+            top_errors = sorted(batch_errors.items(), key=lambda x: x[1], reverse=True)[:2]
+            print(f"  Errors: {', '.join([f'{e}({c})' for e, c in top_errors])}")
         
         sys.stdout.flush()
-        
-        # Add delay between batches for stability
-        if batch_num < num_batches - 1:
-            time.sleep(1)
+        time.sleep(1)
 
-    success_rate = (len(working_proxies) / total * 100) if total > 0 else 0
-    print(f"\n  {group_name.upper()} Complete: {len(working_proxies)}/{total} ({success_rate:.1f}%)")
-    
-    # Show overall error summary
+    print(f"\n  {group_name.upper()}: {len(working_proxies)}/{total} working ({len(working_proxies)/total*100:.1f}%)")
     if all_errors:
-        print(f"\n  Error Summary:")
-        for error, count in sorted(all_errors.items(), key=lambda x: x[1], reverse=True)[:5]:
-            print(f"    {error}: {count}")
-    
+        print(f"  Top errors:")
+        for error, count in sorted(all_errors.items(), key=lambda x: x[1], reverse=True)[:3]:
+            print(f"    - {error}: {count}")
     sys.stdout.flush()
 
     return working_proxies, {'total': total, 'working': len(working_proxies)}, all_latencies
 
 
 def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
-                     max_workers: int = 30) -> Tuple[List[Dict], Dict, Dict]:
-    """Test all proxies with reduced concurrency for accuracy"""
-    # Reduce default workers to prevent false positives
-    max_workers = min(int(os.environ.get('TEST_WORKERS', max_workers)), 30)
-    test_timeout = int(os.environ.get('TEST_TIMEOUT', 10))
-    batch_size = min(int(os.environ.get('BATCH_SIZE', 30)), 30)
+                     max_workers: int = 20) -> Tuple[List[Dict], Dict, Dict]:
+    max_workers = min(int(os.environ.get('TEST_WORKERS', max_workers)), 20)
+    test_timeout = int(os.environ.get('TEST_TIMEOUT', 15))
+    batch_size = min(int(os.environ.get('BATCH_SIZE', 20)), 20)
 
     port_manager = PortManager()
-
     groups = {}
+    
     for proxy in proxies:
         ptype = proxy.get('type', 'unknown')
         if ptype not in groups:
             groups[ptype] = []
         groups[ptype].append(proxy)
 
-    print(f"\n{'='*60}")
-    print(f"Test Configuration (False Positive Prevention Mode)")
-    print(f"{'='*60}")
-    print(f"Total proxies: {len(proxies)}")
-    print(f"Workers: {max_workers} | Timeout: {test_timeout}s | Batch: {batch_size}")
-    print(f"Multi-stage validation: HTTP + HTTPS + Content")
-    print(f"\nProtocols:")
+    print(f"\n{'='*70}")
+    print(f"STRICT VALIDATION MODE - Real Connectivity Testing")
+    print(f"{'='*70}")
+    print(f"Total: {len(proxies)} | Workers: {max_workers} | Timeout: {test_timeout}s")
+    print(f"Validation: HTTP + HTTPS + Content + IP Leak Check")
     for ptype, plist in sorted(groups.items()):
         print(f"  {ptype.upper()}: {len(plist)}")
-    print(f"{'='*60}")
-    sys.stdout.flush()
+    print(f"{'='*70}")
 
     all_working = []
     group_stats = {}
@@ -649,26 +496,15 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
     for group_name, group_proxies in sorted(groups.items()):
         try:
             working, stats, latencies = test_group_proxies(
-                group_name,
-                group_proxies,
-                clash_path,
-                temp_dir,
-                port_manager,
-                max_workers,
-                test_timeout,
-                batch_size
+                group_name, group_proxies, clash_path, temp_dir,
+                port_manager, max_workers, test_timeout, batch_size
             )
-
             all_working.extend(working)
             group_stats[group_name] = stats
             all_latencies.update(latencies)
-            
-            # Add delay between protocol groups
             time.sleep(2)
-
         except Exception as e:
             print(f"Error testing {group_name}: {e}")
-            sys.stdout.flush()
             group_stats[group_name] = {'total': len(group_proxies), 'working': 0}
 
     return all_working, group_stats, all_latencies
@@ -677,8 +513,7 @@ def test_all_proxies(proxies: List[Dict], clash_path: str, temp_dir: str,
 def save_working_configs(proxies: List[Dict], output_dir: str, latencies: Dict):
     os.makedirs(output_dir, exist_ok=True)
 
-    json_file = os.path.join(output_dir, 'working_proxies.json')
-    with open(json_file, 'w', encoding='utf-8') as f:
+    with open(os.path.join(output_dir, 'working_proxies.json'), 'w', encoding='utf-8') as f:
         json.dump(proxies, f, indent=2, ensure_ascii=False)
 
     by_protocol_dir = os.path.join(output_dir, 'by_protocol')
@@ -692,21 +527,15 @@ def save_working_configs(proxies: List[Dict], output_dir: str, latencies: Dict):
         protocols[ptype].append(proxy)
 
     for ptype, plist in protocols.items():
-        txt_file = os.path.join(by_protocol_dir, f'{ptype}.txt')
-        with open(txt_file, 'w', encoding='utf-8') as f:
+        with open(os.path.join(by_protocol_dir, f'{ptype}.txt'), 'w', encoding='utf-8') as f:
             for proxy in plist:
                 from utils import proxy_to_share_url
-                share_url = proxy_to_share_url(proxy)
-                if share_url:
-                    f.write(share_url + '\n')
+                f.write(proxy_to_share_url(proxy) + '\n')
 
-    all_txt_file = os.path.join(output_dir, 'all_working.txt')
-    with open(all_txt_file, 'w', encoding='utf-8') as f:
+    with open(os.path.join(output_dir, 'all_working.txt'), 'w', encoding='utf-8') as f:
         for proxy in proxies:
             from utils import proxy_to_share_url
-            share_url = proxy_to_share_url(proxy)
-            if share_url:
-                f.write(share_url + '\n')
+            f.write(proxy_to_share_url(proxy) + '\n')
 
     latency_values = [v for v in latencies.values() if v > 0]
     metadata = {
@@ -717,98 +546,64 @@ def save_working_configs(proxies: List[Dict], output_dir: str, latencies: Dict):
             'min': min(latency_values) if latency_values else 0,
             'max': max(latency_values) if latency_values else 0
         },
-        'test_method': 'multi_stage_validation',
-        'validation_stages': 'HTTP + HTTPS + Content',
-        'last_updated': datetime.now().isoformat(),
-        'timestamp': int(time.time())
+        'validation': '4-stage: HTTP + HTTPS + Content + IP',
+        'last_updated': datetime.now().isoformat()
     }
 
-    metadata_file = os.path.join(output_dir, 'metadata.json')
-    with open(metadata_file, 'w', encoding='utf-8') as f:
+    with open(os.path.join(output_dir, 'metadata.json'), 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=2)
-
-    timestamp_file = os.path.join(output_dir, 'last_updated.txt')
-    with open(timestamp_file, 'w', encoding='utf-8') as f:
-        f.write(datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC'))
 
 
 def find_clash_binary() -> Optional[str]:
-    possible_paths = [
-        '/usr/local/bin/clash',
-        '/usr/bin/clash',
-        './clash',
-        './clash-linux-amd64',
-        './clash-linux-arm64',
-        'clash.exe',
-        './clash.exe'
-    ]
-
-    for path in possible_paths:
+    paths = ['/usr/local/bin/clash', '/usr/bin/clash', './clash', 'clash.exe']
+    for path in paths:
         if os.path.exists(path):
             return path
-
     try:
         result = subprocess.run(['which', 'clash'], capture_output=True, text=True)
         if result.returncode == 0:
             return result.stdout.strip()
     except:
         pass
-
     return None
 
 
 def main():
-    print("=" * 60)
-    print("Advanced Clash Proxy Tester - False Positive Prevention")
-    print("=" * 60 + "\n")
+    print("="*70)
+    print("Clash Proxy Tester - STRICT VALIDATION")
+    print("="*70 + "\n")
 
     base_dir = os.path.dirname(os.path.dirname(__file__))
     temp_dir = os.path.join(base_dir, 'temp_configs')
     output_dir = os.path.join(base_dir, 'working_configs')
 
-    proxies_file = os.path.join(temp_dir, 'parsed_proxies.json')
-    if not os.path.exists(proxies_file):
-        print(f"Error: {proxies_file} not found")
-        print("Run download_subscriptions.py first")
-        sys.exit(1)
-
-    proxies = load_parsed_proxies(proxies_file)
+    proxies = load_parsed_proxies(os.path.join(temp_dir, 'parsed_proxies.json'))
     if not proxies:
-        print("No proxies to test")
         sys.exit(1)
 
     clash_path = find_clash_binary()
     if not clash_path:
-        print("Error: Clash binary not found")
+        print("Error: Clash not found")
         sys.exit(1)
 
-    print(f"Clash: {clash_path}\n")
+    print(f"Clash: {clash_path}")
 
     working_proxies, group_stats, latencies = test_all_proxies(proxies, clash_path, temp_dir)
 
-    print(f"\n{'=' * 60}")
-    print(f"Test Results")
-    print(f"{'=' * 60}")
-    print(f"\n{'Protocol':<15} {'Total':<10} {'Working':<10} {'Rate':<10}")
-    print(f"{'-' * 60}")
-
+    print(f"\n{'='*70}")
+    print(f"RESULTS")
+    print(f"{'='*70}")
     for protocol, stats in sorted(group_stats.items()):
-        total = stats['total']
-        working = stats['working']
-        rate = (working / total * 100) if total > 0 else 0
-        print(f"{protocol:<15} {total:<10} {working:<10} {rate:>5.1f}%")
-
-    print(f"{'-' * 60}")
-    total_all = len(proxies)
-    working_all = len(working_proxies)
-    rate_all = (working_all / total_all * 100) if total_all > 0 else 0
-    print(f"{'TOTAL':<15} {total_all:<10} {working_all:<10} {rate_all:>5.1f}%")
-    print(f"{'=' * 60}\n")
+        rate = (stats['working'] / stats['total'] * 100) if stats['total'] > 0 else 0
+        print(f"{protocol.upper()}: {stats['working']}/{stats['total']} ({rate:.1f}%)")
+    
+    total_rate = (len(working_proxies) / len(proxies) * 100) if proxies else 0
+    print(f"TOTAL: {len(working_proxies)}/{len(proxies)} ({total_rate:.1f}%)")
+    print(f"{'='*70}\n")
 
     if working_proxies:
         save_working_configs(working_proxies, output_dir, latencies)
-        print(f"\nSaved {len(working_proxies)} working proxies")
-        print(f"Results directory: {output_dir}/")
+        print(f"Saved {len(working_proxies)} VERIFIED working proxies")
     else:
         print("No working proxies found")
 
