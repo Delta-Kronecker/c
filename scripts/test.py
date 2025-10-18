@@ -278,9 +278,9 @@ def test_all(proxies: List[Dict], clash_bin: str, temp_dir: str) -> List[Dict]:
     """Test all proxies"""
     
     # Get settings from env
-    workers = min(int(os.environ.get('TEST_WORKERS', 150)), 50000)
-    timeout = int(os.environ.get('TEST_TIMEOUT', 5))
-    batch_size = min(int(os.environ.get('BATCH_SIZE', 300)), 50000)
+    workers = min(int(os.environ.get('TEST_WORKERS', 40)), 50)
+    timeout = int(os.environ.get('TEST_TIMEOUT', 12))
+    batch_size = min(int(os.environ.get('BATCH_SIZE', 30)), 50)
     
     # Group by protocol
     groups = {}
