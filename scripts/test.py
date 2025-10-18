@@ -386,8 +386,8 @@ def test_all_smart(proxies: List[Dict], clash_bin: str, temp_dir: str) -> List[D
     total = len(proxies)
     
     if total > 3000:
-        workers = min(int(os.environ.get('TEST_WORKERS', 60)), 80)
-        batch_size = 50
+        workers = min(int(os.environ.get('TEST_WORKERS', 60)), 200)
+        batch_size = 200
         timeout = 10
     elif total > 1000:
         workers = min(int(os.environ.get('TEST_WORKERS', 50)), 60)
