@@ -1,15 +1,18 @@
 {
-  "total_working": 200,
+  "total_working": 29659,
   "by_protocol": {
-    "ss": 200
+    "ss": 3852,
+    "trojan": 5158,
+    "vless": 17070,
+    "vmess": 3579
   },
   "latency_stats": {
-    "average_ms": 102.86,
-    "min_ms": 7.14,
-    "max_ms": 566.29,
-    "median_ms": 71.92
+    "average_ms": 98.12,
+    "min_ms": 6.66,
+    "max_ms": 1504.11,
+    "median_ms": 73.36
   },
   "test_method": "ultra_fast",
-  "test_date": "2025-10-18T21:27:30.766023",
-  "timestamp": 1760822850
+  "test_date": "2025-10-18T22:12:13.604089",
+  "timestamp": 1760825533
 }
