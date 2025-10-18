@@ -1,5 +1,6 @@
 """
 Enhanced helper utilities for Clash config testing
+With improved validation and error handling
 """
 import base64
 import json
@@ -27,26 +28,77 @@ def calculate_proxy_hash(proxy: Dict) -> str:
     return hashlib.md5(key_fields.encode()).hexdigest()[:8]
 
 
+def is_valid_domain(domain: str) -> bool:
+    """Validate domain name or IP address"""
+    # Check for IP address
+    ip_pattern = r'^(\d{1,3}\.){3}\d{1,3}$'
+    if re.match(ip_pattern, domain):
+        # Validate IP range
+        parts = domain.split('.')
+        return all(0 <= int(part) <= 255 for part in parts)
+    
+    # Check for domain name
+    domain_pattern = r'^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)*[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?$'
+    return bool(re.match(domain_pattern, domain)) and len(domain) <= 253
+
+
 def validate_proxy_config(proxy: Dict) -> Tuple[bool, str]:
-    """Validate proxy configuration"""
+    """Enhanced proxy configuration validation"""
     required_fields = ['type', 'name', 'server', 'port']
     
+    # Check required fields
     for field in required_fields:
         if field not in proxy or not proxy[field]:
             return False, f"Missing required field: {field}"
     
-    # Validate server (IP or domain)
-    server = proxy['server']
-    if not re.match(r'^[a-zA-Z0-9.-]+$', server):
+    # Validate proxy type
+    valid_types = ['vmess', 'vless', 'ss', 'ssr', 'trojan']
+    if proxy['type'] not in valid_types:
+        return False, f"Invalid proxy type: {proxy['type']}"
+    
+    # Validate server
+    server = str(proxy['server']).strip()
+    if not server or len(server) > 253:
+        return False, f"Invalid server: {server}"
+    
+    if not is_valid_domain(server):
         return False, f"Invalid server format: {server}"
     
     # Validate port
     try:
         port = int(proxy['port'])
         if not (1 <= port <= 65535):
-            return False, f"Invalid port: {port}"
+            return False, f"Invalid port range: {port}"
     except (ValueError, TypeError):
         return False, f"Invalid port format: {proxy['port']}"
+    
+    # Validate protocol-specific fields
+    ptype = proxy['type']
+    
+    if ptype == 'vmess':
+        if 'uuid' not in proxy or not proxy['uuid']:
+            return False, "VMess missing UUID"
+        # Validate UUID format
+        uuid_pattern = r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$'
+        if not re.match(uuid_pattern, proxy['uuid'].lower()):
+            return False, "Invalid VMess UUID format"
+    
+    elif ptype == 'vless':
+        if 'uuid' not in proxy or not proxy['uuid']:
+            return False, "VLESS missing UUID"
+        uuid_pattern = r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$'
+        if not re.match(uuid_pattern, proxy['uuid'].lower()):
+            return False, "Invalid VLESS UUID format"
+    
+    elif ptype in ['ss', 'ssr']:
+        if 'cipher' not in proxy or not proxy['cipher']:
+            return False, f"{ptype.upper()} missing cipher"
+        if 'password' not in proxy or not proxy['password']:
+            return False, f"{ptype.upper()} missing password"
+    
+    elif ptype == 'trojan':
+        if 'password' not in proxy or not proxy['password']:
+            return False, "Trojan missing password"
     
     return True, "OK"
 
@@ -66,7 +118,7 @@ def decode_base64(data: str) -> str:
         
         decoded = base64.b64decode(data).decode('utf-8', errors='ignore')
         return decoded
-    except Exception as e:
+    except Exception:
         return data
 
 
@@ -88,22 +140,31 @@ def parse_vmess(vmess_url: str) -> Optional[Dict]:
         if not vmess_url.startswith('vmess://'):
             return None
         
-        encoded = vmess_url[8:]
+        encoded = vmess_url[8:].strip()
+        if not encoded:
+            return None
+        
         decoded = decode_base64(encoded)
         config = json.loads(decoded)
         
-        server = config.get('add', '')
+        server = config.get('add', '').strip()
         port = config.get('port', 443)
+        uuid = config.get('id', '').strip()
         
-        if not server or not port:
+        if not server or not port or not uuid:
+            return None
+        
+        # Validate UUID format
+        uuid_pattern = r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$'
+        if not re.match(uuid_pattern, uuid.lower()):
             return None
         
         proxy = {
             'type': 'vmess',
-            'name': config.get('ps', f'VMess-{server}'),
+            'name': config.get('ps', f'VMess-{server}').strip() or f'VMess-{server}',
             'server': server,
             'port': int(port),
-            'uuid': config.get('id', ''),
+            'uuid': uuid,
             'alterId': int(config.get('aid', 0)),
             'cipher': config.get('scy', 'auto'),
             'network': config.get('net', 'tcp'),
@@ -113,7 +174,7 @@ def parse_vmess(vmess_url: str) -> Optional[Dict]:
         if config.get('tls') == 'tls':
             proxy['tls'] = True
             if config.get('sni'):
-                proxy['servername'] = config.get('sni')
+                proxy['servername'] = config.get('sni').strip()
         
         # Network specific options
         net = config.get('net', 'tcp')
@@ -136,7 +197,7 @@ def parse_vmess(vmess_url: str) -> Optional[Dict]:
             }
         
         return proxy
-    except Exception as e:
+    except Exception:
         return None
 
 
@@ -146,12 +207,14 @@ def parse_vless(vless_url: str) -> Optional[Dict]:
         if not vless_url.startswith('vless://'):
             return None
         
-        url = vless_url[8:]
+        url = vless_url[8:].strip()
+        if not url:
+            return None
         
         # Parse name
         if '#' in url:
             url, name = url.rsplit('#', 1)
-            name = urllib.parse.unquote(name)
+            name = urllib.parse.unquote(name).strip()
         else:
             name = 'VLESS'
         
@@ -167,15 +230,22 @@ def parse_vless(vless_url: str) -> Optional[Dict]:
             return None
         
         uuid, server_port = url.split('@', 1)
+        uuid = uuid.strip()
         
         if ':' not in server_port:
             return None
         
         server, port = server_port.rsplit(':', 1)
+        server = server.strip()
+        
+        # Validate UUID format
+        uuid_pattern = r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$'
+        if not re.match(uuid_pattern, uuid.lower()):
+            return None
         
         proxy = {
             'type': 'vless',
-            'name': name,
+            'name': name or f'VLESS-{server}',
             'server': server,
             'port': int(port),
             'uuid': uuid,
@@ -210,7 +280,7 @@ def parse_vless(vless_url: str) -> Optional[Dict]:
             }
         
         return proxy
-    except Exception as e:
+    except Exception:
         return None
 
 
@@ -220,16 +290,18 @@ def parse_ss(ss_url: str) -> Optional[Dict]:
         if not ss_url.startswith('ss://'):
             return None
         
-        url = ss_url[5:]
+        url = ss_url[5:].strip()
+        if not url:
+            return None
         
         # Parse name
         if '#' in url:
             url, name = url.rsplit('#', 1)
-            name = urllib.parse.unquote(name)
+            name = urllib.parse.unquote(name).strip()
         else:
             name = 'Shadowsocks'
         
-        # Remove query params for now
+        # Remove query params
         url = url.split('?')[0]
         
         # Parse credentials and server
@@ -264,15 +336,34 @@ def parse_ss(ss_url: str) -> Optional[Dict]:
             method, password = creds.split(':', 1)
             server, port = server_port.rsplit(':', 1)
         
+        server = server.strip()
+        method = method.strip()
+        password = password.strip()
+        
+        if not server or not method or not password:
+            return None
+        
+        # Validate cipher method
+        valid_ciphers = [
+            'aes-128-gcm', 'aes-192-gcm', 'aes-256-gcm',
+            'aes-128-cfb', 'aes-192-cfb', 'aes-256-cfb',
+            'aes-128-ctr', 'aes-192-ctr', 'aes-256-ctr',
+            'chacha20-ietf-poly1305', 'xchacha20-ietf-poly1305',
+            'rc4-md5'
+        ]
+        
+        if method not in valid_ciphers:
+            return None
+        
         return {
             'type': 'ss',
-            'name': name,
+            'name': name or f'SS-{server}',
             'server': server,
             'port': int(port),
             'cipher': method,
             'password': password
         }
-    except Exception as e:
+    except Exception:
         return None
 
 
@@ -282,12 +373,14 @@ def parse_trojan(trojan_url: str) -> Optional[Dict]:
         if not trojan_url.startswith('trojan://'):
             return None
         
-        url = trojan_url[9:]
+        url = trojan_url[9:].strip()
+        if not url:
+            return None
         
         # Parse name
         if '#' in url:
             url, name = url.rsplit('#', 1)
-            name = urllib.parse.unquote(name)
+            name = urllib.parse.unquote(name).strip()
         else:
             name = 'Trojan'
         
@@ -303,19 +396,24 @@ def parse_trojan(trojan_url: str) -> Optional[Dict]:
             return None
         
         password, server_port = url.rsplit('@', 1)
+        password = urllib.parse.unquote(password).strip()
         
         if ':' not in server_port:
             return None
         
         server, port = server_port.rsplit(':', 1)
+        server = server.strip()
         port = port.split('?')[0]  # Remove any leftover params
+        
+        if not password or not server:
+            return None
         
         proxy = {
             'type': 'trojan',
-            'name': name,
+            'name': name or f'Trojan-{server}',
             'server': server,
             'port': int(port),
-            'password': urllib.parse.unquote(password),
+            'password': password,
             'skip-cert-verify': params.get('allowInsecure', ['0'])[0] == '1'
         }
         
@@ -338,17 +436,20 @@ def parse_trojan(trojan_url: str) -> Optional[Dict]:
             }
         
         return proxy
-    except Exception as e:
+    except Exception:
         return None
 
 
 def parse_ssr(ssr_url: str) -> Optional[Dict]:
-    """Parse ShadowsocksR URL"""
+    """Parse ShadowsocksR URL with enhanced validation"""
     try:
         if not ssr_url.startswith('ssr://'):
             return None
         
-        encoded = ssr_url[6:]
+        encoded = ssr_url[6:].strip()
+        if not encoded:
+            return None
+        
         decoded = decode_base64(encoded)
         
         # Parse SSR format: server:port:protocol:method:obfs:password_base64/?params
@@ -361,27 +462,43 @@ def parse_ssr(ssr_url: str) -> Optional[Dict]:
             return None
         
         server, port, protocol, method, obfs, password_b64 = components[:6]
-        password = decode_base64(password_b64)
+        server = server.strip()
+        protocol = protocol.strip()
+        method = method.strip()
+        obfs = obfs.strip()
+        
+        password = decode_base64(password_b64).strip()
+        
+        if not server or not protocol or not method or not obfs or not password:
+            return None
+        
+        name = params.get('remarks', [''])[0]
+        if name:
+            name = decode_base64(name).strip()
+        name = name or f'SSR-{server}'
         
         return {
             'type': 'ssr',
-            'name': decode_base64(params.get('remarks', ['SSR'])[0]),
+            'name': name,
             'server': server,
             'port': int(port),
             'cipher': method,
             'password': password,
             'protocol': protocol,
             'obfs': obfs,
-            'protocol-param': decode_base64(params.get('protoparam', [''])[0]),
-            'obfs-param': decode_base64(params.get('obfsparam', [''])[0]),
+            'protocol-param': decode_base64(params.get('protoparam', [''])[0]) if params.get('protoparam') else '',
+            'obfs-param': decode_base64(params.get('obfsparam', [''])[0]) if params.get('obfsparam') else '',
         }
-    except Exception as e:
+    except Exception:
         return None
 
 
 def parse_proxy_url(url: str) -> Optional[Dict]:
-    """Parse any supported proxy URL"""
+    """Parse any supported proxy URL with validation"""
     url = url.strip()
+    
+    if not url or len(url) < 10:
+        return None
     
     parsers = {
         'vmess://': parse_vmess,
@@ -395,7 +512,7 @@ def parse_proxy_url(url: str) -> Optional[Dict]:
         if url.startswith(prefix):
             proxy = parser(url)
             if proxy:
-                # Validate and add hash
+                # Validate configuration
                 is_valid, msg = validate_proxy_config(proxy)
                 if is_valid:
                     proxy['hash'] = calculate_proxy_hash(proxy)
@@ -413,7 +530,7 @@ def proxy_to_clash_format(proxy: Dict) -> Dict:
     for k, v in proxy.items():
         if k == 'hash':  # Skip internal fields
             continue
-        if v is not None and v != '' and v != {}:
+        if v is not None and v != '' and v != {} and v != []:
             clash_proxy[k] = v
     
     return clash_proxy
@@ -434,7 +551,7 @@ def proxy_to_share_url(proxy: Dict) -> str:
             return reconstruct_trojan_url(proxy)
         elif ptype == 'ssr':
             return reconstruct_ssr_url(proxy)
-    except Exception as e:
+    except Exception:
         pass
     
     # Fallback
