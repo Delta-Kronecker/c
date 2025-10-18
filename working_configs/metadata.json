@@ -1,18 +1,17 @@
 {
-  "total_working": 216,
+  "total_working": 218,
   "by_protocol": {
-    "ss": 123,
-    "trojan": 7,
-    "vless": 36,
-    "vmess": 50
+    "ss": 110,
+    "trojan": 5,
+    "vless": 41,
+    "vmess": 62
   },
   "latency_stats": {
-    "average_ms": 1504.13,
-    "min_ms": 68.69,
-    "max_ms": 8057.5
+    "average_ms": 1415.44,
+    "min_ms": 76.4,
+    "max_ms": 8768.02
   },
-  "test_method": "balanced_validation",
-  "validation": "Connectivity + (IP Check OR Content Validation)",
-  "last_updated": "2025-10-18T15:59:10.729203",
-  "timestamp": 1760803150
+  "test_method": "smart_adaptive",
+  "last_updated": "2025-10-18T18:55:03.702825",
+  "timestamp": 1760813703
 }
