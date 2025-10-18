@@ -1,13 +1,13 @@
 [
   {
     "type": "ss",
-    "name": "🇩🇪 德国",
-    "server": "45.87.175.174",
+    "name": "🇱🇹 SS-立陶宛>荷兰-NF解锁荷兰自制剧-ChatGPT-TikTok-YouTube-45.87.175.28:8080",
+    "server": "45.87.175.28",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
-    "password": "k1dBOmOB4oqi7Ump37a1bQ",
-    "hash": "d7fba920",
-    "latency": 235.55946350097656
+    "password": "oZIoA69Q8yhcQV8ka3Pa3A",
+    "hash": "f7fe3401",
+    "latency": 425.5062739054362
   },
   {
     "type": "ss",
@@ -17,67 +17,7 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "k1dBOmOB4oqi7Ump37a1bQ",
     "hash": "ec13a975",
-    "latency": 230.38212458292642
-  },
-  {
-    "type": "ss",
-    "name": "🇮🇸_IS_冰岛",
-    "server": "37.235.49.168",
-    "port": 989,
-    "cipher": "aes-256-cfb",
-    "password": "f8f7aCzcPKbsF8p3",
-    "hash": "58ec6bf1",
-    "latency": 309.64962641398114
-  },
-  {
-    "type": "ss",
-    "name": "🇳🇱 SS-荷兰-NF解锁荷兰地区非自制剧-ChatGPT-TikTok-YouTube-213.109.147.242:62685",
-    "server": "213.109.147.242",
-    "port": 62685,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "VpKABcOpNNA0l5G2AVOmw8",
-    "hash": "2d160d30",
-    "latency": 748.9246527353922
-  },
-  {
-    "type": "ss",
-    "name": "🇭🇺 匈牙利 V2CROSS.COM",
-    "server": "109.61.39.28",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "4040a9e2",
-    "latency": 743.3989842732748
-  },
-  {
-    "type": "ss",
-    "name": "🇺🇸 美国",
-    "server": "arxfw2b78fi2q9hzylhn.freesocks.work",
-    "port": 443,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "Nk9asglDzHzjktVzTkvhaA",
-    "hash": "513a9214",
-    "latency": 1117.9455916086833
-  },
-  {
-    "type": "ss",
-    "name": "🇺🇸 美国",
-    "server": "switcher-nick-croquet.freesocks.work",
-    "port": 443,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "9tqhMdIrTkgQ46PvhyAtMH",
-    "hash": "2ede6122",
-    "latency": 4919.762134552002
-  },
-  {
-    "type": "ss",
-    "name": "🇺🇸_US_美国->🏳️_unKnow_未知",
-    "server": "54.84.99.165",
-    "port": 443,
-    "cipher": "aes-256-cfb",
-    "password": "amazonskr05",
-    "hash": "1ee4217c",
-    "latency": 50.29129981994629
+    "latency": 472.6525942484538
   },
   {
     "type": "ss",
@@ -87,17 +27,7 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "oZIoA69Q8yhcQV8ka3Pa3A",
     "hash": "79c168a5",
-    "latency": 214.07326062520346
-  },
-  {
-    "type": "ss",
-    "name": "🇮🇷_IR_伊朗->🇺🇸_US_美国",
-    "server": "151.242.251.133",
-    "port": 8080,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "k1dBOmOB4oqi7Ump37a1bQ",
-    "hash": "34fec70e",
-    "latency": 263.0321184794108
+    "latency": 421.1488564809163
   },
   {
     "type": "ss",
@@ -107,37 +37,97 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "4a2rfixophdjffa8KVA4Aa",
     "hash": "0011c029",
-    "latency": 237.4436060587565
+    "latency": 456.6393693288167
   },
   {
     "type": "ss",
-    "name": "@IRAN_V2RAY1",
-    "server": "45.87.175.178",
+    "name": "🇺🇸 SS-美国-NF解锁自制剧-ChatGPT-TikTok-YouTube-104.167.197.25:57456",
+    "server": "104.167.197.25",
+    "port": 57456,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "360e21d21977dc11",
+    "hash": "e9d7a038",
+    "latency": 699.1106669108073
+  },
+  {
+    "type": "ss",
+    "name": "🇳🇱 SS-荷兰-NF解锁荷兰地区非自制剧-ChatGPT-TikTok-YouTube-213.109.147.242:62685",
+    "server": "213.109.147.242",
+    "port": 62685,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "VpKABcOpNNA0l5G2AVOmw8",
+    "hash": "2d160d30",
+    "latency": 1345.8085854848225
+  },
+  {
+    "type": "ss",
+    "name": "🇩🇪 德国",
+    "server": "45.87.175.155",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
-    "password": "4a2rfixophdjffa8KVA4Aa",
-    "hash": "fb9e2e70",
-    "latency": 511.5195115407308
+    "password": "k1dBOmOB4oqi7Ump37a1bQ",
+    "hash": "de5e338b",
+    "latency": 1373.2806046803792
   },
   {
     "type": "ss",
-    "name": "@Selinc",
-    "server": "45.87.175.199",
+    "name": "🇭🇺_HU_匈牙利",
+    "server": "109.61.39.28",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "4040a9e2",
+    "latency": 1109.7099781036377
+  },
+  {
+    "type": "ss",
+    "name": "🇺🇸 美国",
+    "server": "arxfw2b78fi2q9hzylhn.freesocks.work",
+    "port": 443,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "Nk9asglDzHzjktVzTkvhaA",
+    "hash": "513a9214",
+    "latency": 1138.7977600097656
+  },
+  {
+    "type": "ss",
+    "name": "🇺🇸 美国 V2CROSS.COM",
+    "server": "pl.vpnsparta.pro",
+    "port": 57456,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "360e21d21977dc11",
+    "hash": "d6461875",
+    "latency": 2890.645742416382
+  },
+  {
+    "type": "ss",
+    "name": "🇺🇸 美国",
+    "server": "switcher-nick-croquet.freesocks.work",
+    "port": 443,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "9tqhMdIrTkgQ46PvhyAtMH",
+    "hash": "2ede6122",
+    "latency": 5359.213352203369
+  },
+  {
+    "type": "ss",
+    "name": "SS-78.40.198.60",
+    "server": "78.40.198.60",
+    "port": 47346,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "67szB9204bjydiyQEaChON",
+    "hash": "3c3d82f4",
+    "latency": 438.4438991546631
+  },
+  {
+    "type": "ss",
+    "name": "@AYMH19 کانال تلگرام",
+    "server": "45.87.175.188",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
     "password": "1RWwXhwfAB5gAEozU4G2Pg",
-    "hash": "e208c44f",
-    "latency": 272.2935676574707
-  },
-  {
-    "type": "ss",
-    "name": "🇳🇱@FreakConfig",
-    "server": "212.34.140.184",
-    "port": 443,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "0NeN5ta7FLa5B9DLytU0um",
-    "hash": "15a9ba6c",
-    "latency": 474.03955459594727
+    "hash": "153754b8",
+    "latency": 500.91107686360675
   },
   {
     "type": "ss",
@@ -147,7 +137,17 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "7115Q0ojojBF7mc2F7KLkN",
     "hash": "4f25fa5a",
-    "latency": 524.4057973225912
+    "latency": 587.0037873586019
+  },
+  {
+    "type": "ss",
+    "name": "@IRAN_V2RAY1",
+    "server": "45.87.175.178",
+    "port": 8080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "4a2rfixophdjffa8KVA4Aa",
+    "hash": "fb9e2e70",
+    "latency": 637.9768053690592
   },
   {
     "type": "ss",
@@ -157,17 +157,7 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "360e21d21977dc11",
     "hash": "78e81282",
-    "latency": 503.81938616434735
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇸🇬",
-    "server": "sgmob222.asuscomm.com",
-    "port": 8899,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "03241",
-    "hash": "3d88fe39",
-    "latency": 823.6478964487711
+    "latency": 791.124184926351
   },
   {
     "type": "ss",
@@ -177,7 +167,47 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "2jmKlUhNDQ3mUf7uaOLJYb",
     "hash": "11fb1ec0",
-    "latency": 1328.7201722462971
+    "latency": 1352.1310488382976
+  },
+  {
+    "type": "ss",
+    "name": "Channel id: @ShadowProxy66",
+    "server": "45.87.175.166",
+    "port": 443,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "1RWwXhwfAB5gAEozU4G2Pg",
+    "hash": "38ad023f",
+    "latency": 1272.7057933807373
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇸🇬",
+    "server": "sgmob222.asuscomm.com",
+    "port": 8899,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "03241",
+    "hash": "3d88fe39",
+    "latency": 4301.416238149007
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇺🇸",
+    "server": "167.160.90.178",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "51ac4430",
+    "latency": 68.68950525919597
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇺🇸",
+    "server": "173.234.29.2",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "c169bb04",
+    "latency": 172.29262987772623
   },
   {
     "type": "ss",
@@ -187,7 +217,7 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
     "hash": "58dfe0bd",
-    "latency": 259.80520248413086
+    "latency": 375.4315376281738
   },
   {
     "type": "ss",
@@ -197,7 +227,17 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
     "hash": "29ba1fb2",
-    "latency": 397.60859807332355
+    "latency": 603.2431125640869
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇱🇹",
+    "server": "185.237.185.89",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "6ac7fa9d",
+    "latency": 587.0529015858968
   },
   {
     "type": "ss",
@@ -207,7 +247,7 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "yALtyAtHfbw1Vu4pqh6wUc",
     "hash": "434307c5",
-    "latency": 420.12794812520343
+    "latency": 679.9254417419434
   },
   {
     "type": "ss",
@@ -217,17 +257,27 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
     "hash": "fd18831c",
-    "latency": 458.8758150736491
+    "latency": 657.9643885294596
   },
   {
     "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇨🇱",
-    "server": "154.205.153.107",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇯🇵",
+    "server": "103.106.228.247",
     "port": 990,
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "480a6e59",
-    "latency": 831.1898708343506
+    "hash": "22e9e9aa",
+    "latency": 631.4074993133545
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇹🇭",
+    "server": "119.59.127.129",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "0fbf23d3",
+    "latency": 771.4002927144369
   },
   {
     "type": "ss",
@@ -237,97 +287,7 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "wbWE1MgcMNEkQHVHlJZq7G",
     "hash": "e8b3b705",
-    "latency": 2263.5370095570884
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇦🇷",
-    "server": "190.103.176.32",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "080da5ef",
-    "latency": 471.9237486521403
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇪🇨",
-    "server": "38.165.231.25",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "e6950d0e",
-    "latency": 531.2683582305908
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇲🇾",
-    "server": "38.60.192.176",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "116e4401",
-    "latency": 677.0075162251791
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇰🇿",
-    "server": "45.159.250.190",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "67be7b61",
-    "latency": 670.3970432281494
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇭🇰",
-    "server": "45.82.252.109",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "21e05fdd",
-    "latency": 715.2406374613444
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇧🇷",
-    "server": "38.54.57.90",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "7fc541e3",
-    "latency": 777.2165139516195
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇲🇩",
-    "server": "176.123.1.175",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "8548d688",
-    "latency": 866.8901125590006
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇰🇭",
-    "server": "38.54.4.65",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "7aa6a36b",
-    "latency": 834.9692026774088
-  },
-  {
-    "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇭🇺",
-    "server": "185.163.204.94",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "7da5e31d",
-    "latency": 1058.8854948679607
+    "latency": 917.129913965861
   },
   {
     "type": "ss",
@@ -337,77 +297,47 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
     "hash": "3ba92214",
-    "latency": 1077.6703357696533
+    "latency": 1007.564385732015
   },
   {
     "type": "ss",
-    "name": "SS-154.70.207.97",
-    "server": "154.70.207.97",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇧🇭",
+    "server": "154.205.146.153",
     "port": 990,
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "781034cf",
-    "latency": 1832.5719038645427
+    "hash": "d05baba3",
+    "latency": 1252.9269059499104
   },
   {
     "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇪🇸",
-    "server": "37.143.130.203",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇦🇪",
+    "server": "147.78.0.182",
     "port": 990,
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "48e50b01",
-    "latency": 2607.8211466471353
+    "hash": "498dff6b",
+    "latency": 1579.8447132110596
   },
   {
     "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇻🇳",
-    "server": "38.54.31.230",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇳🇴",
+    "server": "185.213.23.63",
     "port": 990,
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "e3a70e24",
-    "latency": 4861.009279886882
-  },
-  {
-    "type": "ss",
-    "name": "@AZARBAYJAB1",
-    "server": "142.4.216.225",
-    "port": 80,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "JIhN6rBKkaEboLNXVSv5rq",
-    "hash": "0e388399",
-    "latency": 92.91728337605794
+    "hash": "6b0b839f",
+    "latency": 3957.120656967163
   },
   {
     "type": "ss",
     "name": "@AblNet7 🇮🇷 نت ملی 🇬🇧",
-    "server": "62.100.205.100",
+    "server": "62.100.205.177",
     "port": 990,
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "30dfcf81",
-    "latency": 205.39538065592447
-  },
-  {
-    "type": "ss",
-    "name": "🇳🇱@FreakConfig",
-    "server": "194.135.46.13",
-    "port": 1419,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "EacZIMFwmMCR6dWqN5Ah0c",
-    "hash": "0df1d583",
-    "latency": 239.57649866739908
-  },
-  {
-    "type": "ss",
-    "name": "🇵🇹 - PT - @freeOnlineVPN",
-    "server": "185.113.143.186",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "6d5409a5",
-    "latency": 336.2874190012614
+    "hash": "61c828aa",
+    "latency": 456.48709932963055
   },
   {
     "type": "ss",
@@ -417,57 +347,67 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
     "hash": "eaf4f0c1",
-    "latency": 1097.6804892222087
+    "latency": 544.7078545888265
   },
   {
     "type": "ss",
-    "name": "SS-91.219.237.163",
-    "server": "91.219.237.163",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇦🇷",
+    "server": "190.103.176.32",
     "port": 990,
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "e1717dc4",
-    "latency": 1278.0194282531738
+    "hash": "080da5ef",
+    "latency": 718.8489437103271
   },
   {
     "type": "ss",
-    "name": "🇸🇪[Telegram:NetifyVpn]",
-    "server": "176.97.77.71",
-    "port": 31778,
+    "name": "@AblNet7 🇮🇷 نت ملی 🇨🇾",
+    "server": "91.148.135.31",
+    "port": 990,
     "cipher": "chacha20-ietf-poly1305",
-    "password": "Iel2tlruoGON1PooiQy0G3",
-    "hash": "f400369c",
-    "latency": 2038.4981632232666
-  },
-  {
-    "type": "ss",
-    "name": "@v2ray_configs_pools 🩵",
-    "server": "193.29.139.227",
-    "port": 8080,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "QCXDxuDlTTMD7jtgHUjIoj",
-    "hash": "198d1000",
-    "latency": 248.79884719848633
-  },
-  {
-    "type": "ss",
-    "name": "@awlix_ir",
-    "server": "45.87.175.154",
-    "port": 8080,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "QCXDxuDlTTMD7jtgHUjIoj",
-    "hash": "3124d731",
-    "latency": 535.1095199584961
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "6e05a27c",
+    "latency": 832.0275147755941
   },
   {
     "type": "ss",
     "name": "@Daily_Configs",
-    "server": "promo19v.bystrivpn.ru",
-    "port": 443,
+    "server": "94.156.250.122",
+    "port": 990,
     "cipher": "chacha20-ietf-poly1305",
-    "password": "SwTShXYSQd404FISs8NFeJ",
-    "hash": "86ddba1d",
-    "latency": 524.5539347330729
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "71e2ff94",
+    "latency": 778.0376275380453
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇵🇷",
+    "server": "185.47.255.213",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "351a66d8",
+    "latency": 859.128475189209
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇭🇰",
+    "server": "45.82.252.109",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "21e05fdd",
+    "latency": 961.144765218099
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇩🇪",
+    "server": "38.60.250.107",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "54582038",
+    "latency": 6934.9682331085205
   },
   {
     "type": "ss",
@@ -477,27 +417,87 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "QCXDxuDlTTMD7jtgHUjIoj",
     "hash": "0738ae03",
-    "latency": 1830.1424980163574
+    "latency": 470.92461585998535
   },
   {
     "type": "ss",
-    "name": "SS-77.91.101.132",
-    "server": "77.91.101.132",
-    "port": 43458,
+    "name": "@pardazeshvpn - JOIN",
+    "server": "45.87.175.167",
+    "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
-    "password": "SSh5aoQdcX0nZXCAH5yF75",
-    "hash": "2dbabb74",
-    "latency": 2416.2423610687256
+    "password": "QCXDxuDlTTMD7jtgHUjIoj",
+    "hash": "6c13e653",
+    "latency": 510.88643074035645
+  },
+  {
+    "type": "ss",
+    "name": "🇳🇱[Telegram:@tik7net_vpn]",
+    "server": "81.90.29.169",
+    "port": 58080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "HaNXmMrFne7Ta3u0pGuv2F",
+    "hash": "0f02a710",
+    "latency": 541.297992070516
+  },
+  {
+    "type": "ss",
+    "name": "🇬🇧GB",
+    "server": "series-a2.samanehha.co",
+    "port": 443,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "W74XFALLLuw6m5IA",
+    "hash": "2abd05f2",
+    "latency": 419.5648431777954
+  },
+  {
+    "type": "ss",
+    "name": "All--@Iran_V2ray1",
+    "server": "series-a1.samanehha.co",
+    "port": 443,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "W74XFALLLuw6m5IA",
+    "hash": "fd4b5423",
+    "latency": 457.039475440979
+  },
+  {
+    "type": "ss",
+    "name": "@IRAN_V2RAY1",
+    "server": "141.98.4.67",
+    "port": 52952,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "LMSNh21TrXjR2ok25Q2nE8ENT2zoBmPvka3RCCUAHZELCnWoekVjvaf89qwcRkdbxEfep2bc2aUtmnxqvF1ayQRez1JHjULj",
+    "hash": "8dec107f",
+    "latency": 1817.3894087473552
+  },
+  {
+    "type": "ss",
+    "name": "@V2rayNGVPN+<=+کانفیگ+رایگان",
+    "server": "38.180.195.193",
+    "port": 443,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "SwTShXYSQd404FISs8NFeJ",
+    "hash": "1e925576",
+    "latency": 3347.2538789113364
   },
   {
     "type": "ss",
     "name": "@AblNet7 🇮🇷 نت ملی 🇳🇱",
-    "server": "45.87.175.187",
+    "server": "45.87.175.185",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
     "password": "cvII85TrW6n0OGyfpHVS1u",
-    "hash": "64a809df",
-    "latency": 233.08483759562174
+    "hash": "43cfddf1",
+    "latency": 472.59823481241864
+  },
+  {
+    "type": "ss",
+    "name": "🇺🇲TM-@AZARBAYJAB1",
+    "server": "45.87.175.193",
+    "port": 8080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "cvII85TrW6n0OGyfpHVS1u",
+    "hash": "6c0252f2",
+    "latency": 547.6210117340088
   },
   {
     "type": "ss",
@@ -507,77 +507,57 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "f8f7aCzcPKbsF8p3",
     "hash": "e7aa2ace",
-    "latency": 505.9010982513428
+    "latency": 960.3250821431478
   },
   {
     "type": "ss",
-    "name": "@v2ray_configs_pools❤️‍🔥⚡",
-    "server": "103.243.215.17",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "f8f7aCzcPKbsF8p3",
-    "hash": "a8f496b0",
-    "latency": 822.1980730692545
-  },
-  {
-    "type": "ss",
-    "name": "@AYMH19 کانال تلگرام",
-    "server": "45.87.175.183",
+    "name": "@Selinc",
+    "server": "45.87.175.190",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
     "password": "cvII85TrW6n0OGyfpHVS1u",
-    "hash": "c8ff1762",
-    "latency": 999.0705649058024
+    "hash": "4a9fef48",
+    "latency": 3420.4039573669434
   },
   {
     "type": "ss",
-    "name": "@awlix_ir",
-    "server": "45.158.171.146",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇳🇱",
+    "server": "45.87.175.187",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
     "password": "cvII85TrW6n0OGyfpHVS1u",
-    "hash": "75cf59ea",
-    "latency": 1873.955488204956
+    "hash": "64a809df",
+    "latency": 3430.3978284200034
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇩🇪",
+    "server": "212.224.125.154",
+    "port": 57456,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "c40641c1f89e7acb",
+    "hash": "295defd3",
+    "latency": 2401.2558460235596
+  },
+  {
+    "type": "ss",
+    "name": "🇦🇺 - @FREEV2RNG 19",
+    "server": "173.244.56.6",
+    "port": 443,
+    "cipher": "aes-128-gcm",
+    "password": "shadowsocks",
+    "hash": "1b3f402f",
+    "latency": 71.76462809244792
   },
   {
     "type": "ss",
     "name": "@AYMH19 کانال تلگرام",
-    "server": "193.29.139.240",
+    "server": "45.87.175.65",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
     "password": "oZIoA69Q8yhcQV8ka3Pa3A",
-    "hash": "edf21016",
-    "latency": 213.16186587015787
-  },
-  {
-    "type": "ss",
-    "name": "@V2rayNGVPN <= کانفیگ رایگان",
-    "server": "tawaguard.xyz",
-    "port": 8080,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "k1dBOmOB4oqi7Ump37a1bQ",
-    "hash": "4ac2a978",
-    "latency": 320.96370061238605
-  },
-  {
-    "type": "ss",
-    "name": "@AYMH19 کانال تلگرام",
-    "server": "51.195.119.47",
-    "port": 1080,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "qXvO7zYU7KeaB0Md7DQLow",
-    "hash": "d6b0ce5b",
-    "latency": 380.595604578654
-  },
-  {
-    "type": "ss",
-    "name": "@AYMH19 کانال تلگرام",
-    "server": "193.29.139.177",
-    "port": 8080,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "oZIoA69Q8yhcQV8ka3Pa3A",
-    "hash": "6c752ac4",
-    "latency": 5071.621338526408
+    "hash": "49707960",
+    "latency": 416.59053166707355
   },
   {
     "type": "ss",
@@ -587,27 +567,27 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "oZIoA69Q8yhcQV8ka3Pa3A",
     "hash": "a81844e9",
-    "latency": 5069.535334904988
+    "latency": 425.5990187327067
   },
   {
     "type": "ss",
-    "name": "🇬🇧𝐣𝐨𝐢𝐍-@𝐅𝐑𝐄𝐄𝐕𝟐𝐑𝐍𝐆",
-    "server": "141.98.101.179",
-    "port": 443,
+    "name": "@AblNet7 🇮🇷 نت ملی 🇯🇵",
+    "server": "160.16.123.124",
+    "port": 10087,
     "cipher": "aes-128-gcm",
-    "password": "shadowsocks",
-    "hash": "7c878ad2",
-    "latency": 328.3395767211914
+    "password": "10086",
+    "hash": "f425d893",
+    "latency": 518.4231599171957
   },
   {
     "type": "ss",
-    "name": "@awlix_ir",
-    "server": "103.186.154.26",
-    "port": 38388,
-    "cipher": "aes-256-cfb",
-    "password": "Xn8jKdmDM00IeO%#$#fJAMtsEAEUOpH/YWYtYqDFnT0SV",
-    "hash": "280ee8fd",
-    "latency": 860.8686129252116
+    "name": "@AYMH19 کانال تلگرام",
+    "server": "51.195.119.47",
+    "port": 1080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "qXvO7zYU7KeaB0Md7DQLow",
+    "hash": "d6b0ce5b",
+    "latency": 649.7046947479248
   },
   {
     "type": "ss",
@@ -617,17 +597,77 @@
     "cipher": "aes-128-gcm",
     "password": "93498539-7838-4836-b9b3-8311ffc79bcf",
     "hash": "73f58d1d",
-    "latency": 1036.6865793863933
+    "latency": 1027.6671250661213
   },
   {
     "type": "ss",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇺🇸",
-    "server": "3.85.144.122",
-    "port": 80,
-    "cipher": "aes-256-gcm",
-    "password": "dada0801",
-    "hash": "36738386",
-    "latency": 108.61571629842122
+    "name": "@IRAN_V2RAY1",
+    "server": "82.180.146.173",
+    "port": 30607,
+    "cipher": "aes-128-gcm",
+    "password": "162629d7-cb17-43b1-82c9-f9c7ae6cba70",
+    "hash": "f5a15471",
+    "latency": 1113.50679397583
+  },
+  {
+    "type": "ss",
+    "name": "@awlix_ir",
+    "server": "103.186.154.26",
+    "port": 38388,
+    "cipher": "aes-256-cfb",
+    "password": "Xn8jKdmDM00IeO%#$#fJAMtsEAEUOpH/YWYtYqDFnT0SV",
+    "hash": "280ee8fd",
+    "latency": 1119.5472081502278
+  },
+  {
+    "type": "ss",
+    "name": "🇺🇲@FreakConfig",
+    "server": "pupas-shirting-unsung.freesocks.work",
+    "port": 443,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "p78naCf2EfOlRSLTX0wFVx",
+    "hash": "dcffe9c8",
+    "latency": 1407.3317050933838
+  },
+  {
+    "type": "ss",
+    "name": "@awlix_ir",
+    "server": "103.186.155.22",
+    "port": 38388,
+    "cipher": "aes-256-cfb",
+    "password": "Xn8jKdmDM00IeO%#$#fJAMtsEAEUOpH/YWYtYqDFnT0SV",
+    "hash": "f8388851",
+    "latency": 1260.535717010498
+  },
+  {
+    "type": "ss",
+    "name": "🇬🇧𝐣𝐨𝐢𝐍-@𝐅𝐑𝐄𝐄𝐕𝟐𝐑𝐍𝐆",
+    "server": "141.98.101.179",
+    "port": 443,
+    "cipher": "aes-128-gcm",
+    "password": "shadowsocks",
+    "hash": "7c878ad2",
+    "latency": 1792.1160856882732
+  },
+  {
+    "type": "ss",
+    "name": "@IRAN_V2RAY1",
+    "server": "45.87.175.58",
+    "port": 8080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "oZIoA69Q8yhcQV8ka3Pa3A",
+    "hash": "9d91a008",
+    "latency": 3304.779529571533
+  },
+  {
+    "type": "ss",
+    "name": "@awlix_ir",
+    "server": "217.30.10.18",
+    "port": 9033,
+    "cipher": "aes-256-cfb",
+    "password": "UTJA57ypk2XKQpnm",
+    "hash": "ff0562d2",
+    "latency": 2280.789613723755
   },
   {
     "type": "ss",
@@ -637,17 +677,27 @@
     "cipher": "aes-256-cfb",
     "password": "f8f7aCzcPKbsF8p3",
     "hash": "43de85c2",
-    "latency": 162.63175010681152
+    "latency": 72.95831044514973
+  },
+  {
+    "type": "ss",
+    "name": "@AblNet7 🇮🇷 نت ملی 🇺🇸",
+    "server": "3.85.144.122",
+    "port": 80,
+    "cipher": "aes-256-gcm",
+    "password": "dada0801",
+    "hash": "36738386",
+    "latency": 264.24217224121094
   },
   {
     "type": "ss",
     "name": "@awlix_ir",
-    "server": "38.54.57.90",
+    "server": "154.223.16.212",
     "port": 989,
     "cipher": "aes-256-cfb",
     "password": "f8f7aCzcPKbsF8p3",
-    "hash": "ad486297",
-    "latency": 531.9701830546061
+    "hash": "50b601c5",
+    "latency": 415.1323636372884
   },
   {
     "type": "ss",
@@ -657,7 +707,7 @@
     "cipher": "aes-256-gcm",
     "password": "dada0801",
     "hash": "86a16071",
-    "latency": 1113.170862197876
+    "latency": 2033.945639928182
   },
   {
     "type": "ss",
@@ -667,127 +717,7 @@
     "cipher": "aes-256-gcm",
     "password": "dada0801",
     "hash": "9a728b1b",
-    "latency": 44.50265566507975
-  },
-  {
-    "type": "ss",
-    "name": "🇺🇸 US | 🔒 SS | @godv2rang [1]",
-    "server": "37.19.198.244",
-    "port": 443,
-    "cipher": "aes-128-gcm",
-    "password": "shadowsocks",
-    "hash": "3f596819",
-    "latency": 60.89027722676595
-  },
-  {
-    "type": "ss",
-    "name": "🇳🇱 NL | 🔒 SS | @outlinereleasedkey [15]",
-    "server": "193.29.139.188",
-    "port": 8080,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "oZIoA69Q8yhcQV8ka3Pa3A",
-    "hash": "de0fdd03",
-    "latency": 242.35614140828451
-  },
-  {
-    "type": "ss",
-    "name": "🇳🇱 NL | 🔒 SS | @netfreedom0 [18]",
-    "server": "109.201.152.181",
-    "port": 443,
-    "cipher": "aes-128-cfb",
-    "password": "shadowsocks",
-    "hash": "e4971db4",
-    "latency": 293.47944259643555
-  },
-  {
-    "type": "ss",
-    "name": "@awlix_ir",
-    "server": "68.183.235.122",
-    "port": 8080,
-    "cipher": "rc4-md5",
-    "password": "14fFPrbezE3HDZzsMOr6",
-    "hash": "01c060d0",
-    "latency": 620.8834648132324
-  },
-  {
-    "type": "ss",
-    "name": "@awlix_ir",
-    "server": "68.183.227.4",
-    "port": 8080,
-    "cipher": "rc4-md5",
-    "password": "14fFPrbezE3HDZzsMOr6",
-    "hash": "3462811a",
-    "latency": 688.0145072937012
-  },
-  {
-    "type": "ss",
-    "name": "🇻🇳 VN | 🔒 SS | @free4allvpn [18]",
-    "server": "103.163.218.2",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "f8f7aCzcPKbsF8p3",
-    "hash": "62b098fe",
-    "latency": 911.4915529886881
-  },
-  {
-    "type": "ss",
-    "name": "SS-54.157.30.50",
-    "server": "54.157.30.50",
-    "port": 80,
-    "cipher": "aes-256-gcm",
-    "password": "dada0801",
-    "hash": "c96b9e8b",
-    "latency": 1280.280590057373
-  },
-  {
-    "type": "ss",
-    "name": "🇯🇵 JP | 🔒 SS | @outlinereleasedkey [17]",
-    "server": "153.121.43.183",
-    "port": 10087,
-    "cipher": "aes-128-gcm",
-    "password": "10086",
-    "hash": "54f01f26",
-    "latency": 1281.7312081654866
-  },
-  {
-    "type": "ss",
-    "name": "🇬🇧 GB | 🔒 SS | @key_outline [19]",
-    "server": "78.129.140.11",
-    "port": 443,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "H9XmMFyYJ0jlHqhUyoQN72",
-    "hash": "a6ca3ae0",
-    "latency": 2907.536824544271
-  },
-  {
-    "type": "ss",
-    "name": ">>@hope_net::US",
-    "server": "37.19.198.160",
-    "port": 443,
-    "cipher": "aes-128-gcm",
-    "password": "shadowsocks",
-    "hash": "ad04fb25",
-    "latency": 58.64222844441732
-  },
-  {
-    "type": "ss",
-    "name": ">>@ShadowsocksM::XX",
-    "server": "64.74.163.130",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "f8f7aCzcPKbsF8p3",
-    "hash": "af2c7129",
-    "latency": 86.43714586893718
-  },
-  {
-    "type": "ss",
-    "name": ">>@ShadowsocksM::XX",
-    "server": "104.192.226.106",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "f8f7aCzcPKbsF8p3",
-    "hash": "3f1724cb",
-    "latency": 149.8854160308838
+    "latency": 212.67040570576987
   },
   {
     "type": "ss",
@@ -797,57 +727,147 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "f8f7aCzcPKbsF8p3",
     "hash": "3b4eace5",
-    "latency": 221.5430736541748
+    "latency": 171.44036293029785
   },
   {
     "type": "ss",
-    "name": ">>@ShadowsocksM::XX",
-    "server": "77.238.224.29",
-    "port": 55702,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "S2QudBxi0vRySw4YRLloPq",
-    "hash": "7c0e0758",
-    "latency": 228.05913289388022
+    "name": "🇯🇵 JP | 🔒 SS | @outlinereleasedkey [16]",
+    "server": "149.22.87.240",
+    "port": 443,
+    "cipher": "aes-128-gcm",
+    "password": "shadowsocks",
+    "hash": "e78bf323",
+    "latency": 465.7588005065918
   },
   {
     "type": "ss",
-    "name": ">>@ShadowsocksM::XX",
-    "server": "193.29.139.202",
-    "port": 8080,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "oZIoA69Q8yhcQV8ka3Pa3A",
-    "hash": "b47f6e3f",
-    "latency": 238.8796011606852
-  },
-  {
-    "type": "ss",
-    "name": ">>@ShadowsocksM::ES",
-    "server": "45.154.206.192",
+    "name": "🇵🇹 PT | 🔒 SS | @filtershekan_channel [13]",
+    "server": "185.231.233.173",
     "port": 990,
     "cipher": "chacha20-ietf-poly1305",
     "password": "f8f7aCzcPKbsF8p3",
-    "hash": "b9d53141",
-    "latency": 284.81125831604004
+    "hash": "616762a4",
+    "latency": 572.8957653045654
   },
   {
     "type": "ss",
-    "name": ">>@ShadowsocksM::XX",
-    "server": "45.87.175.165",
-    "port": 8080,
+    "name": ">>@free4allVPN::CZ",
+    "server": "195.181.160.6",
+    "port": 990,
     "cipher": "chacha20-ietf-poly1305",
-    "password": "QCXDxuDlTTMD7jtgHUjIoj",
-    "hash": "b34672fc",
-    "latency": 305.3191502888997
+    "password": "f8f7aCzcPKbsF8p3",
+    "hash": "c907419d",
+    "latency": 535.3391170501709
   },
   {
     "type": "ss",
-    "name": ">>@v2rayNG_Matsuri::XX",
-    "server": "151.242.251.142",
-    "port": 8080,
+    "name": "🇺🇦 UA | 🔒 SS | @v2ray_sub [45]",
+    "server": "176.103.53.105",
+    "port": 990,
     "cipher": "chacha20-ietf-poly1305",
-    "password": "k1dBOmOB4oqi7Ump37a1bQ",
-    "hash": "ef00f497",
-    "latency": 919.6734428405762
+    "password": "f8f7aCzcPKbsF8p3",
+    "hash": "a17e15d0",
+    "latency": 630.9598286946615
+  },
+  {
+    "type": "ss",
+    "name": "@awlix_ir",
+    "server": "68.183.227.4",
+    "port": 8080,
+    "cipher": "rc4-md5",
+    "password": "14fFPrbezE3HDZzsMOr6",
+    "hash": "3462811a",
+    "latency": 693.1717395782471
+  },
+  {
+    "type": "ss",
+    "name": ">>@free4allVPN::PY",
+    "server": "38.165.233.18",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "f8f7aCzcPKbsF8p3",
+    "hash": "99a7f2fa",
+    "latency": 829.3891747792562
+  },
+  {
+    "type": "ss",
+    "name": "r♡ya",
+    "server": "54.81.226.31",
+    "port": 80,
+    "cipher": "aes-256-gcm",
+    "password": "dada0801",
+    "hash": "9bb93825",
+    "latency": 1194.7449843088787
+  },
+  {
+    "type": "ss",
+    "name": "🇬🇧 GB | 🔒 SS | @key_outline [19]",
+    "server": "78.129.140.11",
+    "port": 443,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "H9XmMFyYJ0jlHqhUyoQN72",
+    "hash": "a6ca3ae0",
+    "latency": 1677.7998606363933
+  },
+  {
+    "type": "ss",
+    "name": "SS-54.157.30.50",
+    "server": "54.157.30.50",
+    "port": 80,
+    "cipher": "aes-256-gcm",
+    "password": "dada0801",
+    "hash": "c96b9e8b",
+    "latency": 2519.4212595621743
+  },
+  {
+    "type": "ss",
+    "name": "🇯🇵 JP | 🔒 SS | @outlinereleasedkey [17]",
+    "server": "153.121.43.183",
+    "port": 10087,
+    "cipher": "aes-128-gcm",
+    "password": "10086",
+    "hash": "54f01f26",
+    "latency": 3966.9454097747803
+  },
+  {
+    "type": "ss",
+    "name": "🇺🇸US-156.146.38.169-0200",
+    "server": "156.146.38.169",
+    "port": 443,
+    "cipher": "aes-128-gcm",
+    "password": "shadowsocks",
+    "hash": "9b6488bd",
+    "latency": 113.13422520955403
+  },
+  {
+    "type": "ss",
+    "name": ">>@hope_net::US",
+    "server": "37.19.198.160",
+    "port": 443,
+    "cipher": "aes-128-gcm",
+    "password": "shadowsocks",
+    "hash": "ad04fb25",
+    "latency": 218.74666213989258
+  },
+  {
+    "type": "ss",
+    "name": "🇺🇸US-54.209.249.254-5686",
+    "server": "54.209.249.254",
+    "port": 443,
+    "cipher": "aes-256-cfb",
+    "password": "amazonskr05",
+    "hash": "122e590e",
+    "latency": 204.48684692382812
+  },
+  {
+    "type": "ss",
+    "name": "🇺🇸US-54.84.99.165-0207",
+    "server": "54.84.99.165",
+    "port": 443,
+    "cipher": "aes-256-cfb",
+    "password": "amazonskr05",
+    "hash": "1ee4217c",
+    "latency": 211.92296346028647
   },
   {
     "type": "ss",
@@ -857,197 +877,404 @@
     "cipher": "chacha20-ietf-poly1305",
     "password": "X7sZBSMYZps1SJVR9D49sH",
     "hash": "3e3ebeeb",
-    "latency": 1950.00163714091
+    "latency": 485.96612612406415
   },
   {
     "type": "ss",
-    "name": "🇺🇸US-156.146.38.169-0173",
-    "server": "156.146.38.169",
-    "port": 443,
-    "cipher": "aes-128-gcm",
-    "password": "shadowsocks",
-    "hash": "9b6488bd",
-    "latency": 90.46673774719238
-  },
-  {
-    "type": "ss",
-    "name": "🇳🇱NL-193.29.139.217-0216",
-    "server": "193.29.139.217",
-    "port": 8080,
+    "name": ">>@ShadowsocksM::XX",
+    "server": "77.238.224.29",
+    "port": 55702,
     "cipher": "chacha20-ietf-poly1305",
-    "password": "QCXDxuDlTTMD7jtgHUjIoj",
-    "hash": "4a3226e9",
-    "latency": 221.45573298136392
+    "password": "S2QudBxi0vRySw4YRLloPq",
+    "hash": "7c0e0758",
+    "latency": 452.02938715616864
   },
   {
     "type": "ss",
-    "name": "🇫🇷FR-13.38.44.116-5584",
-    "server": "13.38.44.116",
-    "port": 443,
-    "cipher": "aes-256-cfb",
-    "password": "amazonskr05",
-    "hash": "6311a9b1",
-    "latency": 224.12848472595215
-  },
-  {
-    "type": "ss",
-    "name": "🇮🇹IT-212.102.54.45-0226",
-    "server": "212.102.54.45",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "a216f544",
-    "latency": 266.53186480204266
-  },
-  {
-    "type": "ss",
-    "name": "🇱🇺LU-109.61.46.43-0218",
-    "server": "109.61.46.43",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
-    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
-    "hash": "8cf9360e",
-    "latency": 311.3839626312256
-  },
-  {
-    "type": "ss",
-    "name": "🇧🇬BG-37.19.203.147-0262",
-    "server": "37.19.203.147",
-    "port": 989,
-    "cipher": "aes-256-cfb",
-    "password": "f8f7aCzcPKbsF8p3",
-    "hash": "3addaa4d",
-    "latency": 357.207457224528
-  },
-  {
-    "type": "ss",
-    "name": "@Rayan_Config-45.87.175.164-@beepassvpn_bot",
-    "server": "45.87.175.164",
+    "name": "@Rayan_Config-151.242.251.137-@beepassvpn_bot",
+    "server": "151.242.251.137",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
     "password": "k1dBOmOB4oqi7Ump37a1bQ",
-    "hash": "16622854",
-    "latency": 469.85451380411786
+    "hash": "72844ba4",
+    "latency": 428.0257225036621
   },
   {
     "type": "ss",
-    "name": "🇱🇹LT-45.87.175.181-0197",
-    "server": "45.87.175.181",
+    "name": "🇱🇹LT-45.158.171.110-0269",
+    "server": "45.158.171.110",
+    "port": 8080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "oZIoA69Q8yhcQV8ka3Pa3A",
+    "hash": "af5847f6",
+    "latency": 416.31126403808594
+  },
+  {
+    "type": "ss",
+    "name": ">>@ShadowsocksM::XX",
+    "server": "45.87.175.200",
+    "port": 8080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "cvII85TrW6n0OGyfpHVS1u",
+    "hash": "55e81842",
+    "latency": 511.5157763163249
+  },
+  {
+    "type": "ss",
+    "name": ">>@ShadowsocksM::ES",
+    "server": "45.154.206.192",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "f8f7aCzcPKbsF8p3",
+    "hash": "b9d53141",
+    "latency": 510.9616120656331
+  },
+  {
+    "type": "ss",
+    "name": "🇦🇪AE-151.242.251.153-0221",
+    "server": "151.242.251.153",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
     "password": "QCXDxuDlTTMD7jtgHUjIoj",
-    "hash": "6d70d64a",
-    "latency": 657.2092374165853
+    "hash": "d3b06932",
+    "latency": 516.8397426605225
   },
   {
     "type": "ss",
-    "name": "🇦🇪AE-151.242.251.144-0212",
+    "name": ">>@ShadowsocksM::EE",
+    "server": "188.214.36.155",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "f8f7aCzcPKbsF8p3",
+    "hash": "b69506d6",
+    "latency": 576.4978726704916
+  },
+  {
+    "type": "ss",
+    "name": "@Rayan_Config-151.242.251.133-@beepassvpn_bot",
+    "server": "151.242.251.133",
+    "port": 8080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "k1dBOmOB4oqi7Ump37a1bQ",
+    "hash": "34fec70e",
+    "latency": 634.7742080688477
+  },
+  {
+    "type": "ss",
+    "name": "🇺🇸US-54.242.126.43-5695",
+    "server": "54.242.126.43",
+    "port": 443,
+    "cipher": "aes-256-cfb",
+    "password": "amazonskr05",
+    "hash": "6f4d85ae",
+    "latency": 305.9964179992676
+  },
+  {
+    "type": "ss",
+    "name": "🇦🇪AE-151.242.251.153-0228",
+    "server": "beesyar.org",
+    "port": 8080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "QCXDxuDlTTMD7jtgHUjIoj",
+    "hash": "8edde8a8",
+    "latency": 2278.668483098348
+  },
+  {
+    "type": "ss",
+    "name": "🇦🇪AE-151.242.251.144-0215",
     "server": "151.242.251.144",
     "port": 8080,
     "cipher": "chacha20-ietf-poly1305",
     "password": "4a2rfixophdjffa8KVA4Aa",
     "hash": "797e407e",
-    "latency": 1068.9847469329834
+    "latency": 4337.233066558838
   },
   {
     "type": "ss",
-    "name": "🇺🇸US-167.88.61.59-5688",
-    "server": "167.88.61.59",
-    "port": 8118,
-    "cipher": "aes-256-gcm",
-    "password": "cdBIDV42DCwnfIN",
-    "hash": "f7f023d5",
-    "latency": 231.5515677134196
+    "name": "🇨🇦CA-142.4.216.225-0266",
+    "server": "ca225.vpnbook.com",
+    "port": 80,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "JIhN6rBKkaEboLNXVSv5rq",
+    "hash": "0b1ee634",
+    "latency": 327.27773984273273
   },
   {
     "type": "ss",
-    "name": "🇫🇮FI-37.143.129.230-0281",
-    "server": "37.143.129.230",
+    "name": "🇮🇹IT-212.102.54.45-0234",
+    "server": "212.102.54.45",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "a216f544",
+    "latency": 474.30944442749023
+  },
+  {
+    "type": "ss",
+    "name": "🇯🇵JP-149.22.87.204-0212",
+    "server": "149.22.87.204",
+    "port": 443,
+    "cipher": "aes-128-gcm",
+    "password": "shadowsocks",
+    "hash": "6e1c98f1",
+    "latency": 460.6325626373291
+  },
+  {
+    "type": "ss",
+    "name": "🇸🇪SE-13.60.209.163-5691",
+    "server": "13.60.209.163",
+    "port": 443,
+    "cipher": "aes-256-cfb",
+    "password": "amazonskr05",
+    "hash": "e862fff6",
+    "latency": 535.9396934509277
+  },
+  {
+    "type": "ss",
+    "name": "🇧🇪BE-192.71.249.78-0332",
+    "server": "192.71.249.78",
     "port": 989,
     "cipher": "aes-256-cfb",
     "password": "f8f7aCzcPKbsF8p3",
-    "hash": "f16f5de4",
-    "latency": 277.45946248372394
+    "hash": "b2892be5",
+    "latency": 520.6077098846436
   },
   {
     "type": "ss",
-    "name": "🇵🇱PL-92.118.205.228-0280",
+    "name": "🇱🇺LU-109.61.46.43-0236",
+    "server": "109.61.46.43",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
+    "hash": "8cf9360e",
+    "latency": 488.49789301554364
+  },
+  {
+    "type": "ss",
+    "name": "🇸🇪SE-121.127.46.147-0241",
+    "server": "121.127.46.147",
+    "port": 989,
+    "cipher": "aes-256-cfb",
+    "password": "f8f7aCzcPKbsF8p3",
+    "hash": "46b92d3c",
+    "latency": 554.549773534139
+  },
+  {
+    "type": "ss",
+    "name": "🇵🇱PL-92.118.205.228-0321",
     "server": "92.118.205.228",
     "port": 990,
     "cipher": "chacha20-ietf-poly1305",
     "password": "f8f7aCzcPKbsF8p3",
     "hash": "7851e65e",
-    "latency": 305.3988615671794
+    "latency": 544.2503293355306
   },
   {
     "type": "ss",
-    "name": "🇩🇰DK-192.36.27.94-0320",
+    "name": "🇦🇹AT-95.163.176.37-0284",
+    "server": "95.163.176.37",
+    "port": 8506,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "eUh4lSpi7nOYj0vSrqLUh0",
+    "hash": "d33ee482",
+    "latency": 560.3826840718588
+  },
+  {
+    "type": "ss",
+    "name": "🇵🇱PL-217.30.10.70-5638",
+    "server": "217.30.10.70",
+    "port": 9097,
+    "cipher": "aes-256-cfb",
+    "password": "Sn5B7jTqr76aCJT8",
+    "hash": "8896ce8b",
+    "latency": 545.922597249349
+  },
+  {
+    "type": "ss",
+    "name": "🇩🇰DK-192.36.27.94-0282",
     "server": "192.36.27.94",
     "port": 989,
     "cipher": "aes-256-cfb",
     "password": "f8f7aCzcPKbsF8p3",
     "hash": "8c74c423",
-    "latency": 375.60272216796875
+    "latency": 600.0757217407227
   },
   {
     "type": "ss",
-    "name": "🇷🇴RO-185.126.237.38-0287",
-    "server": "185.126.237.38",
-    "port": 990,
-    "cipher": "chacha20-ietf-poly1305",
+    "name": "🇧🇬BG-37.19.203.147-0258",
+    "server": "37.19.203.147",
+    "port": 989,
+    "cipher": "aes-256-cfb",
     "password": "f8f7aCzcPKbsF8p3",
-    "hash": "e0322ab6",
-    "latency": 451.7865975697835
+    "hash": "3addaa4d",
+    "latency": 636.530876159668
   },
   {
     "type": "ss",
-    "name": "🇩🇿DZ-102.207.216.176-6013",
+    "name": "🇫🇷FR-195.154.169.198-0230",
+    "server": "195.154.169.198",
+    "port": 989,
+    "cipher": "aes-256-cfb",
+    "password": "f8f7aCzcPKbsF8p3",
+    "hash": "9d9d618d",
+    "latency": 824.4577248891195
+  },
+  {
+    "type": "ss",
+    "name": "🇵🇱PL-217.30.10.70-5632",
+    "server": "217.30.10.70",
+    "port": 9046,
+    "cipher": "aes-256-cfb",
+    "password": "NvS8N4Vf8qAGPSCL",
+    "hash": "7212bfb8",
+    "latency": 700.0672817230225
+  },
+  {
+    "type": "ss",
+    "name": "🇩🇿DZ-102.207.216.176-0291",
     "server": "102.207.216.176",
     "port": 990,
     "cipher": "chacha20-ietf-poly1305",
     "password": "ARgvGZywA+gacgGV26Bvmu05+wZmRW/j+AdU+Z8Bt44=",
     "hash": "ab6e7c5e",
-    "latency": 466.70985221862793
+    "latency": 994.7472413380941
   },
   {
     "type": "ss",
-    "name": "🇯🇵JP-194.68.27.76-5625",
-    "server": "194.68.27.76",
+    "name": "🇳🇱NL-193.29.139.189-5457",
+    "server": "193.29.139.189",
+    "port": 8080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "cvII85TrW6n0OGyfpHVS1u",
+    "hash": "28a5fae6",
+    "latency": 2014.9877071380615
+  },
+  {
+    "type": "ss",
+    "name": "🇮🇸IS-37.235.49.152-0345",
+    "server": "37.235.49.152",
     "port": 989,
     "cipher": "aes-256-cfb",
     "password": "f8f7aCzcPKbsF8p3",
-    "hash": "0b3ba2fa",
-    "latency": 526.4072418212891
+    "hash": "395e1f0b",
+    "latency": 4339.967727661133
   },
   {
     "type": "ss",
-    "name": "🇵🇾PY-38.165.233.93-0348",
-    "server": "38.165.233.93",
+    "name": "🇺🇸US-23.157.40.101-0304",
+    "server": "23.157.40.101",
+    "port": 8009,
+    "cipher": "aes-256-gcm",
+    "password": "XKFKl2rULjIp74",
+    "hash": "edbc75f8",
+    "latency": 213.2422129313151
+  },
+  {
+    "type": "ss",
+    "name": "@v2FreeHub 🇺🇲",
+    "server": "45.158.171.66",
+    "port": 8080,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "oZIoA69Q8yhcQV8ka3Pa3A",
+    "hash": "d32e5306",
+    "latency": 422.6752122243245
+  },
+  {
+    "type": "ss",
+    "name": "🇵🇱PL-217.30.10.70-5643",
+    "server": "217.30.10.70",
+    "port": 9040,
+    "cipher": "aes-256-cfb",
+    "password": "p9z5BVADH2YFs3MN",
+    "hash": "3927fa2e",
+    "latency": 529.9497445424398
+  },
+  {
+    "type": "ss",
+    "name": "🇮🇸IS-37.235.49.168-0383",
+    "server": "37.235.49.168",
     "port": 989,
     "cipher": "aes-256-cfb",
     "password": "f8f7aCzcPKbsF8p3",
-    "hash": "c4658214",
-    "latency": 597.7182388305664
+    "hash": "58ec6bf1",
+    "latency": 542.1501795450846
   },
   {
     "type": "ss",
-    "name": "🇳🇱NL-51.15.23.63-5641",
+    "name": "🇹🇼TW-223.165.4.173-0393",
+    "server": "223.165.4.173",
+    "port": 990,
+    "cipher": "chacha20-ietf-poly1305",
+    "password": "f8f7aCzcPKbsF8p3",
+    "hash": "cd60443e",
+    "latency": 856.9900194803873
+  },
+  {
+    "type": "ss",
+    "name": "🇰🇷KR-154.90.63.177-0306",
+    "server": "154.90.63.177",
+    "port": 989,
+    "cipher": "aes-256-cfb",
+    "password": "f8f7aCzcPKbsF8p3",
+    "hash": "d64141c9",
+    "latency": 895.476500193278
+  },
+  {
+    "type": "ss",
+    "name": "🇳🇱NL-51.15.23.63-0318",
     "server": "51.15.23.63",
     "port": 989,
     "cipher": "aes-256-cfb",
     "password": "f8f7aCzcPKbsF8p3",
     "hash": "88d9f5cd",
-    "latency": 991.0650253295898
+    "latency": 1117.350180943807
   },
   {
-    "type": "ss",
-    "name": "🇲🇰MK-46.183.185.15-4719",
-    "server": "46.183.185.15",
-    "port": 989,
-    "cipher": "aes-256-cfb",
-    "password": "f8f7aCzcPKbsF8p3",
-    "hash": "1b5842f5",
-    "latency": 3338.867743810018
+    "type": "trojan",
+    "name": "US_speednode_0100",
+    "server": "www.visa.com.sg",
+    "port": 8443,
+    "password": "trojan",
+    "skip-cert-verify": false,
+    "sni": "azadnet-f03.pages.dev",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/?ed=2560",
+      "headers": {
+        "Host": "azadnet-f03.pages.dev"
+      }
+    },
+    "hash": "cdd1872c",
+    "latency": 467.9416020711263
+  },
+  {
+    "type": "trojan",
+    "name": "🇭🇰 香港4|@ripaojiedian",
+    "server": "58.152.30.92",
+    "port": 443,
+    "password": "c53647f3153f784b3c695ffbe5fb43c0",
+    "skip-cert-verify": false,
+    "sni": "www.nintendogames.net",
+    "hash": "200b1f5d",
+    "latency": 911.8749300638834
+  },
+  {
+    "type": "trojan",
+    "name": "🇺🇲𝗧𝗩𝗖™ᵍʳᵒᵘᵖ (@AZARBAYJAB1) (Trojan)",
+    "server": "104.17.247.140",
+    "port": 443,
+    "password": "02XtoczO7V",
+    "skip-cert-verify": false,
+    "sni": "mooshali.arshiacomplus.dpdns.org",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/hishhhh123#TM (@AZARBAYJAB1),TM (@AZARBAYJAB1),TM (@AZARBAYJAB1),TM (@AZARBAYJAB1),TM (@AZARBAYJAB1)",
+      "headers": {
+        "Host": "mooshali.arshiacomplus.dpdns.org"
+      }
+    },
+    "hash": "8647a552",
+    "latency": 4319.40221786499
   },
   {
     "type": "trojan",
@@ -1065,25 +1292,7 @@
       }
     },
     "hash": "538f39b4",
-    "latency": 908.5341294606527
-  },
-  {
-    "type": "trojan",
-    "name": "IR-@IRAN_V2RAY1",
-    "server": "creativecommons.org",
-    "port": 443,
-    "password": "02XtoczO7V",
-    "skip-cert-verify": false,
-    "sni": "mooshali.arshiacomplus.dpdns.org",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/hishhhh123",
-      "headers": {
-        "Host": "mooshali.arshiacomplus.dpdns.org"
-      }
-    },
-    "hash": "99706ddb",
-    "latency": 942.6965713500977
+    "latency": 5194.1633224487305
   },
   {
     "type": "trojan",
@@ -1101,18 +1310,29 @@
       }
     },
     "hash": "224a0fd6",
-    "latency": 589.6375179290771
+    "latency": 1238.6380831400554
   },
   {
     "type": "trojan",
-    "name": "[@AstroVPN_Official] 🇪🇪",
-    "server": "5.188.200.224",
+    "name": "🏴‍☠️@FreakConfig",
+    "server": "154.93.37.169",
+    "port": 16526,
+    "password": "N0R3eiSMlv8UybTC",
+    "skip-cert-verify": false,
+    "sni": "glowingpickle.bananatornado.click",
+    "hash": "eaa148af",
+    "latency": 1375.7530053456624
+  },
+  {
+    "type": "trojan",
+    "name": "[@AstroVPN_Official] 🇵🇹",
+    "server": "195.133.92.56",
     "port": 8441,
-    "password": "tunnel-astrovpn_official827",
+    "password": "tunnel-astrovpn_official918",
     "skip-cert-verify": true,
     "sni": "zula.ir.AstroVPN-official.AstroVPN-official.workers.dev.AstroVPN_Official.org.AstroVPN.com.AstroVPN_Official.xyz.AstroVPN_Official.AstroVPN_Official.AstroVPN_Official.AstroVPN_Official.AstroVPN_Official.AstroVPN_Official.AstroVPN_Official.AstroVPN_Official.monster.AstroVPN_OfficialJoinTelegram-------------AstroVPN_Official----------Join.ir",
-    "hash": "74629dc8",
-    "latency": 443.60558191935223
+    "hash": "a2aeb6c6",
+    "latency": 1166.6566530863445
   },
   {
     "type": "vless",
@@ -1128,25 +1348,7 @@
       }
     },
     "hash": "6699bfb7",
-    "latency": 343.40429306030273
-  },
-  {
-    "type": "vless",
-    "name": "🟣🔥 کانفینگ  اختصاصی @ParsiV2ray پر سرعت",
-    "server": "188.114.97.202",
-    "port": 8443,
-    "uuid": "c2e177d4-e610-4abd-85cd-1a869d158751",
-    "network": "ws",
-    "tls": true,
-    "servername": "teslakit1.pages.dev",
-    "ws-opts": {
-      "path": "/",
-      "headers": {
-        "Host": "teslakit1.pages.dev"
-      }
-    },
-    "hash": "3048249e",
-    "latency": 90.75284004211426
+    "latency": 664.2591953277588
   },
   {
     "type": "vless",
@@ -1164,35 +1366,53 @@
       }
     },
     "hash": "312b5a05",
-    "latency": 83.86802673339844
+    "latency": 115.30649662017822
   },
   {
     "type": "vless",
-    "name": "Channel id: @@proxy_kafee 🇨🇦",
-    "server": "104.21.3.219",
+    "name": "🟣🔥 کانفینگ  اختصاصی @ParsiV2ray پر سرعت",
+    "server": "188.114.97.202",
     "port": 8443,
-    "uuid": "57ba2ab1-a283-42eb-82ee-dc3561a805b8",
+    "uuid": "c2e177d4-e610-4abd-85cd-1a869d158751",
     "network": "ws",
     "tls": true,
-    "servername": "ovhwuxian.pai50288.uk",
+    "servername": "teslakit1.pages.dev",
     "ws-opts": {
-      "path": "/57ba2ab1",
+      "path": "/",
       "headers": {
-        "Host": "ovhwuxian.pai50288.uk"
+        "Host": "teslakit1.pages.dev"
       }
     },
-    "hash": "0aba6a0d",
-    "latency": 4070.135513941447
+    "hash": "3048249e",
+    "latency": 202.61319478352866
   },
   {
     "type": "vless",
-    "name": "🇮🇳𝐣𝐨𝐢𝐍-@𝐅𝐑𝐄𝐄𝐕𝟐𝐑𝐍𝐆",
-    "server": "45.88.183.156",
-    "port": 12794,
-    "uuid": "08704c01-7edb-454a-98a2-328ccb9936fa",
+    "name": "LB_speednode_0041",
+    "server": "213.165.56.19",
+    "port": 666,
+    "uuid": "13e824c8-46a7-458a-b9d5-24ab4058acae",
     "network": "tcp",
-    "hash": "379af0b5",
-    "latency": 2206.3682079315186
+    "hash": "44724695",
+    "latency": 2838.2163047790527
+  },
+  {
+    "type": "vless",
+    "name": "t.me/entryNET/config=1846235317923619",
+    "server": "45.131.208.187",
+    "port": 2053,
+    "uuid": "08cb0591-5193-4a0c-9105-ceb09fba67fe",
+    "network": "ws",
+    "tls": true,
+    "servername": "iYjnx-71195.zephorium.uk",
+    "ws-opts": {
+      "path": "/",
+      "headers": {
+        "Host": "iYjnx-71195.zephorium.uk"
+      }
+    },
+    "hash": "66e6c33f",
+    "latency": 2110.5213165283203
   },
   {
     "type": "vless",
@@ -1210,7 +1430,25 @@
       }
     },
     "hash": "c85ca6f7",
-    "latency": 494.83784039815265
+    "latency": 1694.7282950083415
+  },
+  {
+    "type": "vless",
+    "name": "🇩🇪@FreakConfig",
+    "server": "net2026cd.zanddynastyofpersia.org",
+    "port": 443,
+    "uuid": "0ec8c120-33fa-4658-9bed-3a51cb04c55c",
+    "network": "ws",
+    "tls": true,
+    "servername": "net2026cd.zanddynastyofpersia.org",
+    "ws-opts": {
+      "path": "/eJsVXFVZ6iavNx1EFxOyH861WH",
+      "headers": {
+        "Host": "net2026cd.zanddynastyofpersia.org"
+      }
+    },
+    "hash": "86163681",
+    "latency": 1805.6847254435222
   },
   {
     "type": "vless",
@@ -1228,23 +1466,43 @@
       }
     },
     "hash": "c4a08348",
-    "latency": 2611.1976305643716
+    "latency": 6761.209487915039
   },
   {
     "type": "vless",
-    "name": "💎کانفیگ های بیشتر در چنل تلگرام💎 Config_Rayegan@",
-    "server": "212.192.31.146",
+    "name": "🏴‍☠️@FreakConfig",
+    "server": "104.18.33.45",
     "port": 443,
-    "uuid": "199a78a5-b4d4-4064-a0db-bb37c5839134",
+    "uuid": "101e6a7d-7d10-4859-a626-8a76daab4547",
     "network": "ws",
+    "tls": true,
+    "servername": "nkAnG2rEpLACE.airlineSHoma.Com",
     "ws-opts": {
-      "path": "/panika",
+      "path": "/",
       "headers": {
-        "Host": "212.192.31.146"
+        "Host": "nkAnG2rEpLACE.airlineSHoma.Com"
       }
     },
-    "hash": "8cb20b9e",
-    "latency": 423.6580530802409
+    "hash": "790fc7d5",
+    "latency": 6647.679924964905
+  },
+  {
+    "type": "vless",
+    "name": "@Daily_Configs",
+    "server": "198.71.191.253",
+    "port": 2096,
+    "uuid": "2456f90c-5183-476d-b069-16ae74ce120f",
+    "network": "ws",
+    "tls": true,
+    "servername": "fast01.0860852.xyz",
+    "ws-opts": {
+      "path": "/Telegram🇨🇳@ShadowProxy66/",
+      "headers": {
+        "Host": "fast01.0860852.xyz"
+      }
+    },
+    "hash": "842e4a82",
+    "latency": 213.8191064198812
   },
   {
     "type": "vless",
@@ -1262,7 +1520,23 @@
       }
     },
     "hash": "40e89d9c",
-    "latency": 108.52940877278645
+    "latency": 213.64974975585938
+  },
+  {
+    "type": "vless",
+    "name": "Channel : @Mrsoulb 🏴🏳",
+    "server": "ov-germany5.09vpn.com",
+    "port": 80,
+    "uuid": "21911efc-b47c-47db-8316-aa07a793c067",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/vless/",
+      "headers": {
+        "Host": "google.com"
+      }
+    },
+    "hash": "60fda5bc",
+    "latency": 1654.472827911377
   },
   {
     "type": "vless",
@@ -1278,75 +1552,51 @@
       }
     },
     "hash": "737259bd",
-    "latency": 676.1332352956136
+    "latency": 1029.6752452850342
   },
   {
     "type": "vless",
-    "name": "@𝙎𝙆𝙔𝙋𝙍𝙊_𝙑𝙋𝙉",
-    "server": "cloudcdn3.parsgit.com",
-    "port": 4040,
-    "uuid": "349c60ae-4bf8-4466-a245-0334f2adc719",
+    "name": "🇩🇪𝐣𝐨𝐢𝐍-@𝐅𝐑𝐄𝐄𝐕𝟐𝐑𝐍𝐆",
+    "server": "51.195.119.204",
+    "port": 80,
+    "uuid": "2ac2a3ac-49ec-4cf1-90fd-252b7fad9fbe",
     "network": "ws",
     "ws-opts": {
-      "path": "/admin?ed=1024-SKYPRO_VPN-SKYPRO_VPN-SKYPRO_VPN-SKYPRO_VPN-SKYPRO_VPN-SKYPRO_VPN-SKYPRO_VPN-SKYPRO_VPN-",
+      "path": "/vless/",
       "headers": {
-        "Host": "webde2.parsgit.com."
+        "Host": "---@FREEV2RNG"
       }
     },
-    "hash": "eaa276ab",
-    "latency": 692.7789052327474
+    "hash": "e04ce92d",
+    "latency": 1342.226266860962
   },
   {
     "type": "vless",
-    "name": "@AYMH19+کانال+تلگرام",
-    "server": "172.66.47.175",
-    "port": 2083,
-    "uuid": "4d794980-54c0-4fcb-8def-c2beaecadbad",
-    "network": "ws",
-    "tls": true,
-    "servername": "azadnet05.pages.dev",
-    "ws-opts": {
-      "path": "/lZU7WqWIDqC1jRn6?ed",
-      "headers": {
-        "Host": "azadnet05.pages.dev"
-      }
-    },
-    "hash": "ab6584ae",
-    "latency": 72.42250442504883
+    "name": "@Daily_Configs",
+    "server": "65.109.187.13",
+    "port": 799,
+    "uuid": "31f246db-6749-4198-9406-96a9d23317ce",
+    "network": "tcp",
+    "hash": "51188a56",
+    "latency": 562.9326502482096
   },
   {
     "type": "vless",
-    "name": "@V2rayNGVPN <= کانفیگ رایگان",
-    "server": "ovhwuxian.pai50288.uk",
-    "port": 8443,
-    "uuid": "57ba2ab1-a283-42eb-82ee-dc3561a805b8",
+    "name": "🇺🇲@FreakConfig",
+    "server": "45.192.224.253",
+    "port": 2096,
+    "uuid": "7556317c-dff6-46e8-ad29-b408f2a6456e",
     "network": "ws",
     "tls": true,
-    "servername": "ovhwuxian.pai50288.uk",
+    "servername": "vless.muzheng.top",
     "ws-opts": {
-      "path": "/57ba2ab1",
+      "path": "/Telegram🇨🇳@WangCai2/?ed=2560",
       "headers": {
-        "Host": "ovhwuxian.pai50288.uk"
+        "Host": "vless.muzheng.top"
       }
     },
-    "hash": "aedf6074",
-    "latency": 2111.3946437835693
-  },
-  {
-    "type": "vless",
-    "name": "🏴‍☠️@FreakConfig",
-    "server": "90.156.254.164",
-    "port": 40432,
-    "uuid": "5ae45629-3db6-4c6b-9b9e-346c3e1a798d",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/",
-      "headers": {
-        "Host": "90.156.254.164"
-      }
-    },
-    "hash": "3c4fd803",
-    "latency": 483.49769910176593
+    "hash": "c1b026fe",
+    "latency": 104.38696543375652
   },
   {
     "type": "vless",
@@ -1364,23 +1614,25 @@
       }
     },
     "hash": "ebcaa98e",
-    "latency": 62.438408533732094
+    "latency": 109.88442103068034
   },
   {
     "type": "vless",
-    "name": "🇩🇪 @Evay_vpn",
-    "server": "51.68.189.39",
-    "port": 80,
-    "uuid": "af552d84-cefb-4952-a814-17f284c21080",
+    "name": "کانال تلگرامی : @skypro_vpn",
+    "server": "braze.com",
+    "port": 443,
+    "uuid": "7d18fc67-1994-4f7e-8ff8-c024223f33bb",
     "network": "ws",
+    "tls": true,
+    "servername": "revcloud.migacpi.org",
     "ws-opts": {
-      "path": "/vless/",
+      "path": "/cbde4058-6b81-432b-8689-dd7ce10e479c",
       "headers": {
-        "Host": "@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn----@Evay_vpn"
+        "Host": "revcloud.migacpi.org"
       }
     },
-    "hash": "cd14d698",
-    "latency": 574.6363798777262
+    "hash": "7c9cfde1",
+    "latency": 3945.8082914352417
   },
   {
     "type": "vless",
@@ -1392,7 +1644,7 @@
     "tls": true,
     "servername": "book.smnsoft.com",
     "hash": "59abe3a7",
-    "latency": 983.7549527486166
+    "latency": 3204.805056254069
   },
   {
     "type": "vless",
@@ -1402,79 +1654,7 @@
     "uuid": "d8d05386-e381-40a4-bb63-715c208b3ed3",
     "network": "tcp",
     "hash": "b44712c7",
-    "latency": 777.7025699615479
-  },
-  {
-    "type": "vless",
-    "name": "🔐 @AblNet7 🇺🇸 机场推荐",
-    "server": "104.21.48.1",
-    "port": 443,
-    "uuid": "e5c2e234-333e-48b4-8199-2793a64527bc",
-    "network": "ws",
-    "tls": true,
-    "servername": "s1-c3r.pages.dev",
-    "ws-opts": {
-      "path": "/",
-      "headers": {
-        "Host": "s1-c3r.pages.dev"
-      }
-    },
-    "hash": "0605d25b",
-    "latency": 84.21810468037923
-  },
-  {
-    "type": "vless",
-    "name": "🇭🇺TM (@AZARBAYJAB1) vless-ws",
-    "server": "77.223.215.167",
-    "port": 443,
-    "uuid": "e5c2e234-333e-48b4-8199-2793a64527bc",
-    "network": "ws",
-    "tls": true,
-    "servername": "s1-c3r.pages.dev",
-    "ws-opts": {
-      "path": "/?BIA_TELEGRAM@AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1",
-      "headers": {
-        "Host": "s1-c3r.pages.dev"
-      }
-    },
-    "hash": "35e7c86c",
-    "latency": 451.1624177296956
-  },
-  {
-    "type": "vless",
-    "name": "🇭🇺TM (@AZARBAYJAB1) vless-ws",
-    "server": "194.0.194.222",
-    "port": 443,
-    "uuid": "e5c2e234-333e-48b4-8199-2793a64527bc",
-    "network": "ws",
-    "tls": true,
-    "servername": "s1-c3r.pages.dev",
-    "ws-opts": {
-      "path": "/?BIA_TELEGRAM@AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1",
-      "headers": {
-        "Host": "s1-c3r.pages.dev"
-      }
-    },
-    "hash": "7e3684b8",
-    "latency": 462.8616174062093
-  },
-  {
-    "type": "vless",
-    "name": "🇭🇺TM (@AZARBAYJAB1) vless-ws",
-    "server": "45.133.118.153",
-    "port": 443,
-    "uuid": "e5c2e234-333e-48b4-8199-2793a64527bc",
-    "network": "ws",
-    "tls": true,
-    "servername": "s1-c3r.pages.dev",
-    "ws-opts": {
-      "path": "/?BIA_TELEGRAM@AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1",
-      "headers": {
-        "Host": "s1-c3r.pages.dev"
-      }
-    },
-    "hash": "0f790834",
-    "latency": 550.8772532145182
+    "latency": 952.5347550710043
   },
   {
     "type": "vless",
@@ -1492,12 +1672,12 @@
       }
     },
     "hash": "7b731731",
-    "latency": 423.50252469380695
+    "latency": 847.9402860005697
   },
   {
     "type": "vless",
-    "name": "@V2rayNGVPN <= کانفیگ رایگان",
-    "server": "89.110.69.173",
+    "name": "🇭🇺TM (@AZARBAYJAB1) vless-ws",
+    "server": "195.58.50.134",
     "port": 443,
     "uuid": "e5c2e234-333e-48b4-8199-2793a64527bc",
     "network": "ws",
@@ -1509,26 +1689,26 @@
         "Host": "s1-c3r.pages.dev"
       }
     },
-    "hash": "2a8e6347",
-    "latency": 428.4958044687907
+    "hash": "00a3ca19",
+    "latency": 894.784688949585
   },
   {
     "type": "vless",
-    "name": "@Daily_Configs",
-    "server": "hdfynpv2d1.farvaharforever.com",
+    "name": "🇭🇺TM (@AZARBAYJAB1) vless-ws",
+    "server": "77.223.215.167",
     "port": 443,
-    "uuid": "e959d53c-91e9-459d-a332-d59ae89b3b4c",
+    "uuid": "e5c2e234-333e-48b4-8199-2793a64527bc",
     "network": "ws",
     "tls": true,
-    "servername": "hdfynpv2d1.farvaharforever.com",
+    "servername": "s1-c3r.pages.dev",
     "ws-opts": {
-      "path": "/Iyq035lnud9R8ruNNrqGxZZ2",
+      "path": "/?BIA_TELEGRAM@AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1",
       "headers": {
-        "Host": "hdfynpv2d1.farvaharforever.com"
+        "Host": "s1-c3r.pages.dev"
       }
     },
-    "hash": "23237f71",
-    "latency": 509.95397567749023
+    "hash": "35e7c86c",
+    "latency": 952.0527521769205
   },
   {
     "type": "vless",
@@ -1546,23 +1726,43 @@
       }
     },
     "hash": "9c134e6c",
-    "latency": 587.6030921936035
+    "latency": 1051.4285564422607
   },
   {
     "type": "vless",
-    "name": "🇯🇵 | @External_Net",
-    "server": "45.12.134.217",
-    "port": 80,
-    "uuid": "ed242313-b502-4a4a-97f4-336da621a837",
+    "name": "🇭🇺TM (@AZARBAYJAB1) vless-ws",
+    "server": "45.133.118.153",
+    "port": 443,
+    "uuid": "e5c2e234-333e-48b4-8199-2793a64527bc",
     "network": "ws",
+    "tls": true,
+    "servername": "s1-c3r.pages.dev",
     "ws-opts": {
-      "path": "/vless/",
+      "path": "/?BIA_TELEGRAM@AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1",
       "headers": {
-        "Host": "---@External_Net---@External_Net---@External_Net---@External_Net---@External_Net"
+        "Host": "s1-c3r.pages.dev"
       }
     },
-    "hash": "c44fad63",
-    "latency": 1532.55033493042
+    "hash": "0f790834",
+    "latency": 1109.5577081044514
+  },
+  {
+    "type": "vless",
+    "name": "🇭🇺TM (@AZARBAYJAB1) vless-ws",
+    "server": "185.94.165.183",
+    "port": 443,
+    "uuid": "e5c2e234-333e-48b4-8199-2793a64527bc",
+    "network": "ws",
+    "tls": true,
+    "servername": "s1-c3r.pages.dev",
+    "ws-opts": {
+      "path": "/?BIA_TELEGRAM@AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1",
+      "headers": {
+        "Host": "s1-c3r.pages.dev"
+      }
+    },
+    "hash": "1a881620",
+    "latency": 1415.2952829996746
   },
   {
     "type": "vless",
@@ -1578,7 +1778,7 @@
       }
     },
     "hash": "1ce47593",
-    "latency": 721.2844689687093
+    "latency": 769.9066797892252
   },
   {
     "type": "vless",
@@ -1588,40 +1788,42 @@
     "uuid": "d3daa900-0377-4575-9ebc-c4d88cb8486c",
     "network": "tcp",
     "hash": "7dec80ef",
-    "latency": 893.3346271514893
+    "latency": 1416.2869453430176
   },
   {
     "type": "vless",
-    "name": ">>@ShadowsocksM::US",
-    "server": "154.218.15.253",
-    "port": 2096,
-    "uuid": "f61a4285-7264-4d07-9408-7b9ba1922c26",
+    "name": ">>@configV2rayNG::US",
+    "server": "104.21.67.60",
+    "port": 443,
+    "uuid": "2737c5a4-50d5-46a2-9c8c-86920088b8c7",
     "network": "ws",
     "tls": true,
-    "servername": "gaosir.unfeeling.sbs",
+    "servername": "4g.zippza404abp.webredirect.org",
     "ws-opts": {
-      "path": "/Telegram @ShadowProxy66 /?ed=2560",
+      "path": "/?ed=2560",
       "headers": {
-        "Host": "gaosir.unfeeling.sbs"
+        "Host": "4g.zippza404abp.webredirect.org"
       }
     },
-    "hash": "22c46184",
-    "latency": 63.15732002258301
+    "hash": "76e03daf",
+    "latency": 144.78556315104166
   },
   {
     "type": "vless",
-    "name": ">>@flyv2ray::DE",
-    "server": "TeslaaTeam.niceserver.sbs",
-    "port": 124,
-    "uuid": "db316594-959c-48b5-8d8a-96304b7bb37b",
+    "name": ">>@configV2rayNG::FR",
+    "server": "vpn-srv-2.circlevpn.net",
+    "port": 37096,
+    "uuid": "c30ec165-fcb4-47af-8e68-70d88a3b2910",
     "network": "tcp",
-    "hash": "a10a9e13",
-    "latency": 837.0187282562256
+    "tls": true,
+    "servername": "vpn-srv-2.circlevpn.net",
+    "hash": "2d5214cf",
+    "latency": 1087.6691341400146
   },
   {
     "type": "vless",
     "name": ">>@v2ray_configs_pool::FR",
-    "server": "45.12.30.233",
+    "server": "45.131.5.22",
     "port": 2053,
     "uuid": "08cb0591-5193-4a0c-9105-ceb09fba67fe",
     "network": "ws",
@@ -1633,13 +1835,13 @@
         "Host": "iYjnx-71195.zephorium.uk"
       }
     },
-    "hash": "40d00d7c",
-    "latency": 1904.5836925506592
+    "hash": "23b9ae3e",
+    "latency": 2183.7332248687744
   },
   {
     "type": "vless",
     "name": ">>@v2ray_configs_pool::FR",
-    "server": "188.42.89.163",
+    "server": "45.80.111.26",
     "port": 2053,
     "uuid": "08cb0591-5193-4a0c-9105-ceb09fba67fe",
     "network": "ws",
@@ -1651,8 +1853,8 @@
         "Host": "iYjnx-71195.zephorium.uk"
       }
     },
-    "hash": "87b7c500",
-    "latency": 1933.759371439616
+    "hash": "e361b834",
+    "latency": 2193.7220891316733
   },
   {
     "type": "vless",
@@ -1670,43 +1872,79 @@
       }
     },
     "hash": "edf0a4b0",
-    "latency": 1949.732780456543
+    "latency": 2742.7093982696533
   },
   {
     "type": "vless",
-    "name": "[@v2FreeHub] Vless 🇦🇪 WS TLS",
-    "server": "172.67.192.215",
+    "name": "@Rayan_Config 2-2",
+    "server": "iplocation.net",
     "port": 443,
-    "uuid": "bebffc49-b2d0-4c56-a8df-62d1603446a4",
+    "uuid": "9653eb63-742a-4e85-b11b-b6a31cf6cff9",
+    "network": "ws",
+    "tls": true,
+    "servername": "rAyAn-cOnFiG-it-1.pArIsA.DpDnS.OrG",
+    "ws-opts": {
+      "path": "/ws",
+      "headers": {
+        "Host": "rAyAn-cOnFiG-it-1.pArIsA.DpDnS.OrG"
+      }
+    },
+    "hash": "35570cc6",
+    "latency": 5655.721545219421
+  },
+  {
+    "type": "vless",
+    "name": "[@v2FreeHub] Vless 🇩🇪 WS TLS",
+    "server": "104.21.33.216",
+    "port": 443,
+    "uuid": "e1191c4d-5a2c-406e-977f-63cb7e0aba2c",
     "network": "ws",
     "tls": true,
     "servername": "joss.krikkrik.xyz",
     "ws-opts": {
-      "path": "/Free-VPN-CF-Geo-Project/AE2",
+      "path": "/Free-VPN-CF-Geo-Project/DE3",
       "headers": {
         "Host": "joss.krikkrik.xyz"
       }
     },
-    "hash": "759a9df0",
-    "latency": 126.7095406850179
+    "hash": "5d3c62d4",
+    "latency": 239.00675773620605
+  },
+  {
+    "type": "vless",
+    "name": "@Rayan_Config 4-4",
+    "server": "check-host.net",
+    "port": 443,
+    "uuid": "e617e005-87c0-48a9-a499-6f9a134bdf1a",
+    "network": "ws",
+    "tls": true,
+    "servername": "rAyAn-cOnFiG-ua-1.pArIsA.DpDnS.OrG",
+    "ws-opts": {
+      "path": "/ws",
+      "headers": {
+        "Host": "rAyAn-cOnFiG-ua-1.pArIsA.DpDnS.OrG"
+      }
+    },
+    "hash": "e89de573",
+    "latency": 3999.048113822937
   },
   {
     "type": "vmess",
-    "name": "🇨🇦 VMESS-加拿大-NF解锁加拿大地区非自制剧-ChatGPT-TikTok-YouTube-51.79.102.253:80",
-    "server": "51.79.102.253",
-    "port": 80,
-    "uuid": "58fe1542-5290-40ad-815a-77707a81afe5",
+    "name": "🇺🇸 美国 CloudFlare节点",
+    "server": "s1.db-link03.top",
+    "port": 2095,
+    "uuid": "25fbcec6-e45a-3a86-977a-12c40bf649ba",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
     "ws-opts": {
-      "path": "/IOebhLMhl1CTbFHbL95myfRX2",
+      "path": "/dabai.in?=400e16fa96eca85d55e637d3e3a83b46",
       "headers": {
-        "Host": ""
+        "Host": "400e16fa96eca85d55e637d3e3a83b46.s1.db-link03.top"
       }
     },
-    "hash": "5486db73",
-    "latency": 333.73570442199707
+    "hash": "21c5a115",
+    "latency": 812.5069936116537
   },
   {
     "type": "vmess",
@@ -1725,7 +1963,55 @@
       }
     },
     "hash": "6fcb3147",
-    "latency": 596.8241691589355
+    "latency": 1145.667314529419
+  },
+  {
+    "type": "vmess",
+    "name": "⚜️Telegram:@IP_CF",
+    "server": "8.210.52.211",
+    "port": 20522,
+    "uuid": "37827036-1fc5-41ea-9fc5-111af1db49dc",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/telegram_@sswia",
+      "headers": {
+        "Host": ""
+      }
+    },
+    "hash": "b5d3428e",
+    "latency": 2897.954305013021
+  },
+  {
+    "type": "vmess",
+    "name": "🇭🇰 香港 电讯盈科有限公司",
+    "server": "v10.heduian.link",
+    "port": 30807,
+    "uuid": "cbb3f877-d1fb-344c-87a9-d153bffd5484",
+    "alterId": 2,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/oooo",
+      "headers": {
+        "Host": "baidu.com"
+      }
+    },
+    "hash": "efe9f086",
+    "latency": 4683.817783991496
+  },
+  {
+    "type": "vmess",
+    "name": "Channel id: @ShadowProxy66🇮🇳",
+    "server": "94.136.185.230",
+    "port": 10534,
+    "uuid": "b01c7ef9-33ec-41f6-bfbf-77ddc4d21649",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "tcp",
+    "hash": "02f378ba",
+    "latency": 1041.8277581532795
   },
   {
     "type": "vmess",
@@ -1745,12 +2031,12 @@
       }
     },
     "hash": "874e38a8",
-    "latency": 396.23332023620605
+    "latency": 2920.0594425201416
   },
   {
     "type": "vmess",
     "name": "@Daily_Configs",
-    "server": "57.129.59.195",
+    "server": "kampong.org",
     "port": 443,
     "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
     "alterId": 0,
@@ -1764,8 +2050,8 @@
         "Host": "kampong.org"
       }
     },
-    "hash": "ae2a5b8d",
-    "latency": 429.16329701741535
+    "hash": "ce28184f",
+    "latency": 3324.3701457977295
   },
   {
     "type": "vmess",
@@ -1785,74 +2071,32 @@
       }
     },
     "hash": "8f8f1923",
-    "latency": 820.4734325408936
+    "latency": 4027.1785259246826
   },
   {
     "type": "vmess",
-    "name": "@Daily_Configs",
-    "server": "141.95.126.134",
-    "port": 443,
-    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
+    "name": "IR-@IRAN_V2RAY1",
+    "server": "51.68.191.233",
+    "port": 80,
+    "uuid": "f0eda072-9ae8-494c-a495-215fa5729467",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
-    "tls": true,
-    "servername": "jamekk.org",
     "ws-opts": {
-      "path": "linkvws",
+      "path": "/vmess/",
       "headers": {
-        "Host": "jamekk.org"
+        "Host": ""
       }
     },
-    "hash": "921e5762",
-    "latency": 3681.964715321859
+    "hash": "5cfdc37c",
+    "latency": 1484.220822652181
   },
   {
     "type": "vmess",
-    "name": "TM (@AZARBAYJAB1)🇩🇪",
-    "server": "57.129.24.131",
-    "port": 443,
-    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
-    "alterId": 1,
-    "cipher": "auto",
-    "network": "ws",
-    "tls": true,
-    "servername": "kampong.org",
-    "ws-opts": {
-      "path": "linkvws#TM (@AZARBAYJAB1)TM (@AZARBAYJAB1)TM (@AZARBAYJAB1)",
-      "headers": {
-        "Host": "kampong.org"
-      }
-    },
-    "hash": "773cd522",
-    "latency": 490.7924334208171
-  },
-  {
-    "type": "vmess",
-    "name": "🇩🇪TM (@AZARBAYJAB1)",
-    "server": "57.129.24.132",
-    "port": 443,
-    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "tls": true,
-    "servername": "serkat.org",
-    "ws-opts": {
-      "path": "linkvws#TM (@AZARBAYJAB1) TM (@AZARBAYJAB1)TM (@AZARBAYJAB1)TM (@AZARBAYJAB1)",
-      "headers": {
-        "Host": "serkat.org"
-      }
-    },
-    "hash": "8bf9af97",
-    "latency": 831.8692048390707
-  },
-  {
-    "type": "vmess",
-    "name": "🔥@AblNet7 🇮🇷 نت ملی 🔥",
-    "server": "47.76.157.234",
-    "port": 14479,
-    "uuid": "90606c14-cba4-43ff-9586-9edd8bef21a4",
+    "name": "@IRAN_V2RAY1",
+    "server": "47.244.120.197",
+    "port": 36703,
+    "uuid": "45b83519-9c4f-4052-a11b-02e017b636d4",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
@@ -1862,8 +2106,32 @@
         "Host": ""
       }
     },
-    "hash": "129f6204",
-    "latency": 8607.53353436788
+    "hash": "b4f69496",
+    "latency": 1088.9309247334797
+  },
+  {
+    "type": "vmess",
+    "name": "MTN-@IRAN_V2RAY1",
+    "server": "57.129.78.147",
+    "port": 550,
+    "uuid": "4b9654bd-a4e8-41e0-8425-ef4604cc1166",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "tcp",
+    "hash": "96df69f2",
+    "latency": 565.9722487131754
+  },
+  {
+    "type": "vmess",
+    "name": "🇦🇪@AZARBAYJAB1",
+    "server": "89.31.120.192",
+    "port": 443,
+    "uuid": "44537595-9ccc-4b83-8936-5f9ad3229019",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "tcp",
+    "hash": "9c5335d8",
+    "latency": 1152.0416736602783
   },
   {
     "type": "vmess",
@@ -1883,37 +2151,27 @@
       }
     },
     "hash": "1c3291af",
-    "latency": 540.9893989562988
+    "latency": 3496.870438257853
   },
   {
     "type": "vmess",
-    "name": "All--@IRAN_V2RAY1",
-    "server": "82.197.69.131",
-    "port": 39674,
-    "uuid": "5a89386a-827b-4f54-8778-2f1b5122c6ef",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "tcp",
-    "hash": "7586b8e0",
-    "latency": 972.1666177113851
-  },
-  {
-    "type": "vmess",
-    "name": "Channel id: @ShadowProxy66 🇯🇵",
-    "server": "8.211.164.215",
-    "port": 20522,
-    "uuid": "73193cce-7ca1-4b08-93ff-4ee8b0147374",
+    "name": "@vmesskhodam🍂 منبع پروکسی و کانفیگ",
+    "server": "57.129.59.201",
+    "port": 443,
+    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
+    "tls": true,
+    "servername": "kampong.org",
     "ws-opts": {
-      "path": "/telegram_@sswia",
+      "path": "linkvws",
       "headers": {
-        "Host": ""
+        "Host": "kampong.org"
       }
     },
-    "hash": "1f243bb4",
-    "latency": 1175.2581596374512
+    "hash": "456b1053",
+    "latency": 4836.90079053243
   },
   {
     "type": "vmess",
@@ -1931,65 +2189,27 @@
       }
     },
     "hash": "50c8bc9a",
-    "latency": 1709.2577616373699
+    "latency": 4916.677554448445
   },
   {
     "type": "vmess",
-    "name": "🇩🇪TM (@AZARBAYJAB1)",
-    "server": "57.129.59.193",
+    "name": "🇺🇲@FreakConfig",
+    "server": "15.204.64.211",
     "port": 443,
     "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
     "tls": true,
-    "servername": "serkat.org",
-    "ws-opts": {
-      "path": "linkvws#TM (@AZARBAYJAB1) TM (@AZARBAYJAB1)TM (@AZARBAYJAB1)TM (@AZARBAYJAB1)",
-      "headers": {
-        "Host": "serkat.org"
-      }
-    },
-    "hash": "177a4a40",
-    "latency": 3891.4204438527427
-  },
-  {
-    "type": "vmess",
-    "name": "@AblNet7 🇮🇷 نت ملی 🇭🇰",
-    "server": "8.218.26.234",
-    "port": 15233,
-    "uuid": "8a638047-8de4-4034-9b24-d8bf9fb18fa4",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "0a63b0b9",
-    "latency": 5914.285977681478
-  },
-  {
-    "type": "vmess",
-    "name": "🇨🇦@FreakConfig",
-    "server": "148.113.153.113",
-    "port": 443,
-    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "tls": true,
-    "servername": "serkat.org",
+    "servername": "kampong.org",
     "ws-opts": {
       "path": "linkvws",
       "headers": {
-        "Host": "serkat.org"
+        "Host": "kampong.org"
       }
     },
-    "hash": "56b10da5",
-    "latency": 150.2054532368978
+    "hash": "dc675425",
+    "latency": 307.24231402079266
   },
   {
     "type": "vmess",
@@ -2009,27 +2229,37 @@
       }
     },
     "hash": "51d6d44e",
-    "latency": 199.27589098612467
+    "latency": 502.89122263590497
   },
   {
     "type": "vmess",
-    "name": "🇨🇦@FreakConfig",
-    "server": "158.51.121.63",
-    "port": 443,
-    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
+    "name": "🔥@AblNet7 🇮🇷 نت ملی 🔥",
+    "server": "172.111.146.64",
+    "port": 80,
+    "uuid": "05b8c783-7f59-47f9-9923-06a465679f6a",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
-    "tls": true,
-    "servername": "seribus.org",
     "ws-opts": {
-      "path": "linkvws",
+      "path": "/vmess/",
       "headers": {
-        "Host": "seribus.org"
+        "Host": ""
       }
     },
-    "hash": "a50526e4",
-    "latency": 198.22382926940918
+    "hash": "f8e78c8e",
+    "latency": 794.4624423980713
+  },
+  {
+    "type": "vmess",
+    "name": "@Daily_Configs",
+    "server": "154.223.19.117",
+    "port": 46418,
+    "uuid": "d1de8433-692d-47fd-9a8d-6ccb02ea39bd",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "tcp",
+    "hash": "7f441a49",
+    "latency": 1448.0054378509521
   },
   {
     "type": "vmess",
@@ -2041,27 +2271,79 @@
     "cipher": "auto",
     "network": "tcp",
     "hash": "b3ac61e8",
-    "latency": 1667.4942175547283
+    "latency": 1485.8893553415935
   },
   {
     "type": "vmess",
-    "name": "🇬🇧@FreakConfig",
-    "server": "masjide.org",
+    "name": "VMess-155.254.35.214",
+    "server": "155.254.35.214",
+    "port": 51409,
+    "uuid": "703a1b6c-a01e-45f8-9040-c29cbb0235e1",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "tcp",
+    "hash": "bad3a96d",
+    "latency": 8057.503302892049
+  },
+  {
+    "type": "vmess",
+    "name": "@i10VPN 🚀| با ما متصل بمون⚡",
+    "server": "serkat.org",
     "port": 443,
     "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
     "tls": true,
-    "servername": "masjide.org",
+    "servername": "serkat.org",
     "ws-opts": {
       "path": "linkvws",
       "headers": {
-        "Host": "masjide.org"
+        "Host": "Join---i10VPN---Join---i10VPN---Join---i10VPN---Join---i10VPN"
       }
     },
-    "hash": "f024c9c8",
-    "latency": 335.47600110371906
+    "hash": "e55d2289",
+    "latency": 645.2181339263916
+  },
+  {
+    "type": "vmess",
+    "name": "🇩🇪@FreakConfig",
+    "server": "pelang.org",
+    "port": 443,
+    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "tls": true,
+    "servername": "pelang.org",
+    "ws-opts": {
+      "path": "linkvws",
+      "headers": {
+        "Host": "pelang.org"
+      }
+    },
+    "hash": "e2decde3",
+    "latency": 1050.3244400024414
+  },
+  {
+    "type": "vmess",
+    "name": "🔐 @AblNet7 🇸🇬 机场推荐",
+    "server": "node4.rtxconfigz.com",
+    "port": 443,
+    "uuid": "44e57485-eccc-46ef-808f-cd17ac810018",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "tls": true,
+    "servername": "node4.rtxconfigz.com",
+    "ws-opts": {
+      "path": "/@Malinda6104",
+      "headers": {
+        "Host": "node4.rtxconfigz.com"
+      }
+    },
+    "hash": "595d7518",
+    "latency": 1194.4188276926677
   },
   {
     "type": "vmess",
@@ -2081,31 +2363,7 @@
       }
     },
     "hash": "2e774740",
-    "latency": 453.4761905670166
-  },
-  {
-    "type": "vmess",
-    "name": "🇩🇪@FreakConfig",
-    "server": "162.19.205.162",
-    "port": 550,
-    "uuid": "95ca28bb-922e-49c9-9326-b4aff7c0d8ad",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "tcp",
-    "hash": "ee89b9f0",
-    "latency": 681.1331907908121
-  },
-  {
-    "type": "vmess",
-    "name": "AKLISvpn%F0%9F%87%AB%F0%9F%87%B7",
-    "server": "45.13.226.116",
-    "port": 12449,
-    "uuid": "b1053a67-88b9-4550-b5fb-826735adc045",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "tcp",
-    "hash": "cbdba550",
-    "latency": 7517.139116923015
+    "latency": 1733.5090637207031
   },
   {
     "type": "vmess",
@@ -2117,97 +2375,7 @@
     "cipher": "auto",
     "network": "tcp",
     "hash": "9ba0fdec",
-    "latency": 829.4218381245931
-  },
-  {
-    "type": "vmess",
-    "name": ">>@ShadowsocksM::XX",
-    "server": "57.129.28.68",
-    "port": 443,
-    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "tls": true,
-    "servername": "pelang.org",
-    "ws-opts": {
-      "path": "linkvws",
-      "headers": {
-        "Host": "pelang.org"
-      }
-    },
-    "hash": "9a59ec94",
-    "latency": 423.63866170247394
-  },
-  {
-    "type": "vmess",
-    "name": ">>@ShadowsocksM::DE",
-    "server": "57.129.25.24",
-    "port": 443,
-    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "tls": true,
-    "servername": "pelang.org",
-    "ws-opts": {
-      "path": "linkvws",
-      "headers": {
-        "Host": "pelang.org"
-      }
-    },
-    "hash": "a57002ee",
-    "latency": 467.73115793863934
-  },
-  {
-    "type": "vmess",
-    "name": ">>@ShadowsocksM::LV",
-    "server": "216.173.69.250",
-    "port": 8443,
-    "uuid": "91382092-2330-455b-8a1c-9c129cfe661a",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/",
-      "headers": {
-        "Host": "google.com"
-      }
-    },
-    "hash": "e7c0a0b3",
-    "latency": 536.5978876749674
-  },
-  {
-    "type": "vmess",
-    "name": ">>@ShadowsocksM::XX",
-    "server": "pulau.org",
-    "port": 443,
-    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "tls": true,
-    "servername": "pulau.org",
-    "ws-opts": {
-      "path": "linkvws",
-      "headers": {
-        "Host": "pulau.org"
-      }
-    },
-    "hash": "089777e0",
-    "latency": 555.6179682413737
-  },
-  {
-    "type": "vmess",
-    "name": ">>@DailyV2RY::SG",
-    "server": "109.123.236.157",
-    "port": 550,
-    "uuid": "9371b4ae-59a6-46ad-8413-4021b65a103c",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "tcp",
-    "hash": "519b39ec",
-    "latency": 663.1981531778971
+    "latency": 5847.345193227132
   },
   {
     "type": "vmess",
@@ -2219,25 +2387,37 @@
     "cipher": "auto",
     "network": "tcp",
     "hash": "4922c1f2",
-    "latency": 707.9880237579346
+    "latency": 663.7266476949056
   },
   {
     "type": "vmess",
-    "name": ">>@configV2rayNG::XX",
-    "server": "66.253.7.254",
-    "port": 45979,
-    "uuid": "23bdf6df-c482-46d0-c0f4-5a98d534ea11",
+    "name": ">>@configV2rayNG::VN",
+    "server": "152.32.250.131",
+    "port": 20522,
+    "uuid": "c29f3eeb-95c5-4891-b06f-732fc7348359",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
     "ws-opts": {
-      "path": "/test",
+      "path": "/telegram_@sswia",
       "headers": {
         "Host": ""
       }
     },
-    "hash": "b48ed153",
-    "latency": 1750.9872118632
+    "hash": "456a1f1f",
+    "latency": 1183.111270268758
+  },
+  {
+    "type": "vmess",
+    "name": ">>@configV2rayNG::CN",
+    "server": "39.100.81.215",
+    "port": 50002,
+    "uuid": "418048af-a293-4b99-9b0c-98ca3580dd24",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "tcp",
+    "hash": "a79e8aee",
+    "latency": 1038.682222366333
   },
   {
     "type": "vmess",
@@ -2257,29 +2437,11 @@
       }
     },
     "hash": "e517d2d0",
-    "latency": 442.96900431315106
+    "latency": 883.3683331807455
   },
   {
     "type": "vmess",
-    "name": "🇬🇧GB-57.129.132.223-0730",
-    "server": "57.129.132.223",
-    "port": 80,
-    "uuid": "a25cbf11-2908-4a1b-a3a8-9a571777dca3",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/vmess/",
-      "headers": {
-        "Host": "google.com"
-      }
-    },
-    "hash": "6d6aea2a",
-    "latency": 458.7596257527669
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-203.218.217.198-0266",
+    "name": "🇭🇰HK-203.218.217.198-0260",
     "server": "1e426046-t0fds0-t12cnj-1ol97.hk.p5pv.com",
     "port": 80,
     "uuid": "93fb69fc-77cf-11ee-85ee-f23c91369f2d",
@@ -2293,32 +2455,34 @@
       }
     },
     "hash": "648f1eb0",
-    "latency": 891.2151654561361
+    "latency": 892.9460048675537
   },
   {
     "type": "vmess",
-    "name": "🇭🇰HK-42.2.163.134-0289",
-    "server": "hkt.gotochinatown.net",
-    "port": 80,
-    "uuid": "93fb69fc-77cf-11ee-85ee-f23c91369f2d",
-    "alterId": 2,
+    "name": ">>@ShadowsocksM::XX",
+    "server": "57.129.2.121",
+    "port": 443,
+    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
+    "alterId": 0,
     "cipher": "auto",
     "network": "ws",
+    "tls": true,
+    "servername": "pelang.org",
     "ws-opts": {
-      "path": "/",
+      "path": "linkvws",
       "headers": {
-        "Host": "hkt.gotochinatown.net"
+        "Host": "pelang.org"
       }
     },
-    "hash": "c9dffe2a",
-    "latency": 909.8594983418783
+    "hash": "6247160d",
+    "latency": 973.8100369771322
   },
   {
     "type": "vmess",
-    "name": "🇯🇵JP-47.74.10.111-5628",
-    "server": "47.74.10.111",
+    "name": "🇭🇰HK-8.217.92.110-5477",
+    "server": "8.217.92.110",
     "port": 20522,
-    "uuid": "0b6a563a-7bee-4740-82ff-3d8126251ed9",
+    "uuid": "31e1f90f-0218-4097-91f9-a42df9b3334a",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
@@ -2328,120 +2492,68 @@
         "Host": ""
       }
     },
-    "hash": "052fa9f9",
-    "latency": 1111.6827328999836
+    "hash": "a0d60e5f",
+    "latency": 971.9754854838053
   },
   {
     "type": "vmess",
-    "name": "🇯🇵JP-47.74.10.111-5630",
-    "server": "47.74.10.111",
-    "port": 46049,
-    "uuid": "728257b1-5158-47d9-a1a1-6ac29faab878",
+    "name": "🏁RELAY-172.67.200.13-1087",
+    "server": "172.67.200.13",
+    "port": 443,
+    "uuid": "5f726fe3-d82e-4da5-a711-8af0cbb2b682",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
+    "tls": true,
     "ws-opts": {
-      "path": "/arki?ed=2048",
+      "path": "/azumase.ren",
       "headers": {
-        "Host": ""
+        "Host": "1a2d514b-37cf-499f-8d08-d017a92ab5bb.asoul-ava.top"
       }
     },
-    "hash": "4b6c3db0",
-    "latency": 1675.6752332051594
+    "hash": "4868f60b",
+    "latency": 1046.2255477905273
   },
   {
     "type": "vmess",
-    "name": "🇭🇰HK-8.210.122.139-5610",
-    "server": "8.210.122.139",
-    "port": 39194,
-    "uuid": "b34a4bd6-0d5d-421b-b6ff-5ab6a6c3bb82",
+    "name": "🏁RELAY-172.67.197.47-0300",
+    "server": "sy4.620720.xyz",
+    "port": 443,
+    "uuid": "516d8a7a-3f0b-41d3-bad0-246116381516",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
+    "tls": true,
     "ws-opts": {
-      "path": "/arki?ed=2048",
+      "path": "/",
       "headers": {
-        "Host": ""
+        "Host": "sy4.620720.xyz"
       }
     },
-    "hash": "24a17c4c",
-    "latency": 2134.094476699829
+    "hash": "869135ce",
+    "latency": 1062.6899401346843
   },
   {
     "type": "vmess",
-    "name": "🇭🇰HK-47.243.172.177-5602",
-    "server": "47.243.172.177",
-    "port": 48540,
-    "uuid": "61999571-f1f4-47b1-b303-692ab359892d",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "569f3271",
-    "latency": 3599.891503651937
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-8.210.52.211-5492",
-    "server": "8.210.52.211",
-    "port": 20522,
-    "uuid": "37827036-1fc5-41ea-9fc5-111af1db49dc",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/telegram_@sswia",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "b5d3428e",
-    "latency": 4170.672655105591
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-47.76.246.12-5710",
-    "server": "47.76.246.12",
-    "port": 42669,
-    "uuid": "13709d57-530e-4f9c-97d7-ebc774bdfc6c",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "2a6d82d5",
-    "latency": 826.6424338022867
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-112.118.248.94-5425",
-    "server": "697dc551-t1i9s0-tm53cm-1ol97.hk3.p5pv.com",
+    "name": "🇭🇰HK-112.118.249.162-5404",
+    "server": "09f05870-t35j40-tdnzz0-1qtp7.hk3.p5pv.com",
     "port": 80,
-    "uuid": "93fb69fc-77cf-11ee-85ee-f23c91369f2d",
+    "uuid": "3653c708-df72-11ee-aec1-f23c9164ca5d",
     "alterId": 2,
     "cipher": "auto",
     "network": "ws",
     "ws-opts": {
       "path": "/",
       "headers": {
-        "Host": "697dc551-t1i9s0-tm53cm-1ol97.hk3.p5pv.com"
+        "Host": "09f05870-t35j40-tdnzz0-1qtp7.hk3.p5pv.com"
       }
     },
-    "hash": "5eefcbf1",
-    "latency": 840.4658635457357
+    "hash": "989661df",
+    "latency": 1083.6477279663086
   },
   {
     "type": "vmess",
-    "name": "🇭🇰HK-112.118.248.94-5429",
+    "name": "🇭🇰HK-112.118.249.162-5405",
     "server": "9def5c5d-t398g0-tdnzz0-1qtp7.hk3.p5pv.com",
     "port": 80,
     "uuid": "3653c708-df72-11ee-aec1-f23c9164ca5d",
@@ -2455,12 +2567,140 @@
       }
     },
     "hash": "4cdb2dab",
-    "latency": 997.2198009490967
+    "latency": 1525.2890586853027
   },
   {
     "type": "vmess",
-    "name": "🇭🇰HK-112.118.248.94-1166",
-    "server": "be4fe2f9-t3gn40-tdnzz0-1qtp7.hk3.p5pv.com",
+    "name": ">>@ShadowsocksM::XX",
+    "server": "pulau.org",
+    "port": 443,
+    "uuid": "03fcc618-b93d-6796-6aed-8a38c975d581",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "tls": true,
+    "servername": "pulau.org",
+    "ws-opts": {
+      "path": "linkvws",
+      "headers": {
+        "Host": "pulau.org"
+      }
+    },
+    "hash": "089777e0",
+    "latency": 2480.7814757029214
+  },
+  {
+    "type": "vmess",
+    "name": "🇭🇰HK-8.218.26.234-5670",
+    "server": "8.218.26.234",
+    "port": 55566,
+    "uuid": "520a5072-76ec-4c37-8e25-02cf61b04889",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/arki?ed=2048",
+      "headers": {
+        "Host": ""
+      }
+    },
+    "hash": "c78a6c3c",
+    "latency": 1857.6020399729412
+  },
+  {
+    "type": "vmess",
+    "name": ">>@configV2rayNG::XX",
+    "server": "66.253.7.254",
+    "port": 45979,
+    "uuid": "23bdf6df-c482-46d0-c0f4-5a98d534ea11",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/test",
+      "headers": {
+        "Host": ""
+      }
+    },
+    "hash": "b48ed153",
+    "latency": 2368.8982327779136
+  },
+  {
+    "type": "vmess",
+    "name": "🇭🇰HK-47.86.85.95-5704",
+    "server": "47.86.85.95",
+    "port": 14044,
+    "uuid": "74475bf0-0267-4a04-b431-54752e31994b",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/arki?ed=2048",
+      "headers": {
+        "Host": ""
+      }
+    },
+    "hash": "001ea006",
+    "latency": 4036.1572901407876
+  },
+  {
+    "type": "vmess",
+    "name": "🇭🇰HK-8.218.175.64-5667",
+    "server": "8.218.175.64",
+    "port": 9754,
+    "uuid": "5b9575c3-c404-4c93-98f8-63581e88ffdf",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/arki?ed=2048",
+      "headers": {
+        "Host": ""
+      }
+    },
+    "hash": "2559523a",
+    "latency": 5440.885941187541
+  },
+  {
+    "type": "vmess",
+    "name": "🇬🇧GB-57.129.132.223-0744",
+    "server": "57.129.132.223",
+    "port": 80,
+    "uuid": "a25cbf11-2908-4a1b-a3a8-9a571777dca3",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/vmess/",
+      "headers": {
+        "Host": "google.com"
+      }
+    },
+    "hash": "6d6aea2a",
+    "latency": 1312.2920989990234
+  },
+  {
+    "type": "vmess",
+    "name": "🇭🇰HK-47.86.85.95-5705",
+    "server": "47.86.85.95",
+    "port": 8934,
+    "uuid": "a50e42f2-d578-4cb9-8d38-a9a382ef5534",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/arki?ed=2048",
+      "headers": {
+        "Host": ""
+      }
+    },
+    "hash": "8d47eb7f",
+    "latency": 1616.8312231699626
+  },
+  {
+    "type": "vmess",
+    "name": "🇭🇰HK-112.118.249.162-5409",
+    "server": "54d2d7fc-t3kcg0-tdnzz0-1qtp7.hk3.p5pv.com",
     "port": 80,
     "uuid": "3653c708-df72-11ee-aec1-f23c9164ca5d",
     "alterId": 2,
@@ -2469,217 +2709,18 @@
     "ws-opts": {
       "path": "/",
       "headers": {
-        "Host": "broadcastlv.chat.bilibili.com"
+        "Host": "54d2d7fc-t3kcg0-tdnzz0-1qtp7.hk3.p5pv.com"
       }
     },
-    "hash": "e8102d3f",
-    "latency": 1162.8874937693279
+    "hash": "086b3084",
+    "latency": 1986.807902654012
   },
   {
     "type": "vmess",
-    "name": "🇭🇰HK-8.218.229.50-5671",
-    "server": "8.218.229.50",
-    "port": 2494,
-    "uuid": "7fb43d0e-2e57-4ba1-8b67-5cbe7a7df173",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "16f7820d",
-    "latency": 1932.2559038798015
-  },
-  {
-    "type": "vmess",
-    "name": "🇺🇸US-209.126.84.189-0811",
-    "server": "v2ray.codefyinc.com",
-    "port": 443,
-    "uuid": "2c981164-9b93-4bca-94ff-b78d3f8498d7",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/vmessws",
-      "headers": {
-        "Host": "v2ray.codefyinc.com"
-      }
-    },
-    "hash": "a7cd1c91",
-    "latency": 2095.2531496683755
-  },
-  {
-    "type": "vmess",
-    "name": "🇯🇵JP-158.101.146.3-0815",
-    "server": "158.101.146.3",
-    "port": 54516,
-    "uuid": "6d0b24b6-6622-44b2-8da0-ef1e67651325",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "tls": true,
-    "ws-opts": {
-      "path": "/vmess",
-      "headers": {
-        "Host": "serv00_vmess.sweetrx.eu.org"
-      }
-    },
-    "hash": "8940c8e6",
-    "latency": 2289.1998291015625
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-47.83.174.131-5714",
-    "server": "47.83.174.131",
-    "port": 19850,
-    "uuid": "cdc5c72c-9a50-4a28-ae46-89b7d398e753",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "071c5214",
-    "latency": 2478.721857070923
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-8.217.158.92-5663",
-    "server": "8.217.158.92",
-    "port": 25506,
-    "uuid": "a3846e50-9935-4b49-bb7c-ce258f3253b2",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "e1046ab8",
-    "latency": 3493.372837702433
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-8.218.8.84-5660",
-    "server": "8.218.8.84",
-    "port": 23326,
-    "uuid": "871d04df-fc58-470a-baca-daae28869164",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "957edf7e",
-    "latency": 3795.632282892863
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-47.243.172.177-5605",
-    "server": "47.243.172.177",
-    "port": 17527,
-    "uuid": "499ee2c5-30a7-4939-8b3c-781b07486d4c",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "5c1d569b",
-    "latency": 3883.7873140970864
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-8.210.230.179-5591",
-    "server": "8.210.230.179",
-    "port": 45324,
-    "uuid": "88ae3410-5af6-4a76-bb0f-940d6fff4f1a",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "b247a421",
-    "latency": 4569.230159123738
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-8.218.229.50-5657",
-    "server": "8.218.229.50",
-    "port": 14834,
-    "uuid": "36611591-e684-40bc-ab20-089c6c70ebf8",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "f12cdbea",
-    "latency": 1362.5958760579426
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-8.218.175.64-5665",
-    "server": "8.218.175.64",
-    "port": 51823,
-    "uuid": "b8ee639c-a7ac-49fa-bc49-2510e885043f",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "01272b62",
-    "latency": 1698.8627115885417
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-47.83.174.131-5720",
-    "server": "47.83.174.131",
-    "port": 29493,
-    "uuid": "12c24fed-1079-41d6-ab51-4e8ab3cc1267",
-    "alterId": 0,
-    "cipher": "auto",
-    "network": "ws",
-    "ws-opts": {
-      "path": "/arki?ed=2048",
-      "headers": {
-        "Host": ""
-      }
-    },
-    "hash": "6434ea79",
-    "latency": 2547.736724217733
-  },
-  {
-    "type": "vmess",
-    "name": "🇭🇰HK-47.239.81.113-5707",
+    "name": "🇭🇰HK-47.239.81.113-5718",
     "server": "47.239.81.113",
-    "port": 29760,
-    "uuid": "fd2987cc-b25f-4966-846a-b0d65d3c1e4b",
+    "port": 17002,
+    "uuid": "97798ac2-80d4-4e7f-84cc-8221244ed741",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
@@ -2689,15 +2730,15 @@
         "Host": ""
       }
     },
-    "hash": "a91d09db",
-    "latency": 3268.248955408732
+    "hash": "63403043",
+    "latency": 1989.8587067921956
   },
   {
     "type": "vmess",
-    "name": "🇭🇰HK-47.242.214.178-5615",
-    "server": "47.242.214.178",
-    "port": 24497,
-    "uuid": "0f62d166-39e5-4d3d-89b6-5c6490b4f4d4",
+    "name": "🇭🇰HK-8.218.71.140-5650",
+    "server": "8.218.71.140",
+    "port": 57714,
+    "uuid": "a2e3f41e-97a6-4dbb-b926-7093ff574f74",
     "alterId": 0,
     "cipher": "auto",
     "network": "ws",
@@ -2707,7 +2748,61 @@
         "Host": ""
       }
     },
-    "hash": "0c5cf7d8",
-    "latency": 3426.7337322235107
+    "hash": "cbceaebb",
+    "latency": 2849.7443993886313
+  },
+  {
+    "type": "vmess",
+    "name": "🇭🇰HK-47.243.39.20-5579",
+    "server": "47.243.39.20",
+    "port": 36512,
+    "uuid": "cc13ac4b-d38f-4ebb-8a2a-73cf3aff5650",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/arki?ed=2048",
+      "headers": {
+        "Host": ""
+      }
+    },
+    "hash": "c1418edc",
+    "latency": 2375.0929037729898
+  },
+  {
+    "type": "vmess",
+    "name": "🇭🇰HK-47.76.118.235-5731",
+    "server": "47.76.118.235",
+    "port": 7775,
+    "uuid": "0f1c2d37-adb4-4677-9727-dbb1b8e2b794",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/arki?ed=2048",
+      "headers": {
+        "Host": ""
+      }
+    },
+    "hash": "07b82470",
+    "latency": 5266.09222094218
+  },
+  {
+    "type": "vmess",
+    "name": "🇭🇰HK-47.76.89.175-5733",
+    "server": "47.76.89.175",
+    "port": 22336,
+    "uuid": "41275f5b-a181-4a5c-bada-ee869d5ae8a4",
+    "alterId": 0,
+    "cipher": "auto",
+    "network": "ws",
+    "ws-opts": {
+      "path": "/arki?ed=2048",
+      "headers": {
+        "Host": ""
+      }
+    },
+    "hash": "228bb637",
+    "latency": 7703.117609024048
   }
 ]
