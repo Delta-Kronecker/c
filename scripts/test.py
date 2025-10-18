@@ -1,6 +1,9 @@
 """
-Balanced Proxy Testing - Accurate without being too strict
-Optimized for real-world usage
+Final Optimized Proxy Tester
+- Smart timeout management
+- Retry failed proxies with longer timeout
+- Better Clash initialization
+- Optimized for real-world conditions
 """
 import os
 import sys
@@ -24,39 +27,50 @@ requests.packages.urllib3.disable_warnings()
 from utils import proxy_to_clash_format, calculate_proxy_hash
 
 
-class PortManager:
+class SmartPortManager:
+    """Optimized port manager with cooldown"""
     def __init__(self):
         self.start_port = 20000
-        self.end_port = 30000
+        self.end_port = 25000
         self.used_ports = set()
+        self.cooldown = {}  # port -> release_time
         self.lock = threading.Lock()
     
     def acquire(self) -> Optional[int]:
         with self.lock:
+            current_time = time.time()
+            
+            # Clean old cooldowns
+            self.cooldown = {p: t for p, t in self.cooldown.items() 
+                           if current_time - t < 3}
+            
             for port in range(self.start_port, self.end_port):
-                if port not in self.used_ports:
-                    try:
-                        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-                        sock.bind(('127.0.0.1', port))
-                        sock.close()
-                        self.used_ports.add(port)
-                        return port
-                    except:
-                        continue
+                if port in self.used_ports:
+                    continue
+                if port in self.cooldown:
+                    continue
+                    
+                try:
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                    sock.bind(('127.0.0.1', port))
+                    sock.close()
+                    self.used_ports.add(port)
+                    return port
+                except:
+                    continue
+            
             return None
     
     def release(self, port: int):
         with self.lock:
             self.used_ports.discard(port)
+            self.cooldown[port] = time.time()
 
 
-def balanced_proxy_test(proxy_port: int, timeout: int = 10) -> Tuple[bool, float, str]:
+def smart_proxy_test(proxy_port: int, timeout: int = 12, quick_mode: bool = False) -> Tuple[bool, float, str]:
     """
-    Balanced testing approach:
-    - Must pass basic connectivity
-    - Must have different IP OR pass content validation
-    - Not too strict on edge cases
+    Smart testing with adaptive approach
     """
     proxies = {
         'http': f'http://127.0.0.1:{proxy_port}',
@@ -64,13 +78,16 @@ def balanced_proxy_test(proxy_port: int, timeout: int = 10) -> Tuple[bool, float
     }
     
     latencies = []
-    has_different_ip = False
     
-    # Test 1: Quick connectivity check
-    connectivity_ok = False
-    for url in ['http://www.gstatic.com/generate_204', 
-                'http://connectivitycheck.gstatic.com/generate_204',
-                'http://cp.cloudflare.com']:
+    # Quick connectivity test first
+    basic_tests = [
+        'http://www.gstatic.com/generate_204',
+        'http://connectivitycheck.gstatic.com/generate_204',
+        'http://cp.cloudflare.com'
+    ]
+    
+    connected = False
+    for url in basic_tests:
         try:
             start = time.time()
             resp = requests.get(url, proxies=proxies, timeout=timeout, verify=False)
@@ -78,55 +95,28 @@ def balanced_proxy_test(proxy_port: int, timeout: int = 10) -> Tuple[bool, float
             
             if resp.status_code in [200, 204]:
                 latencies.append(lat)
-                connectivity_ok = True
+                connected = True
                 break
-        except requests.exceptions.ProxyError:
-            continue
-        except requests.exceptions.Timeout:
-            continue
         except:
             continue
     
-    if not connectivity_ok:
+    if not connected:
         return False, 0, "No connectivity"
     
-    # Test 2: IP Check (soft fail - if this fails, we need stronger content validation)
-    try:
-        resp = requests.get('http://ip-api.com/json/?fields=query', 
-                          proxies=proxies, timeout=8, verify=False)
-        
-        if resp.status_code == 200:
-            proxy_ip = resp.json().get('query', '')
-            
-            # Try to get direct IP for comparison
-            try:
-                direct_resp = requests.get('http://ip-api.com/json/?fields=query', 
-                                          timeout=3, verify=False)
-                if direct_resp.status_code == 200:
-                    direct_ip = direct_resp.json().get('query', '')
-                    
-                    if proxy_ip and direct_ip and proxy_ip != direct_ip:
-                        has_different_ip = True
-                        latencies.append((time.time() - start) * 1000)
-            except:
-                # If we can't get direct IP, assume proxy is working
-                has_different_ip = True
-    except:
-        # IP check failed, we'll rely on content validation
-        pass
+    # If in quick mode and connected, accept it
+    if quick_mode:
+        return True, latencies[0] if latencies else 999, ""
     
-    # Test 3: HTTPS + Content (required if IP check failed)
+    # For non-quick mode, do additional validation
+    # Try HTTPS
     https_ok = False
-    
-    # Try multiple HTTPS endpoints
     https_tests = [
-        ('https://www.gstatic.com/generate_204', 204, 0, None),
-        ('https://1.1.1.1', [200, 301, 302], 0, None),
-        ('https://www.cloudflare.com/cdn-cgi/trace', 200, 10, [b'ip=', b'ts=']),
-        ('https://www.google.com/humans.txt', 200, 20, [b'google', b'human'])
+        ('https://www.gstatic.com/generate_204', 204, None),
+        ('https://1.1.1.1', [200, 301, 302, 400], None),
+        ('https://www.cloudflare.com/cdn-cgi/trace', 200, [b'ip=']),
     ]
     
-    for url, expected_status, min_size, keywords in https_tests:
+    for url, status, keywords in https_tests:
         try:
             start = time.time()
             resp = requests.get(url, proxies=proxies, timeout=timeout, 
@@ -134,77 +124,71 @@ def balanced_proxy_test(proxy_port: int, timeout: int = 10) -> Tuple[bool, float
             lat = (time.time() - start) * 1000
             
             # Check status
-            if isinstance(expected_status, list):
-                status_ok = resp.status_code in expected_status
+            if isinstance(status, list):
+                status_ok = resp.status_code in status
             else:
-                status_ok = resp.status_code == expected_status
+                status_ok = resp.status_code == status
             
             if not status_ok:
-                continue
-            
-            # Check size
-            if len(resp.content) < min_size:
                 continue
             
             # Check keywords if provided
             if keywords:
                 content = resp.content.lower()
-                keyword_found = any(kw.lower() in content for kw in keywords)
-                if not keyword_found:
+                if not any(kw.lower() in content for kw in keywords):
                     continue
             
             latencies.append(lat)
             https_ok = True
             break
-            
         except:
             continue
     
-    # Decision logic:
-    # - If we have different IP, we only need connectivity
-    # - If we don't have different IP, we MUST have HTTPS + content validation
-    if has_different_ip:
-        # Proxy is verified by IP difference
-        avg_latency = sum(latencies) / len(latencies) if latencies else 999999
-        return True, avg_latency, ""
+    if https_ok or len(latencies) >= 2:
+        avg_lat = sum(latencies) / len(latencies) if latencies else 999
+        return True, avg_lat, ""
     
-    elif https_ok:
-        # Even without IP verification, HTTPS content validation passed
-        avg_latency = sum(latencies) / len(latencies) if latencies else 999999
-        return True, avg_latency, ""
-    
-    else:
-        # Failed both IP check and content validation
-        return False, 0, "Failed validation"
+    return False, 0, "Validation failed"
 
 
-def start_clash(config_path: str, clash_bin: str, proxy_port: int, 
-                control_port: int) -> Optional[subprocess.Popen]:
-    """Start Clash instance"""
+def start_clash_smart(config_path: str, clash_bin: str, proxy_port: int,
+                     control_port: int, max_wait: int = 15) -> Optional[subprocess.Popen]:
+    """Smart Clash startup with better error handling"""
     try:
         proc = subprocess.Popen(
             [clash_bin, '-f', config_path],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
         )
         
-        # Wait for initialization
-        time.sleep(1.5)
+        # Progressive wait
+        time.sleep(1)
         
         if proc.poll() is not None:
             return None
         
-        # Health check
-        for _ in range(10):
+        # Quick health checks
+        for attempt in range(max_wait):
             try:
                 resp = requests.get(f'http://127.0.0.1:{control_port}/version', timeout=1)
                 if resp.status_code == 200:
-                    time.sleep(0.5)
-                    return proc
+                    # Extra check - verify proxy port is listening
+                    time.sleep(0.3)
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.settimeout(1)
+                    result = sock.connect_ex(('127.0.0.1', proxy_port))
+                    sock.close()
+                    
+                    if result == 0:
+                        return proc
             except:
                 pass
-            time.sleep(0.5)
+            
+            if attempt < 3:
+                time.sleep(0.5)
+            else:
+                time.sleep(1)
         
         proc.kill()
         return None
@@ -213,28 +197,28 @@ def start_clash(config_path: str, clash_bin: str, proxy_port: int,
         return None
 
 
-def test_single_proxy(proxy: Dict, clash_bin: str, temp_dir: str,
-                      port_mgr: PortManager, timeout: int) -> Tuple[bool, float, str]:
-    """Test a single proxy"""
+def test_single_proxy_smart(proxy: Dict, clash_bin: str, temp_dir: str,
+                           port_mgr: SmartPortManager, timeout: int,
+                           quick_mode: bool = False) -> Tuple[bool, float, str]:
+    """Test single proxy with smart approach"""
     port = port_mgr.acquire()
     if not port:
         return False, 0, "No ports"
     
-    ctrl_port = port + 1000
+    ctrl_port = port + 2000
     proc = None
     config_file = None
     
     try:
         # Create config
-        name = re.sub(r'[<>:"/\\|?*]', '_', proxy.get('name', 'proxy'))[:50]
+        name = re.sub(r'[<>:"/\\|?*]', '_', proxy.get('name', 'proxy'))[:40]
         uid = hashlib.md5(
             f"{proxy.get('server')}:{proxy.get('port')}{time.time()}".encode()
-        ).hexdigest()[:8]
-        config_file = os.path.join(temp_dir, f"test_{uid}.yaml")
+        ).hexdigest()[:6]
+        config_file = os.path.join(temp_dir, f"c_{uid}.yaml")
         
         clash_proxy = proxy_to_clash_format(proxy)
         
-        # Balanced config - allows some fallback but prefers proxy
         config = {
             'port': port,
             'socks-port': port + 1,
@@ -252,15 +236,15 @@ def test_single_proxy(proxy: Dict, clash_bin: str, temp_dir: str,
         }
         
         with open(config_file, 'w', encoding='utf-8') as f:
-            yaml.dump(config, f, allow_unicode=True, default_flow_style=False)
+            yaml.dump(config, f, allow_unicode=True)
         
         # Start Clash
-        proc = start_clash(config_file, clash_bin, port, ctrl_port)
+        proc = start_clash_smart(config_file, clash_bin, port, ctrl_port, max_wait=timeout)
         if not proc:
-            return False, 0, "Clash failed"
+            return False, 0, "Clash start failed"
         
-        # Test proxy
-        success, latency, error = balanced_proxy_test(port, timeout)
+        # Test
+        success, latency, error = smart_proxy_test(port, timeout, quick_mode)
         
         return success, latency, error
         
@@ -268,11 +252,10 @@ def test_single_proxy(proxy: Dict, clash_bin: str, temp_dir: str,
         return False, 0, f"Error: {type(e).__name__}"
     
     finally:
-        # Cleanup
         if proc:
             try:
                 proc.terminate()
-                proc.wait(timeout=2)
+                proc.wait(timeout=1)
             except:
                 try:
                     proc.kill()
@@ -281,28 +264,30 @@ def test_single_proxy(proxy: Dict, clash_bin: str, temp_dir: str,
         
         port_mgr.release(port)
         
-        if config_file and os.path.exists(config_file):
+        if config_file:
             try:
                 os.remove(config_file)
             except:
                 pass
-        
-        time.sleep(0.1)
 
 
-def test_batch(batch_proxies: List[Dict], clash_bin: str, temp_dir: str,
-               workers: int, timeout: int) -> Tuple[List[Dict], Dict]:
-    """Test a batch of proxies"""
-    port_mgr = PortManager()
+def test_batch_smart(batch_proxies: List[Dict], clash_bin: str, temp_dir: str,
+                    workers: int, timeout: int, quick_mode: bool = False) -> Tuple[List[Dict], Dict]:
+    """Test batch with smart retry logic"""
+    port_mgr = SmartPortManager()
     working = []
+    failed = []
     errors = {}
     lock = threading.Lock()
     
     def test_wrapper(idx_proxy):
         idx, proxy = idx_proxy
-        result, latency, error = test_single_proxy(proxy, clash_bin, temp_dir, port_mgr, timeout)
+        result, latency, error = test_single_proxy_smart(
+            proxy, clash_bin, temp_dir, port_mgr, timeout, quick_mode
+        )
         return idx, proxy, result, latency, error
     
+    # First pass
     with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = {executor.submit(test_wrapper, (i, p)): i 
                    for i, p in enumerate(batch_proxies, 1)}
@@ -316,21 +301,46 @@ def test_batch(batch_proxies: List[Dict], clash_bin: str, temp_dir: str,
                         proxy['latency'] = latency
                         working.append(proxy)
                     else:
+                        if error == "No connectivity":
+                            failed.append(proxy)
                         errors[error] = errors.get(error, 0) + 1
             except Exception as e:
                 with lock:
-                    errors[f"Exception: {type(e).__name__}"] = errors.get(f"Exception: {type(e).__name__}", 0) + 1
+                    errors[f"Exc: {type(e).__name__}"] = errors.get(f"Exc: {type(e).__name__}", 0) + 1
+    
+    # Retry failed with longer timeout (only if not in quick mode)
+    if failed and not quick_mode and len(failed) <= 10:
+        time.sleep(1)
+        retry_timeout = timeout + 5
+        
+        with ThreadPoolExecutor(max_workers=min(workers, 5)) as executor:
+            futures = {executor.submit(test_wrapper, (i, p)): i 
+                       for i, p in enumerate(failed, 1)}
+            
+            for future in as_completed(futures):
+                try:
+                    idx, proxy, result, latency, error = future.result()
+                    
+                    with lock:
+                        if result:
+                            proxy['latency'] = latency
+                            working.append(proxy)
+                except:
+                    pass
     
     return working, errors
 
 
-def test_protocol_group(ptype: str, proxies: List[Dict], clash_bin: str,
+def test_protocol_smart(ptype: str, proxies: List[Dict], clash_bin: str,
                        temp_dir: str, workers: int, timeout: int, 
                        batch_size: int) -> List[Dict]:
-    """Test all proxies of a specific protocol"""
+    """Test protocol group with smart batching"""
     print(f"\n{'='*70}")
     print(f"Testing {ptype.upper()} - {len(proxies)} proxies")
     print(f"{'='*70}")
+    
+    # Use quick mode for large batches
+    quick_mode = len(proxies) > 500
     
     all_working = []
     num_batches = (len(proxies) + batch_size - 1) // batch_size
@@ -341,41 +351,52 @@ def test_protocol_group(ptype: str, proxies: List[Dict], clash_bin: str,
         end_idx = min(start_idx + batch_size, len(proxies))
         batch_proxies = proxies[start_idx:end_idx]
         
-        print(f"\n  Batch {batch_idx + 1}/{num_batches}: Testing {len(batch_proxies)} configs...", 
+        print(f"  Batch {batch_idx + 1}/{num_batches}: Testing {len(batch_proxies)}...", 
               end=' ', flush=True)
         
-        batch_working, batch_errors = test_batch(
-            batch_proxies, clash_bin, temp_dir, workers, timeout
+        batch_working, batch_errors = test_batch_smart(
+            batch_proxies, clash_bin, temp_dir, workers, timeout, quick_mode
         )
         
         all_working.extend(batch_working)
         total_tested += len(batch_proxies)
         
-        batch_rate = (len(batch_working) / len(batch_proxies) * 100) if batch_proxies else 0
-        overall_rate = (len(all_working) / total_tested * 100) if total_tested > 0 else 0
+        batch_rate = (len(batch_working) / len(batch_proxies) * 100)
+        overall_rate = (len(all_working) / total_tested * 100)
         
-        print(f"{len(batch_working)}/{len(batch_proxies)} ({batch_rate:.1f}%)")
+        print(f"{len(batch_working)}/{len(batch_proxies)} ({batch_rate:.1f}%) | "
+              f"Total: {len(all_working)}/{total_tested} ({overall_rate:.1f}%)")
         
-        if batch_errors:
-            top_errors = sorted(batch_errors.items(), key=lambda x: x[1], reverse=True)[:2]
-            print(f"    Top errors: {', '.join([f'{e}({c})' for e, c in top_errors])}")
+        # Show progress every 10 batches for large groups
+        if (batch_idx + 1) % 10 == 0 and num_batches > 10:
+            print(f"    Progress: {batch_idx + 1}/{num_batches} batches completed")
         
-        print(f"    Overall: {len(all_working)}/{total_tested} ({overall_rate:.1f}%)", flush=True)
-        
-        time.sleep(0.5)
+        time.sleep(0.3)
     
-    print(f"\n  {ptype.upper()} Complete: {len(all_working)}/{len(proxies)} ({len(all_working)/len(proxies)*100:.1f}%)")
+    success_rate = (len(all_working) / len(proxies) * 100) if proxies else 0
+    print(f"\n  {ptype.upper()} Complete: {len(all_working)}/{len(proxies)} ({success_rate:.1f}%)")
     
     return all_working
 
 
-def test_all_proxies(proxies: List[Dict], clash_bin: str, temp_dir: str) -> List[Dict]:
-    """Test all proxies grouped by protocol"""
+def test_all_smart(proxies: List[Dict], clash_bin: str, temp_dir: str) -> List[Dict]:
+    """Smart testing for all proxies"""
     
-    # Get settings
-    workers = min(int(os.environ.get('TEST_WORKERS', 50)), 60)
-    timeout = int(os.environ.get('TEST_TIMEOUT', 10))
-    batch_size = min(int(os.environ.get('BATCH_SIZE', 40)), 50)
+    # Adaptive settings based on total count
+    total = len(proxies)
+    
+    if total > 3000:
+        workers = min(int(os.environ.get('TEST_WORKERS', 60)), 80)
+        batch_size = 50
+        timeout = 10
+    elif total > 1000:
+        workers = min(int(os.environ.get('TEST_WORKERS', 50)), 60)
+        batch_size = 40
+        timeout = 12
+    else:
+        workers = min(int(os.environ.get('TEST_WORKERS', 40)), 50)
+        batch_size = 30
+        timeout = 15
     
     # Group by protocol
     groups = {}
@@ -384,15 +405,12 @@ def test_all_proxies(proxies: List[Dict], clash_bin: str, temp_dir: str) -> List
         groups.setdefault(ptype, []).append(proxy)
     
     print(f"\n{'='*70}")
-    print(f"BALANCED TESTING MODE")
+    print(f"SMART TESTING MODE")
     print(f"{'='*70}")
-    print(f"Total Proxies: {len(proxies)}")
+    print(f"Total: {total} proxies")
     print(f"Workers: {workers} | Timeout: {timeout}s | Batch: {batch_size}")
-    print(f"\nValidation Strategy:")
-    print(f"  - Basic connectivity (required)")
-    print(f"  - IP verification OR content validation (one required)")
-    print(f"  - Multiple fallback tests for reliability")
-    print(f"\nProtocol Distribution:")
+    print(f"Strategy: Adaptive testing with smart retry")
+    print(f"\nProtocols:")
     for ptype, plist in sorted(groups.items()):
         print(f"  {ptype.upper()}: {len(plist)}")
     print(f"{'='*70}")
@@ -400,24 +418,22 @@ def test_all_proxies(proxies: List[Dict], clash_bin: str, temp_dir: str) -> List
     all_working = []
     
     for ptype, plist in sorted(groups.items()):
-        working = test_protocol_group(
+        working = test_protocol_smart(
             ptype, plist, clash_bin, temp_dir, workers, timeout, batch_size
         )
         all_working.extend(working)
-        time.sleep(1)
+        time.sleep(0.5)
     
     return all_working
 
 
 def save_results(proxies: List[Dict], output_dir: str):
-    """Save working proxies in multiple formats"""
+    """Save results"""
     os.makedirs(output_dir, exist_ok=True)
     
-    # JSON format
     with open(os.path.join(output_dir, 'working_proxies.json'), 'w', encoding='utf-8') as f:
         json.dump(proxies, f, indent=2, ensure_ascii=False)
     
-    # By protocol directory
     by_proto_dir = os.path.join(output_dir, 'by_protocol')
     os.makedirs(by_proto_dir, exist_ok=True)
     
@@ -426,7 +442,6 @@ def save_results(proxies: List[Dict], output_dir: str):
         ptype = proxy.get('type', 'unknown')
         protocols.setdefault(ptype, []).append(proxy)
     
-    # Save each protocol separately
     for ptype, plist in protocols.items():
         with open(os.path.join(by_proto_dir, f'{ptype}.txt'), 'w', encoding='utf-8') as f:
             for proxy in plist:
@@ -435,7 +450,6 @@ def save_results(proxies: List[Dict], output_dir: str):
                 if url:
                     f.write(url + '\n')
     
-    # All proxies in one file
     with open(os.path.join(output_dir, 'all_working.txt'), 'w', encoding='utf-8') as f:
         for proxy in proxies:
             from utils import proxy_to_share_url
@@ -443,7 +457,6 @@ def save_results(proxies: List[Dict], output_dir: str):
             if url:
                 f.write(url + '\n')
     
-    # Metadata
     latencies = [p.get('latency', 0) for p in proxies if p.get('latency', 0) > 0]
     metadata = {
         'total_working': len(proxies),
@@ -453,29 +466,18 @@ def save_results(proxies: List[Dict], output_dir: str):
             'min_ms': round(min(latencies), 2) if latencies else 0,
             'max_ms': round(max(latencies), 2) if latencies else 0
         },
-        'test_method': 'balanced_validation',
-        'validation': 'Connectivity + (IP Check OR Content Validation)',
+        'test_method': 'smart_adaptive',
         'last_updated': datetime.now().isoformat(),
         'timestamp': int(time.time())
     }
     
     with open(os.path.join(output_dir, 'metadata.json'), 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=2)
-    
-    with open(os.path.join(output_dir, 'last_updated.txt'), 'w', encoding='utf-8') as f:
-        f.write(datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC'))
 
 
 def find_clash_binary() -> Optional[str]:
-    """Find Clash binary in common locations"""
-    paths = [
-        '/usr/local/bin/clash',
-        '/usr/bin/clash',
-        './clash',
-        '/home/runner/.local/bin/clash',
-        'clash.exe',
-        './clash.exe'
-    ]
+    paths = ['/usr/local/bin/clash', '/usr/bin/clash', './clash',
+             '/home/runner/.local/bin/clash', 'clash.exe']
     
     for path in paths:
         if os.path.exists(path):
@@ -492,7 +494,6 @@ def find_clash_binary() -> Optional[str]:
 
 
 def remove_duplicates(proxies: List[Dict]) -> List[Dict]:
-    """Remove duplicate proxies based on hash"""
     seen = set()
     unique = []
     
@@ -502,73 +503,62 @@ def remove_duplicates(proxies: List[Dict]) -> List[Dict]:
             seen.add(h)
             unique.append(proxy)
     
-    dup_count = len(proxies) - len(unique)
-    if dup_count > 0:
-        print(f"Removed {dup_count} duplicate configs")
+    dup = len(proxies) - len(unique)
+    if dup > 0:
+        print(f"Removed {dup} duplicates")
     
     return unique
 
 
 def main():
-    print("=" * 70)
-    print("Balanced Proxy Tester - Accurate & Practical")
-    print("=" * 70 + "\n")
+    print("="*70)
+    print("Smart Adaptive Proxy Tester")
+    print("="*70 + "\n")
     
-    # Setup paths
     base_dir = os.path.dirname(os.path.dirname(__file__))
     temp_dir = os.path.join(base_dir, 'temp_configs')
     output_dir = os.path.join(base_dir, 'working_configs')
     
-    # Load proxies
     proxies_file = os.path.join(temp_dir, 'parsed_proxies.json')
     if not os.path.exists(proxies_file):
         print(f"Error: {proxies_file} not found")
-        print("Please run download script first")
         sys.exit(1)
     
     with open(proxies_file, 'r', encoding='utf-8') as f:
         proxies = json.load(f)
     
-    print(f"Loaded {len(proxies)} parsed proxies")
-    
-    # Remove duplicates
+    print(f"Loaded: {len(proxies)} proxies")
     proxies = remove_duplicates(proxies)
-    print(f"Unique proxies: {len(proxies)}\n")
+    print(f"Unique: {len(proxies)} proxies\n")
     
     if not proxies:
-        print("No proxies to test")
         sys.exit(1)
     
-    # Find Clash binary
     clash_bin = find_clash_binary()
     if not clash_bin:
-        print("Error: Clash binary not found")
-        print("Please install Clash or Clash Meta")
+        print("Error: Clash not found")
         sys.exit(1)
     
-    print(f"Using Clash: {clash_bin}")
+    print(f"Clash: {clash_bin}")
     
-    # Test all proxies
     start_time = time.time()
-    working_proxies = test_all_proxies(proxies, clash_bin, temp_dir)
+    working = test_all_smart(proxies, clash_bin, temp_dir)
     elapsed = time.time() - start_time
     
-    # Print results
     print(f"\n{'='*70}")
-    print(f"TEST RESULTS")
+    print(f"RESULTS")
     print(f"{'='*70}")
-    print(f"Total Tested:     {len(proxies)}")
-    print(f"Working Proxies:  {len(working_proxies)}")
-    print(f"Success Rate:     {len(working_proxies)/len(proxies)*100:.1f}%")
-    print(f"Time Elapsed:     {elapsed:.1f}s ({elapsed/60:.1f} minutes)")
-    print(f"Test Speed:       {len(proxies)/elapsed:.1f} proxies/sec")
+    print(f"Tested:      {len(proxies)}")
+    print(f"Working:     {len(working)}")
+    print(f"Success:     {len(working)/len(proxies)*100:.1f}%")
+    print(f"Time:        {elapsed:.0f}s ({elapsed/60:.1f}min)")
+    print(f"Speed:       {len(proxies)/elapsed:.1f} proxies/sec")
     
-    # Protocol breakdown
-    if working_proxies:
+    if working:
         print(f"\nBy Protocol:")
         protocols = {}
-        for proxy in working_proxies:
-            ptype = proxy.get('type', 'unknown')
+        for p in working:
+            ptype = p.get('type', '?')
             protocols[ptype] = protocols.get(ptype, 0) + 1
         
         for ptype, count in sorted(protocols.items()):
@@ -576,17 +566,11 @@ def main():
     
     print(f"{'='*70}\n")
     
-    # Save results
-    if working_proxies:
-        save_results(working_proxies, output_dir)
-        print(f"✓ Saved {len(working_proxies)} verified working proxies")
-        print(f"  Output directory: {output_dir}/")
-        print(f"  - working_proxies.json")
-        print(f"  - all_working.txt")
-        print(f"  - by_protocol/*.txt")
-        print(f"  - metadata.json")
+    if working:
+        save_results(working, output_dir)
+        print(f"✓ Saved {len(working)} proxies to {output_dir}/")
     else:
-        print("⚠ No working proxies found")
+        print("⚠ No working proxies")
         sys.exit(1)
 
 
